@@ -1,0 +1,17 @@
+{
+  "__type__": "cc.Material",
+  "_name": "spriteTile",
+  "_objFlags": 0,
+  "_native": "",
+  "_effectAsset": {
+    "__uuid__": "ca172662-d789-401b-b14e-44ef45582eb8"
+  },
+  "_techniqueIndex": 0,
+  "_techniqueData": {
+    "0": {
+      "defines": {
+        "USE_TEXTURE": true
+      }
+    }
+  }
+}

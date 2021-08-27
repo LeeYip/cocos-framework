@@ -1,0 +1,17 @@
+{
+  "__type__": "cc.Material",
+  "_name": "spriteOutline",
+  "_objFlags": 0,
+  "_native": "",
+  "_effectAsset": {
+    "__uuid__": "c2f342df-7997-455a-bece-98c648e51e50"
+  },
+  "_techniqueIndex": 0,
+  "_techniqueData": {
+    "0": {
+      "defines": {
+        "USE_TEXTURE": true
+      }
+    }
+  }
+}
