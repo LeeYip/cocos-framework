@@ -1,4 +1,4 @@
-// 基于CocosCreator2.2.2 按钮组件hack代码
+// 基于CocosCreator2.x 按钮组件hack代码
 
 export enum ButtonHackEvent {
     /** 按钮状态变更 */

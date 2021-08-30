@@ -5,6 +5,7 @@ import Res from "../../util/Res";
 import Tool from "../../util/Tool";
 import DialogBase from "./DialogBase";
 import Timer from "./Timer";
+import Tip from "./Tip";
 
 const { ccclass, property, disallowMultiple, menu } = cc._decorator;
 
@@ -295,6 +296,7 @@ export default class Layer extends cc.Component {
                 return;
             }
             tipNode = cc.instantiate(prefab);
+            this.TipLayer.addChild(tipNode);
         }
 
         // 动画
@@ -310,10 +312,10 @@ export default class Layer extends cc.Component {
         tipNode.opacity = 255;
         tipNode.setPosition(tipData.start);
         tipNode.setSiblingIndex(this.TipLayer.childrenCount - 1);
-        tipNode.getChildByName('text').getComponent(cc.Label).string = tipData.text;
-        tipNode.getChildByName('text').getComponent(cc.Label)['_forceUpdateRenderData']();
-        tipNode.getComponent(cc.Layout).updateLayout();
         tipNode.runAction(cc.sequence(delay, cc.spawn(fade, moveTo), call));
+
+        // 数据
+        tipNode.getComponent(Tip)?.init(tipData.text);
     }
 
     /**

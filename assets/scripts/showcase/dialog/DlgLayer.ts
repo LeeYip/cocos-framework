@@ -21,4 +21,12 @@ export default class DlgLayer extends DialogBase {
         await Layer.inst.waitCloseDialog(DlgLayer2.pUrl);
         Layer.inst.openUniDialog(DlgLayer3.pUrl);
     }
+
+    private onClickTipUnique() {
+        Layer.inst.showTip({text: '这是一条唯一提示', unique: true, end: cc.v2(0, 100)});
+    }
+
+    private onClickTip() {
+        Layer.inst.showTip({text: '这是一条普通提示', end: cc.v2(0, 100), duration: 0});
+    }
 }

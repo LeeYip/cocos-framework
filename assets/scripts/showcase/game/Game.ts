@@ -1,7 +1,9 @@
 import Layer from "../../common/cmpt/base/Layer";
 import Events from "../../common/util/Events";
 import DlgAnimValue from "../dialog/DlgAnimValue";
+import DlgAudio from "../dialog/DlgAudio";
 import DlgButton from "../dialog/DlgButton";
+import DlgI18N from "../dialog/DlgI18N";
 import DlgLayer from "../dialog/DlgLayer";
 import DlgShader from "../dialog/DlgShader";
 import DlgShake from "../dialog/DlgShake";
@@ -51,5 +53,13 @@ export default class Game extends cc.Component {
 
     private onClickList() {
         Layer.inst.openUniDialog(DlgVirtualList.pUrl);
+    }
+
+    private onClickAudio() {
+        Layer.inst.openUniDialog(DlgAudio.pUrl);
+    }
+
+    private onClickI18N() {
+        Layer.inst.openUniDialog(DlgI18N.pUrl);
     }
 }

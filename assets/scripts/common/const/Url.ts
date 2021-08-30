@@ -8,7 +8,14 @@ export const ResUrl = {
         GAME: 'prefab/game/Game',
     },
 
+    AUDIO: {
+        BGM1: 'audio/bgm1',
+        BGM2: 'audio/bgm2',
 
+        SFX1: 'audio/sfx1',
+        SFX2: 'audio/sfx2',
+        SFX_UI: 'audio/sfxUi',
+    }
 }
 
 /**
@@ -21,4 +28,6 @@ export const DirUrl = {
     ATLAS: 'atlas/',
 
     TEXTURE: 'textures/',
+
+    AUDIO: 'audio/',
 }

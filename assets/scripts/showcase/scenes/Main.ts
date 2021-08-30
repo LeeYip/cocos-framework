@@ -10,6 +10,7 @@ export default class Main extends cc.Component {
     protected async start() {
         Layer.inst.showLoading();
         await Res.loadDir(DirUrl.PREFAB, cc.Prefab);
+        await Res.loadDir(DirUrl.AUDIO, cc.AudioClip);
         Layer.inst.hideLoading();
         Layer.inst.enterHome();
     }

@@ -110,7 +110,7 @@ export default class I18n {
             for (let arg in opt) {
                 if (opt.hasOwnProperty(arg)) {
                     let reg = new RegExp(`%{${arg}}`, 'g');
-                    text.replace(reg, opt[arg]);
+                    text = text.replace(reg, opt[arg]);
                 }
             }
         }

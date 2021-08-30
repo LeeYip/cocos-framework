@@ -276,8 +276,8 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 1200,
-      "height": 800
+      "width": 1500,
+      "height": 900
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
@@ -344,8 +344,8 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 100,
-      "height": 40
+      "width": 250,
+      "height": 100
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
@@ -356,15 +356,15 @@
       "__type__": "TypedArray",
       "ctor": "Float64Array",
       "array": [
-        475,
-        340,
+        600,
+        380,
         0,
         0,
         0,
         0,
         1,
-        2,
-        2,
+        1,
+        1,
         1
       ]
     },
@@ -415,8 +415,8 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 100,
-      "height": 40
+      "width": 250,
+      "height": 100
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
@@ -479,8 +479,8 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 100,
-      "height": 40
+      "width": 112.05,
+      "height": 60.48
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
@@ -533,8 +533,8 @@
     "_dstBlendFactor": 771,
     "_string": "close",
     "_N$string": "close",
-    "_fontSize": 20,
-    "_lineHeight": 40,
+    "_fontSize": 48,
+    "_lineHeight": 48,
     "_enableWrapText": false,
     "_N$file": null,
     "_isSystemFontUsed": true,
@@ -545,7 +545,7 @@
     "_N$horizontalAlign": 1,
     "_N$verticalAlign": 1,
     "_N$fontFamily": "Arial",
-    "_N$overflow": 1,
+    "_N$overflow": 0,
     "_N$cacheMode": 1,
     "_id": ""
   },
@@ -557,7 +557,7 @@
     "asset": {
       "__uuid__": "e75c176c-520b-4a83-a942-13f9e0031acf"
     },
-    "fileId": "59l+x5Z7FJKKmWHVu7ZDpk",
+    "fileId": "cc0k+Z6vRG0J6wqK+9QquP",
     "sync": false
   },
   {
@@ -627,7 +627,7 @@
     "asset": {
       "__uuid__": "e75c176c-520b-4a83-a942-13f9e0031acf"
     },
-    "fileId": "3dKCEKNwZJC7uWq7WCRMUE",
+    "fileId": "17K9AsMcROgqugjuePXDpV",
     "sync": false
   },
   {
@@ -734,7 +734,7 @@
     "asset": {
       "__uuid__": "e75c176c-520b-4a83-a942-13f9e0031acf"
     },
-    "fileId": "24xixWpb9Je5fnXQcud+hl",
+    "fileId": "b9I9wXj95NA5b6XI2Q6oGW",
     "sync": false
   },
   {
@@ -765,7 +765,7 @@
     "_contentSize": {
       "__type__": "cc.Size",
       "width": 1000,
-      "height": 90.39999999999999
+      "height": 108.47999999999999
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
@@ -777,7 +777,7 @@
       "ctor": "Float64Array",
       "array": [
         0,
-        200,
+        280,
         0,
         0,
         0,
@@ -818,8 +818,8 @@
     "_dstBlendFactor": 771,
     "_string": "防止多个按钮同时点击，按钮可自定义分组，同一分组按钮不可同时点击。",
     "_N$string": "防止多个按钮同时点击，按钮可自定义分组，同一分组按钮不可同时点击。",
-    "_fontSize": 40,
-    "_lineHeight": 40,
+    "_fontSize": 48,
+    "_lineHeight": 48,
     "_enableWrapText": true,
     "_N$file": null,
     "_isSystemFontUsed": true,
@@ -945,8 +945,8 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 62.25,
-      "height": 50.4
+      "width": 74.7,
+      "height": 60.48
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
@@ -999,8 +999,8 @@
     "_dstBlendFactor": 771,
     "_string": "组1",
     "_N$string": "组1",
-    "_fontSize": 40,
-    "_lineHeight": 40,
+    "_fontSize": 48,
+    "_lineHeight": 48,
     "_enableWrapText": true,
     "_N$file": null,
     "_isSystemFontUsed": true,
@@ -1060,8 +1060,8 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 100,
-      "height": 40
+      "width": 300,
+      "height": 120
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
@@ -1079,8 +1079,8 @@
         0,
         0,
         1,
-        2,
-        2,
+        1,
+        1,
         1
       ]
     },
@@ -1131,8 +1131,8 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 100,
-      "height": 40
+      "width": 300,
+      "height": 120
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
@@ -1195,8 +1195,8 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 100,
-      "height": 40
+      "width": 133.45,
+      "height": 60.48
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
@@ -1249,8 +1249,8 @@
     "_dstBlendFactor": 771,
     "_string": "button",
     "_N$string": "button",
-    "_fontSize": 20,
-    "_lineHeight": 40,
+    "_fontSize": 48,
+    "_lineHeight": 48,
     "_enableWrapText": false,
     "_N$file": null,
     "_isSystemFontUsed": true,
@@ -1261,7 +1261,7 @@
     "_N$horizontalAlign": 1,
     "_N$verticalAlign": 1,
     "_N$fontFamily": "Arial",
-    "_N$overflow": 1,
+    "_N$overflow": 0,
     "_N$cacheMode": 1,
     "_id": ""
   },
@@ -1484,8 +1484,8 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 100,
-      "height": 40
+      "width": 300,
+      "height": 120
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
@@ -1497,14 +1497,14 @@
       "ctor": "Float64Array",
       "array": [
         -300,
-        -100,
+        -150,
         0,
         0,
         0,
         0,
         1,
-        2,
-        2,
+        1,
+        1,
         1
       ]
     },
@@ -1555,8 +1555,8 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 100,
-      "height": 40
+      "width": 300,
+      "height": 120
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
@@ -1619,8 +1619,8 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 100,
-      "height": 40
+      "width": 133.45,
+      "height": 60.48
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
@@ -1673,8 +1673,8 @@
     "_dstBlendFactor": 771,
     "_string": "button",
     "_N$string": "button",
-    "_fontSize": 20,
-    "_lineHeight": 40,
+    "_fontSize": 48,
+    "_lineHeight": 48,
     "_enableWrapText": false,
     "_N$file": null,
     "_isSystemFontUsed": true,
@@ -1685,7 +1685,7 @@
     "_N$horizontalAlign": 1,
     "_N$verticalAlign": 1,
     "_N$fontFamily": "Arial",
-    "_N$overflow": 1,
+    "_N$overflow": 0,
     "_N$cacheMode": 1,
     "_id": ""
   },
@@ -1908,8 +1908,8 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 100,
-      "height": 40
+      "width": 300,
+      "height": 120
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
@@ -1921,14 +1921,14 @@
       "ctor": "Float64Array",
       "array": [
         -300,
-        -200,
+        -300,
         0,
         0,
         0,
         0,
         1,
-        2,
-        2,
+        1,
+        1,
         1
       ]
     },
@@ -1979,8 +1979,8 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 100,
-      "height": 40
+      "width": 300,
+      "height": 120
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
@@ -2043,8 +2043,8 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 100,
-      "height": 40
+      "width": 133.45,
+      "height": 60.48
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
@@ -2097,8 +2097,8 @@
     "_dstBlendFactor": 771,
     "_string": "button",
     "_N$string": "button",
-    "_fontSize": 20,
-    "_lineHeight": 40,
+    "_fontSize": 48,
+    "_lineHeight": 48,
     "_enableWrapText": false,
     "_N$file": null,
     "_isSystemFontUsed": true,
@@ -2109,7 +2109,7 @@
     "_N$horizontalAlign": 1,
     "_N$verticalAlign": 1,
     "_N$fontFamily": "Arial",
-    "_N$overflow": 1,
+    "_N$overflow": 0,
     "_N$cacheMode": 1,
     "_id": ""
   },
@@ -2409,8 +2409,8 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 560,
-      "height": 90.4
+      "width": 672,
+      "height": 108.48
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
@@ -2422,7 +2422,7 @@
       "ctor": "Float64Array",
       "array": [
         300,
-        100,
+        130,
         0,
         0,
         0,
@@ -2463,8 +2463,8 @@
     "_dstBlendFactor": 771,
     "_string": "组2\n该组按钮按下时改变子节点坐标",
     "_N$string": "组2\n该组按钮按下时改变子节点坐标",
-    "_fontSize": 40,
-    "_lineHeight": 40,
+    "_fontSize": 48,
+    "_lineHeight": 48,
     "_enableWrapText": true,
     "_N$file": null,
     "_isSystemFontUsed": true,
@@ -2530,8 +2530,8 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 200,
-      "height": 80
+      "width": 300,
+      "height": 120
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
@@ -2594,8 +2594,8 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 100,
-      "height": 40
+      "width": 133.45,
+      "height": 60.48
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
@@ -2648,8 +2648,8 @@
     "_dstBlendFactor": 771,
     "_string": "button",
     "_N$string": "button",
-    "_fontSize": 32,
-    "_lineHeight": 40,
+    "_fontSize": 48,
+    "_lineHeight": 48,
     "_enableWrapText": false,
     "_N$file": null,
     "_isSystemFontUsed": true,
@@ -2660,7 +2660,7 @@
     "_N$horizontalAlign": 1,
     "_N$verticalAlign": 1,
     "_N$fontFamily": "Arial",
-    "_N$overflow": 1,
+    "_N$overflow": 0,
     "_N$cacheMode": 1,
     "_id": ""
   },
@@ -2733,16 +2733,16 @@
     },
     "_N$pressedColor": {
       "__type__": "cc.Color",
-      "r": 200,
-      "g": 200,
-      "b": 200,
+      "r": 124,
+      "g": 169,
+      "b": 79,
       "a": 255
     },
     "pressedColor": {
       "__type__": "cc.Color",
-      "r": 200,
-      "g": 200,
-      "b": 200,
+      "r": 124,
+      "g": 169,
+      "b": 79,
       "a": 255
     },
     "_N$hoverColor": {
@@ -2879,8 +2879,8 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 200,
-      "height": 80
+      "width": 300,
+      "height": 120
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
@@ -2892,7 +2892,7 @@
       "ctor": "Float64Array",
       "array": [
         300,
-        -100,
+        -150,
         0,
         0,
         0,
@@ -2943,8 +2943,8 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 100,
-      "height": 40
+      "width": 133.45,
+      "height": 60.48
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
@@ -2997,8 +2997,8 @@
     "_dstBlendFactor": 771,
     "_string": "button",
     "_N$string": "button",
-    "_fontSize": 32,
-    "_lineHeight": 40,
+    "_fontSize": 48,
+    "_lineHeight": 48,
     "_enableWrapText": false,
     "_N$file": null,
     "_isSystemFontUsed": true,
@@ -3009,7 +3009,7 @@
     "_N$horizontalAlign": 1,
     "_N$verticalAlign": 1,
     "_N$fontFamily": "Arial",
-    "_N$overflow": 1,
+    "_N$overflow": 0,
     "_N$cacheMode": 1,
     "_id": ""
   },
@@ -3082,16 +3082,16 @@
     },
     "_N$pressedColor": {
       "__type__": "cc.Color",
-      "r": 200,
-      "g": 200,
-      "b": 200,
+      "r": 124,
+      "g": 169,
+      "b": 79,
       "a": 255
     },
     "pressedColor": {
       "__type__": "cc.Color",
-      "r": 200,
-      "g": 200,
-      "b": 200,
+      "r": 124,
+      "g": 169,
+      "b": 79,
       "a": 255
     },
     "_N$hoverColor": {
@@ -3228,8 +3228,8 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 200,
-      "height": 80
+      "width": 300,
+      "height": 120
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
@@ -3241,7 +3241,7 @@
       "ctor": "Float64Array",
       "array": [
         300,
-        -200,
+        -300,
         0,
         0,
         0,
@@ -3292,8 +3292,8 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 100,
-      "height": 40
+      "width": 133.45,
+      "height": 60.48
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
@@ -3346,8 +3346,8 @@
     "_dstBlendFactor": 771,
     "_string": "button",
     "_N$string": "button",
-    "_fontSize": 32,
-    "_lineHeight": 40,
+    "_fontSize": 48,
+    "_lineHeight": 48,
     "_enableWrapText": false,
     "_N$file": null,
     "_isSystemFontUsed": true,
@@ -3358,7 +3358,7 @@
     "_N$horizontalAlign": 1,
     "_N$verticalAlign": 1,
     "_N$fontFamily": "Arial",
-    "_N$overflow": 1,
+    "_N$overflow": 0,
     "_N$cacheMode": 1,
     "_id": ""
   },
@@ -3431,16 +3431,16 @@
     },
     "_N$pressedColor": {
       "__type__": "cc.Color",
-      "r": 200,
-      "g": 200,
-      "b": 200,
+      "r": 124,
+      "g": 169,
+      "b": 79,
       "a": 255
     },
     "pressedColor": {
       "__type__": "cc.Color",
-      "r": 200,
-      "g": 200,
-      "b": 200,
+      "r": 124,
+      "g": 169,
+      "b": 79,
       "a": 255
     },
     "_N$hoverColor": {
