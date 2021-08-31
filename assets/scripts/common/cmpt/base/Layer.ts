@@ -197,7 +197,7 @@ export default class Layer extends cc.Component {
     }
 
     /**
-     * 关闭所有弹窗
+     * 关闭所有同路径弹窗
      * @param url prefab在resources/prefab/dialog/下的路径
      * @param args
      */
@@ -229,7 +229,7 @@ export default class Layer extends cc.Component {
     }
 
     /**
-     * 异步等待所有弹窗关闭
+     * 异步等待所有同路径弹窗关闭
      * @param url prefab在resources/prefab/dialog/下的路径
      */
     public async waitCloseDialogs(url: string) {

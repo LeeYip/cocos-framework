@@ -75,7 +75,7 @@ export default class I18n {
      * 通过语言表value获取对应的key
      * @param value 语言表的value
      */
-    public static getKeyByValue(value: string) {
+    public static getKeyByValue(value: string): string {
         if (!this._phrases) {
             cc.error(`[I18n.getKeyByValue] 未正确初始化`);
             return '';

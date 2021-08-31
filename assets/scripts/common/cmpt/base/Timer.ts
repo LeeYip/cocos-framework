@@ -21,7 +21,7 @@ export default class Timer extends cc.Component {
     private static _lastTimeScale: number = 1;
     private static _timeScale: number = 1;
     /** 
-     * dt缩放值，1为正常速度，0为暂停
+     * dt缩放倍数，1为正常速度，0为暂停
      * - 需要特别注意此值的修改和暂停、恢复如果同时多处调用产生的效果是否正确
      */
     public static get timeScale() { return this._timeScale; }
@@ -36,7 +36,7 @@ export default class Timer extends cc.Component {
     private static _realDt: number = 0;
     /** 距上一帧间隔的真实时间 */
     public static get realDt() { return this._realDt; }
-    /** 距上一帧间隔经过缩放的时间 */
+    /** 距上一帧间隔经过timeScale缩放的时间 */
     public static get scaleDt() { return this._realDt * this._timeScale; }
 
     private static _gameSec: number = 0;

@@ -132,7 +132,7 @@ export default class Events {
     }
 
     /**
-     * 注册事件
+     * 注册事件，触发一次后自动注销
      * @param event 事件名
      * @param cb 处理事件的监听函数
      * @param target 注册目标

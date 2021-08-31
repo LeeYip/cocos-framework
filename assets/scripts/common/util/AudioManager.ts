@@ -109,9 +109,7 @@ export default class AudioManager {
 
         if (this._bgmOff) {
             this._bgmMap.forEach((audioData: AudioData, clip: cc.AudioClip) => {
-                audioData.tween && audioData.tween.stop();
-                audioData.tween = null;
-                cc.audioEngine.stop(audioData.id);
+                this.stop(audioData);
             });
             this._bgmMap.clear();
         }
@@ -131,17 +129,13 @@ export default class AudioManager {
         if (this._sfxOff) {
             this._normalSfxMap.forEach((data: SfxData, clip: cc.AudioClip) => {
                 data.audioList.forEach((audioData: AudioData) => {
-                    audioData.tween && audioData.tween.stop();
-                    audioData.tween = null;
-                    cc.audioEngine.stop(audioData.id);
+                    this.stop(audioData);
                 });
                 data.audioList.length = 0;
             });
             this._uiSfxMap.forEach((data: SfxData, clip: cc.AudioClip) => {
                 data.audioList.forEach((audioData: AudioData) => {
-                    audioData.tween && audioData.tween.stop();
-                    audioData.tween = null;
-                    cc.audioEngine.stop(audioData.id);
+                    this.stop(audioData);
                 });
                 data.audioList.length = 0;
             });
@@ -226,6 +220,18 @@ export default class AudioManager {
     }
 
     /**
+     * 停止音频
+     * @param audioData 
+     */
+    private static stop(audioData: AudioData) {
+        if (audioData.tween) {
+            audioData.tween.stop();
+            audioData.tween = null;
+        }
+        cc.audioEngine.stop(audioData.id);
+    }
+
+    /**
      * 播放音频并返回AudioData
      */
     private static play(args: cc.AudioClip | AudioPlayArgs, volume: number, audioData: AudioData = null): AudioData {
@@ -278,7 +284,7 @@ export default class AudioManager {
             audioData = this.play(args, this.bgmVolume);
             this._bgmMap.set(clip, audioData);
         } else {
-            cc.audioEngine.stop(audioData.id);
+            this.stop(audioData);
             this.play(args, this.bgmVolume, audioData);
         }
     }
@@ -301,12 +307,12 @@ export default class AudioManager {
         } else {
             // 剔除不处于播放状态的音频
             while (sfxData.audioList.length > 0 && cc.audioEngine.getState(sfxData.audioList[0].id) !== cc.audioEngine.AudioState.PLAYING) {
-                cc.audioEngine.stop(sfxData.audioList.shift().id);
+                this.stop(sfxData.audioList.shift());
             }
 
             // 已达到最大数量则剔除最先(第一个)缓存的音频
             while (sfxData.overStop && sfxData.audioList.length >= sfxData.maxNum) {
-                cc.audioEngine.stop(sfxData.audioList.shift().id);
+                this.stop(sfxData.audioList.shift());
             }
 
             // 缓存新的音频
@@ -318,7 +324,7 @@ export default class AudioManager {
     }
 
     /**
-     * 设置音效数据(用于限制某些短时间内同时大量播放的音效)
+     * 设置音效数据（用于限制某些短时间内同时大量播放的音效）
      * @param clip 
      * @param type 音效类型
      * @param maxNum 此音效最大同时播放的数量
@@ -362,31 +368,25 @@ export default class AudioManager {
                 return;
             }
 
-            audioData.tween && audioData.tween.stop();
-            audioData.tween = null;
             if (fadeDuration <= 0) {
-                cc.audioEngine.stop(audioData.id);
+                this.stop(audioData);
                 this._bgmMap.delete(clip);
             } else {
                 this.volumeFade(audioData, fadeDuration, 1, 0, () => {
-                    cc.audioEngine.stop(audioData.id);
+                    this.stop(audioData);
                     this._bgmMap.delete(clip);
                 });
             }
         } else {
             if (fadeDuration <= 0) {
                 this._bgmMap.forEach((audioData: AudioData, clip: cc.AudioClip) => {
-                    audioData.tween && audioData.tween.stop();
-                    audioData.tween = null;
-                    cc.audioEngine.stop(audioData.id);
+                    this.stop(audioData);
                 });
                 this._bgmMap.clear();
             } else {
                 this._bgmMap.forEach((audioData: AudioData, clip: cc.AudioClip) => {
-                    audioData.tween && audioData.tween.stop();
-                    audioData.tween = null;
                     this.volumeFade(audioData, fadeDuration, 1, 0, () => {
-                        cc.audioEngine.stop(audioData.id);
+                        this.stop(audioData);
                         this._bgmMap.delete(clip);
                     });
                 });
@@ -411,25 +411,19 @@ export default class AudioManager {
             }
 
             data.audioList.forEach((audioData: AudioData) => {
-                audioData.tween && audioData.tween.stop();
-                audioData.tween = null;
-                cc.audioEngine.stop(audioData.id);
+                this.stop(audioData);
             });
             data.audioList.length = 0;
         } else {
             this._normalSfxMap.forEach((data: SfxData, clip: cc.AudioClip) => {
                 data.audioList.forEach((audioData: AudioData) => {
-                    audioData.tween && audioData.tween.stop();
-                    audioData.tween = null;
-                    cc.audioEngine.stop(audioData.id);
+                    this.stop(audioData);
                 });
                 data.audioList.length = 0;
             });
             this._uiSfxMap.forEach((data: SfxData, clip: cc.AudioClip) => {
                 data.audioList.forEach((audioData: AudioData) => {
-                    audioData.tween && audioData.tween.stop();
-                    audioData.tween = null;
-                    cc.audioEngine.stop(audioData.id);
+                    this.stop(audioData);
                 });
                 data.audioList.length = 0;
             });
