@@ -21,7 +21,7 @@ https://leeyip.github.io/cocos-framework/
 #### 全局时间管理器
 文件路径(scripts/common/cmpt/base/Timer.ts)
 
-组件需要绑在场景的根节点或者常驻节点上，由timeScale控制每帧间隔时间的缩放，引入并修改了开源库tween.js(https://github.com/tweenjs/tween.js)，在Timer组件内控制。
+组件需要绑在场景的根节点或者常驻节点上，由timeScale控制每帧间隔时间的缩放，引入并修改了开源库tween.js(https://github.com/tweenjs/tween.js) 在Timer组件内控制。
 
 - 属性
     - **`timeScale: number`**  dt缩放倍数，1为正常速度，0为暂停
