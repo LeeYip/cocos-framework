@@ -23,6 +23,11 @@ export default class DlgTimer extends DialogBase {
         Events.targetOn(this);
     }
 
+    protected onDestroy() {
+        this._tween?.stop();
+        Events.targetOff(this);
+    }
+
     protected update() {
         this.Move2.x += Timer.scaleDt * 300 * this._dir;
         if (this._dir > 0 && this.Move2.x > 500) {
@@ -30,11 +35,6 @@ export default class DlgTimer extends DialogBase {
         } else if (this._dir < 0 && this.Move2.x < -500) {
             this._dir = 1;
         }
-    }
-
-    protected onDestroy() {
-        this._tween && this._tween.stop();
-        Events.targetOff(this);
     }
 
     /**

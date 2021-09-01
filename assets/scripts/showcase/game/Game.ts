@@ -1,8 +1,10 @@
 import Layer from "../../common/cmpt/base/Layer";
+import { DirUrl } from "../../common/const/Url";
 import Events from "../../common/util/Events";
+import Res from "../../common/util/Res";
 import DlgAnimValue from "../dialog/DlgAnimValue";
 import DlgAudio from "../dialog/DlgAudio";
-import DlgButton from "../dialog/DlgButton";
+import DlgEvents from "../dialog/DlgEvents";
 import DlgI18N from "../dialog/DlgI18N";
 import DlgLayer from "../dialog/DlgLayer";
 import DlgShader from "../dialog/DlgShader";
@@ -28,38 +30,45 @@ export default class Game extends cc.Component {
     }
 
     private onClickTimer() {
-        Layer.inst.openUniDialog(DlgTimer.pUrl);
+        Layer.inst.openUniDialogAsync(DlgTimer.pUrl);
     }
 
     private onClickLayer() {
-        Layer.inst.openUniDialog(DlgLayer.pUrl);
+        Layer.inst.openUniDialogAsync(DlgLayer.pUrl);
     }
 
     private onClickShader() {
-        Layer.inst.openUniDialog(DlgShader.pUrl);
+        Layer.inst.openUniDialogAsync(DlgShader.pUrl);
     }
 
     private onClickAnimValue() {
-        Layer.inst.openUniDialog(DlgAnimValue.pUrl);
+        Layer.inst.openUniDialogAsync(DlgAnimValue.pUrl);
     }
 
     private onClickButton() {
-        Layer.inst.openUniDialog(DlgButton.pUrl);
+        Layer.inst.openUniDialogAsync('DlgButton');
     }
 
     private onClickShake() {
-        Layer.inst.openUniDialog(DlgShake.pUrl);
+        Layer.inst.openUniDialogAsync(DlgShake.pUrl);
     }
 
     private onClickList() {
-        Layer.inst.openUniDialog(DlgVirtualList.pUrl);
+        Layer.inst.openUniDialogAsync(DlgVirtualList.pUrl);
     }
 
-    private onClickAudio() {
-        Layer.inst.openUniDialog(DlgAudio.pUrl);
+    private async onClickAudio() {
+        Layer.inst.openUniDialogAsync(DlgAudio.pUrl);
+        Layer.inst.showLoading();
+        await Res.loadDir(DirUrl.AUDIO, cc.AudioClip);
+        Layer.inst.hideLoading();
     }
 
     private onClickI18N() {
-        Layer.inst.openUniDialog(DlgI18N.pUrl);
+        Layer.inst.openUniDialogAsync(DlgI18N.pUrl);
+    }
+
+    private onClickEvent() {
+        Layer.inst.openUniDialogAsync(DlgEvents.pUrl);
     }
 }

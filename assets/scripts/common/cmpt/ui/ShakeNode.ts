@@ -32,9 +32,10 @@ export default class ShakeNode extends cc.Component {
         }
 
         let sv = cc.v2(0, this.ShakePower);
+        this.node.setPosition(sv);
         let xArr: number[] = [];
         let yArr: number[] = [];
-        for (let i = 0; i < 8; i++) {
+        for (let i = 1; i <= 8; i++) {
             let v = sv.rotate(Math.PI / 4 * (i * 3));
             xArr.push(v.x);
             yArr.push(v.y);

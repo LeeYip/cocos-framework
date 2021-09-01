@@ -11,19 +11,15 @@ export default class DlgAudio extends DialogBase {
 
     @property(cc.Slider) public VolumeSlider: cc.Slider = null;
 
-    /**
-     * @override
-     */
-    public open() {
-        this.onSlide();
+    protected onDestroy() {
+        AudioManager.stopAll();
     }
 
     /**
      * @override
      */
-    public close() {
-        super.close();
-        AudioManager.stopAll();
+    public open() {
+        this.onSlide();
     }
 
     private onSlide() {

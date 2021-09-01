@@ -67,15 +67,23 @@ export default class Layer extends cc.Component {
     /**
      * 进入主界面
      */
-    public enterHome() {
+    public async enterHome(): Promise<cc.Node> {
+        this.showLoading();
+        let prefab: cc.Prefab = await Res.load(ResUrl.PREFAB.HOME, cc.Prefab);
+        this.hideLoading();
+        if (!prefab) {
+            cc.error(`[Layer.enterHome] can not find home prefab: ${ResUrl.PREFAB.HOME}`);
+            return;
+        }
+
         Timer.reset();
         cc.Camera.main.node.position = cc.v3(0, 0);
         Events.emit(EventName.CAMERA_MOVE);
 
         this.MainLayer.destroyAllChildren();
-        this.DialogLayer.destroyAllChildren();
-        this.TipLayer.destroyAllChildren();
-        let node: cc.Node = cc.instantiate(Res.get(ResUrl.PREFAB.HOME, cc.Prefab));
+        this.clearDialogs();
+        this.clearTips();
+        let node: cc.Node = cc.instantiate(prefab);
         node.setPosition(0, 0);
         this.MainLayer.addChild(node);
         return node;
@@ -84,11 +92,19 @@ export default class Layer extends cc.Component {
     /**
      * 进入游戏界面
      */
-    public enterGame() {
+    public async enterGame(): Promise<cc.Node> {
+        this.showLoading();
+        let prefab: cc.Prefab = await Res.load(ResUrl.PREFAB.GAME, cc.Prefab);
+        this.hideLoading();
+        if (!prefab) {
+            cc.error(`[Layer.enterGame] can not find game prefab: ${ResUrl.PREFAB.GAME}`);
+            return;
+        }
+
         this.MainLayer.destroyAllChildren();
-        this.DialogLayer.destroyAllChildren();
-        this.TipLayer.destroyAllChildren();
-        let node: cc.Node = cc.instantiate(Res.get(ResUrl.PREFAB.GAME, cc.Prefab));
+        this.clearDialogs();
+        this.clearTips();
+        let node: cc.Node = cc.instantiate(prefab);
         node.setPosition(0, 0);
         this.MainLayer.addChild(node);
         return node;
@@ -105,7 +121,7 @@ export default class Layer extends cc.Component {
             if (!cmpt) {
                 continue;
             }
-            if (cmpt.constructor['pUrl'] === url) {
+            if (cmpt.prefabUrl === url) {
                 return cmpt;
             }
         }
@@ -129,6 +145,8 @@ export default class Layer extends cc.Component {
         node.setPosition(0, 0);
         let cmpt = node.getComponent(DialogBase);
         if (cmpt) {
+            //@ts-ignore
+            cmpt._prefabUrl = url;
             cmpt.playOpen();
             cmpt.open(...args);
         }
@@ -167,6 +185,8 @@ export default class Layer extends cc.Component {
         node.setPosition(0, 0);
         let cmpt = node.getComponent(DialogBase);
         if (cmpt) {
+            //@ts-ignore
+            cmpt._prefabUrl = url;
             cmpt.playOpen();
             cmpt.open(...args);
         }
@@ -189,28 +209,40 @@ export default class Layer extends cc.Component {
     /**
      * 关闭遍历到的第一个弹窗
      * @param url prefab在resources/prefab/dialog/下的路径
-     * @param args
      */
-    public closeDialog(url: string, ...args: any[]) {
+    public closeDialog(url: string) {
         let cmpt = this.getDialog(url);
-        cmpt && cmpt.close(...args);
+        cmpt?.close();
     }
 
     /**
      * 关闭所有同路径弹窗
      * @param url prefab在resources/prefab/dialog/下的路径
-     * @param args
      */
-    public closeDialogs(url: string, ...args: any[]) {
-        for (let i = 0; i < this.DialogLayer.childrenCount; i++) {
+    public closeDialogs(url: string) {
+        for (let i = this.DialogLayer.childrenCount - 1; i >= 0; i--) {
             let node = this.DialogLayer.children[i];
             let cmpt = node.getComponent(DialogBase);
             if (!cmpt) {
                 continue;
             }
-            if (cmpt.constructor['pUrl'] === url) {
-                cmpt.close(...args);
+            if (cmpt.prefabUrl === url) {
+                cmpt.close();
             }
+        }
+    }
+
+    /**
+     * 关闭所有弹窗
+     */
+    public clearDialogs() {
+        for (let i = this.DialogLayer.childrenCount - 1; i >= 0; i--) {
+            let node = this.DialogLayer.children[i];
+            let cmpt = node.getComponent(DialogBase);
+            if (!cmpt) {
+                continue;
+            }
+            cmpt.close();
         }
     }
 
@@ -240,7 +272,7 @@ export default class Layer extends cc.Component {
             if (!cmpt) {
                 continue;
             }
-            if (cmpt.constructor['pUrl'] === url) {
+            if (cmpt.prefabUrl === url) {
                 arr.push(new Promise((resolve, reject) => {
                     cmpt.addResolve(resolve);
                 }));
@@ -319,12 +351,11 @@ export default class Layer extends cc.Component {
     }
 
     /**
-     * 清空所有弹窗与提示
+     * 清空所有提示
      */
-    public clearDialogAndTip() {
+    public clearTips() {
         this._tipPool.length = 0;
         this._tipTexts.length = 0;
-        this.DialogLayer.destroyAllChildren();
         this.TipLayer.destroyAllChildren();
     }
 
@@ -333,7 +364,18 @@ export default class Layer extends cc.Component {
      */
     public showLoading() {
         this._loadingCount++;
-        this.LoadingLayer.active = true;
+        if (!this.LoadingLayer.active) {
+            this.LoadingLayer.active = true;
+            // 默认0.5s后才显示loading内容
+            let content = this.LoadingLayer.getChildByName('content');
+            if (content) {
+                content.active = false;
+                this.unscheduleAllCallbacks();
+                Tool.waitCmpt(this, 0.5).then(() => {
+                    content.active = true;
+                });
+            }
+        }
     }
 
     /**
@@ -344,6 +386,7 @@ export default class Layer extends cc.Component {
         if (this._loadingCount <= 0) {
             this._loadingCount = 0;
             this.LoadingLayer.active = false;
+            this.unscheduleAllCallbacks();
         }
     }
 }

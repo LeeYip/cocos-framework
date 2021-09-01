@@ -155,10 +155,10 @@ export default class AudioManager {
 
         this._bgmMap.forEach((audioData: AudioData, clip: cc.AudioClip) => {
             if (this._bgmPause) {
-                audioData.tween && audioData.tween.pause();
+                audioData.tween?.pause();
                 cc.audioEngine.pause(audioData.id);
             } else {
-                audioData.tween && audioData.tween.resume();
+                audioData.tween?.resume();
                 cc.audioEngine.resume(audioData.id);
             }
         });
@@ -178,14 +178,14 @@ export default class AudioManager {
         if (this._sfxPause) {
             this._normalSfxMap.forEach((data: SfxData, clip: cc.AudioClip) => {
                 data.audioList.forEach((audioData: AudioData) => {
-                    audioData.tween && audioData.tween.pause();
+                    audioData.tween?.pause();
                     cc.audioEngine.pause(audioData.id);
                 });
             });
         } else {
             this._normalSfxMap.forEach((data: SfxData, clip: cc.AudioClip) => {
                 data.audioList.forEach((audioData: AudioData) => {
-                    audioData.tween && audioData.tween.pause();
+                    audioData.tween?.resume();
                     cc.audioEngine.resume(audioData.id);
                 });
             });
@@ -202,7 +202,7 @@ export default class AudioManager {
      * @param call 渐变结束的回调
      */
     private static volumeFade(data: AudioData, duration: number, from: number, to: number, call?: () => void) {
-        data.tween && data.tween.stop();
+        data.tween?.stop();
         data.volume = from;
         cc.audioEngine.setVolume(data.id, data.volume * this.bgmVolume);
         data.tween = new Tween(data)

@@ -14,4 +14,7 @@ export enum EventName {
 
 	/** 相机移动 */
 	CAMERA_MOVE,
+
+	EVENT_TEST1,
+	EVENT_TEST2,
 };

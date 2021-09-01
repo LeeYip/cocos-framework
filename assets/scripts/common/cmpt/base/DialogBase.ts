@@ -1,12 +1,13 @@
 import Tool from "../../util/Tool";
 
-const { ccclass, property, disallowMultiple } = cc._decorator;
+const { ccclass, property, disallowMultiple, menu } = cc._decorator;
 
 /**
  * 弹窗基类
  */
 @ccclass
 @disallowMultiple
+@menu('Framework/基础组件/DialogBase')
 export default class DialogBase extends cc.Component {
     /** 弹窗prefab在resources/prefab/dialog/下的路径 */
     public static pUrl: string = '';
@@ -30,6 +31,10 @@ export default class DialogBase extends cc.Component {
 
     /** 外部的resolve函数，在弹窗close时调用 */
     private _resolveList: Array<(value?: any) => void> = [];
+
+    private _prefabUrl: string = '';
+    /** 弹窗prefab在resources/prefab/dialog/下的路径 */
+    public get prefabUrl() { return this._prefabUrl; }
 
     protected onLoad() {
         if (this.DlgAnim) {
@@ -76,7 +81,7 @@ export default class DialogBase extends cc.Component {
      * @virtual
      * 关闭弹窗，必须调用此接口关闭，子类重写时请调用super.close()
      */
-    public close(...args: any[]): any {
+    public close(): any {
         this._resolveList.forEach((resolve) => { resolve(); });
         this.node.removeFromParent();
         this.node.destroy();

@@ -764,8 +764,8 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 160,
-      "height": 50.4
+      "width": 495.63,
+      "height": 90.4
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
@@ -816,8 +816,8 @@
     ],
     "_srcBlendFactor": 770,
     "_dstBlendFactor": 771,
-    "_string": "振动节点",
-    "_N$string": "振动节点",
+    "_string": "振动节点\n动画速度受到timeScale影响",
+    "_N$string": "振动节点\n动画速度受到timeScale影响",
     "_fontSize": 40,
     "_lineHeight": 40,
     "_enableWrapText": true,
@@ -827,7 +827,7 @@
     "_batchAsBitmap": false,
     "_styleFlags": 0,
     "_underlineHeight": 0,
-    "_N$horizontalAlign": 0,
+    "_N$horizontalAlign": 1,
     "_N$verticalAlign": 1,
     "_N$fontFamily": "Arial",
     "_N$overflow": 0,

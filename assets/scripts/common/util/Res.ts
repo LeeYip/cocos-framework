@@ -44,9 +44,9 @@ export default class Res {
      * @param url 资源路径
      * @param type 资源类型
      */
-    public static async loadDir(url: string, type: typeof cc.Asset): Promise<any[]> {
+    public static async loadDir<T extends cc.Asset>(url: string, type: typeof cc.Asset): Promise<T[]> {
         return await new Promise((resolve, reject) => {
-            cc.resources.loadDir(url, type, (error: Error, resource: any[]) => {
+            cc.resources.loadDir(url, type, (error: Error, resource: T[]) => {
                 if (error) {
                     cc.error(`[Res.loadDir] error: ${error}`);
                     resolve([]);
@@ -55,5 +55,12 @@ export default class Res {
                 }
             });
         });
+    }
+
+    /**
+     * 释放所有动态加载的资源，需要注意调用时机
+     */
+    public static clear() {
+        cc.resources.releaseAll();
     }
 }

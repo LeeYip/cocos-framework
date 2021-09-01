@@ -1023,7 +1023,7 @@
     "_contentSize": {
       "__type__": "cc.Size",
       "width": 1000,
-      "height": 50.4
+      "height": 90.39999999999999
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
@@ -1074,8 +1074,8 @@
     ],
     "_srcBlendFactor": 770,
     "_dstBlendFactor": 771,
-    "_string": "简单的shader示例",
-    "_N$string": "简单的shader示例",
+    "_string": "简单的shader示例\n动画速度受到timeScale影响",
+    "_N$string": "简单的shader示例\n动画速度受到timeScale影响",
     "_fontSize": 40,
     "_lineHeight": 40,
     "_enableWrapText": true,

@@ -779,8 +779,8 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 160,
-      "height": 50.4
+      "width": 1142.32,
+      "height": 130.4
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
@@ -831,8 +831,8 @@
     ],
     "_srcBlendFactor": 770,
     "_dstBlendFactor": 771,
-    "_string": "虚拟列表",
-    "_N$string": "虚拟列表",
+    "_string": "虚拟列表\n仅生成mask区域内所需的最少节点\n且支持节点分层，如下列表就是label节点和sprite节点进行了分层",
+    "_N$string": "虚拟列表\n仅生成mask区域内所需的最少节点\n且支持节点分层，如下列表就是label节点和sprite节点进行了分层",
     "_fontSize": 40,
     "_lineHeight": 40,
     "_enableWrapText": true,
@@ -842,7 +842,7 @@
     "_batchAsBitmap": false,
     "_styleFlags": 0,
     "_underlineHeight": 0,
-    "_N$horizontalAlign": 0,
+    "_N$horizontalAlign": 1,
     "_N$verticalAlign": 1,
     "_N$fontFamily": "Arial",
     "_N$overflow": 0,

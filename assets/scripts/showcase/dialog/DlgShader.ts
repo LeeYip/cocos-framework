@@ -16,6 +16,10 @@ export default class DlgShader extends DialogBase {
     private _tween: Tween<any> = null;
     private _sx: number = 2;
 
+    protected onDestroy() {
+        this._tween?.stop();
+    }
+
     /**
      * @override
      */
@@ -28,14 +32,6 @@ export default class DlgShader extends DialogBase {
                 this.Fill.updateShader();
             })
             .start();
-    }
-
-    /**
-     * @override
-     */
-    public close() {
-        super.close();
-        this._tween && this._tween.stop();
     }
 
     protected update() {

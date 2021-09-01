@@ -60,7 +60,10 @@ export default class VirtualList extends cc.Component {
     @property({ type: VirtualLayoutData, tooltip: CC_DEV && '列表除主容器外的其他容器\n需要分层显示时使用，一般用于降低draw call' })
     public Others: VirtualLayoutData[] = [];
 
-    @property({ tooltip: CC_DEV && '元素节点大小是否一致且固定不变，大小不定时更耗性能' })
+    @property({ 
+        visible: false,
+        tooltip: CC_DEV && '元素节点大小是否一致且固定不变，大小不定时更耗性能（目前不支持此选项，必须为true）'
+     })
     public IsFixedSize: boolean = true;
 
     private _scrollView: cc.ScrollView = null;
