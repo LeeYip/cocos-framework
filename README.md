@@ -35,7 +35,7 @@
 #### <a id="framework-timer"></a>全局时间管理器
 >文件路径(scripts/common/cmpt/base/Timer.ts)
 
-组件需要绑在场景的根节点或者常驻节点上，由timeScale控制每帧间隔时间的缩放，引入并修改了开源库tween.js\(https://github.com/tweenjs/tween.js\)，在Timer组件内控制。
+组件需要绑在场景的根节点或者常驻节点上，由timeScale控制每帧间隔时间的缩放。引入并修改了开源库tween.js，在Timer组件中更新和控制，使用方式请参考 https://github.com/tweenjs/tween.js
 
 ```typescript
 // 执行tween，让node用1000毫秒x坐标移动到100处
