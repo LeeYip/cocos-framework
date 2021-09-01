@@ -22,12 +22,16 @@ export default class ShakeNode extends cc.Component {
 
     private _tween: Tween<cc.Node> = null;
 
+    protected onDestroy() {
+        this._tween?.stop();
+    }
+
     /**
      * 振动
-     * @param duration 振动时长，单位秒
+     * @param times 振动几个周期
      */
-    public shake(duration: number = 0.5) {
-        if (this._tween || duration <= 0 || this.ShakePower <= 0 || this.ShakeTime <= 0) {
+    public shake(times: number = 5) {
+        if ((this._tween && this._tween.isPlaying()) || times <= 0 || this.ShakePower <= 0 || this.ShakeTime <= 0) {
             return;
         }
 
@@ -43,18 +47,7 @@ export default class ShakeNode extends cc.Component {
 
         this._tween = this.TimeScale ? new Tween(this.node, SCALE_TWEEN) : new Tween(this.node);
         this._tween.to({ x: xArr, y: yArr }, this.ShakeTime * 1000)
-            .repeat(Number.POSITIVE_INFINITY)
-            .start();
-
-        // duration时间后停止振动
-        let dObj = { progress: 0 };
-        let dTween = this.TimeScale ? new Tween(dObj, SCALE_TWEEN) : new Tween(dObj);
-        dTween.to({ progress: 1 }, duration * 1000)
-            .onComplete(() => {
-                this._tween.stop();
-                this._tween = null;
-                this.node.setPosition(0, 0);
-            })
+            .repeat(times)
             .start();
     }
 }

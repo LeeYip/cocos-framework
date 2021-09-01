@@ -82,6 +82,10 @@ export default class AnimValue extends cc.Component {
     /** 变化过程的当前值 */
     public get curValue() { return this._curValue; }
 
+    protected onDestroy() {
+        this._tween?.stop();
+    }
+
     /**
      * @virtual
      */
@@ -128,7 +132,7 @@ export default class AnimValue extends cc.Component {
 
         this._endValue = end;
         this._isAdd = this._endValue - this._curValue > 0;
-        this._tween && this._tween.stop();
+        this._tween?.stop();
         this._tween = this.TimeScale ? new Tween(this, SCALE_TWEEN) : new Tween(this);
         let duration = this.AnimType === AnimType.DURATION ? this.Duration : Math.abs(this._endValue - this._curValue) / this.Speed;
         switch (this.EasingType) {
