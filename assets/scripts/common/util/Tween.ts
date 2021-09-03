@@ -258,6 +258,20 @@ export class Group {
         if (tweenIds.length === 0) {
             return false;
         }
+
+        // 检测tween绑定的cc.Object是否已经销毁，对应的tween也需销毁
+        for (var i = 0; i < tweenIds.length; i++) {
+            var tween: Tween<any> = this._tweens[tweenIds[i]];
+            if (tween && !tween.isCCObjectValid()) {
+                tween.stop();
+            }
+        }
+
+        tweenIds = Object.keys(this._tweens);
+        if (tweenIds.length === 0) {
+            return false;
+        }
+
         // Tweens are updated in "batches". If you add a new tween during an
         // update, then the new tween will be updated in the next batch.
         // If you remove a tween during an update, it may or may not be updated.
@@ -381,6 +395,9 @@ var scaleGroup = new Group();
  * Thank you all, you're awesome!
  */
 export class Tween<T extends UnknownProps> {
+    /** 绑定的cc.Object */
+    private _ccObject;
+
     private _object;
     private _group;
     private _isPaused;
@@ -435,6 +452,29 @@ export class Tween<T extends UnknownProps> {
         this._isChainStopped = false;
         this._goToEnd = false;
     }
+
+    /**
+     * 绑定cc.Object，则cc.Object销毁时，tween也会销毁
+     */
+     bindCCObject(obj: cc.Object) {
+        this._ccObject = obj;
+    }
+
+    /**
+     * - 返回tween绑定的cc.Object是否可用
+     * - 如果绑定了cc.Object，则检测tween绑定的cc.Object是否已经销毁，对应的tween也需销毁
+     * - 如果没绑定则返回true
+     */
+    isCCObjectValid() {
+        if (this._object instanceof cc.Object && !this._object.isValid) {
+            return false;
+        }
+        if (this._ccObject instanceof cc.Object && !this._ccObject.isValid) {
+            return false;
+        }
+        return true;
+    }
+
     getId(): number {
         return this._id;
     }

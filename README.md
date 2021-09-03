@@ -37,6 +37,8 @@
 
 组件需要绑在场景的根节点或者常驻节点上，由timeScale控制每帧间隔时间的缩放。引入并修改了开源库tween.js，在Timer组件中更新和控制，使用方式请参考 https://github.com/tweenjs/tween.js
 
+关于我对tween.js的修改
+1. 设置了新的Group，用以执行受timeScale影响的tween动画
 ```typescript
 // 执行tween，让node用1000毫秒x坐标移动到100处
 new Tween(node)
@@ -49,14 +51,35 @@ new Tween(node, SCALE_TWEEN)
     .start();
 ```
 
+2. 加入了新的接口`bindCCObject(obj: cc.Object)`，可以将tween与cc.Node或cc.Component等类型为cc.Object的对象进行绑定。当Node或Component被销毁时，与之绑定的tween也会自动销毁。
+```typescript
+// 比如构造参数使用cc.Node
+let node: cc.Node;
+let tween = new Tween(node)
+    .to({x: 100}, 1000)
+    .start();
+// node销毁后，不需要手动销毁tween，框架内部会自动销毁
+node.destory();
+
+
+// 或者主动绑定一个cc.Object类型的对象
+let comp: cc.Component;
+let tween = new Tween({a: 1})
+    .to({a: 10}, 1000)
+    .start()
+    .bindCCObject(comp);
+// 当comp销毁后，同样tween也会自动销毁
+comp.destory();
+```
+
 - **属性**
     - **`timeScale: number`**  dt缩放倍数，1为正常速度，0为暂停
     - **`realDt: number`**  距上一帧间隔的真实时间
     - **`scaleDt: number`**  距上一帧间隔经过timeScale缩放的时间
 - **方法**
-    - **`reset()`**  重置timeScale
-    - **`gamePause()`**  暂停游戏 timeScale设置为0，发送暂停事件
-    - **`gameResume()`**  恢复游戏 timeScale恢复为暂停前的值，发送恢复事件
+    - **`reset()`**  重置timeScale，触发timeScale事件
+    - **`gamePause()`**  暂停游戏 timeScale设置为0，触发暂停事件
+    - **`gameResume()`**  恢复游戏 timeScale恢复为暂停前的值，触发恢复事件
 
 #### <a id="framework-layer"></a>全局层级管理
 

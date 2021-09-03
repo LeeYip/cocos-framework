@@ -82,10 +82,6 @@ export default class AnimValue extends cc.Component {
     /** 变化过程的当前值 */
     public get curValue() { return this._curValue; }
 
-    protected onDestroy() {
-        this._tween?.stop();
-    }
-
     /**
      * @virtual
      */

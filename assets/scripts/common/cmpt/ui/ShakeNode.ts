@@ -22,10 +22,6 @@ export default class ShakeNode extends cc.Component {
 
     private _tween: Tween<cc.Node> = null;
 
-    protected onDestroy() {
-        this._tween?.stop();
-    }
-
     /**
      * 振动
      * @param times 振动几个周期
