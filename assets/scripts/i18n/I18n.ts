@@ -93,7 +93,7 @@ export default class I18n {
      * @param key 语言表中的key
      * @param opt 用于替换的数据
      * @example
-     * 语言表 {"test": "test %{arg1} !!!"}
+     * // 语言表 {"test": "test %{arg1} !!!"}
      * I18n.getText('test', {arg1: 'something'}); => 'test somthing !!!'
      */
     public static getText(key: string, opt?: any): string {

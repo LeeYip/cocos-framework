@@ -45,7 +45,7 @@ export default class Random {
     }
 
     /**
-     * 获取区间[min, max)的整数，传入1个参数则区间为[0, arg1)
+     * 获取区间[min, max)的整数，传入1个参数则区间为[0, min)
      */
     public static int(seed: string | number, min: number, max: number = undefined) {
         if (max === undefined) {
@@ -58,7 +58,7 @@ export default class Random {
     }
 
     /**
-     * 获取区间[min, max)的浮点数，传入1个参数则区间为[0, arg1)
+     * 获取区间[min, max)的浮点数，传入1个参数则区间为[0, min)
      */
     public static float(seed: string | number, min: number, max: number = undefined) {
         if (max === undefined) {

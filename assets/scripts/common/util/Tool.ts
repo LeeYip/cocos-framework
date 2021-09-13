@@ -1,7 +1,7 @@
 /**
  * 工具类
  */
-export default class Tool {
+ export default class Tool {
     /**
      * 深拷贝
      * @param source 源数据
@@ -103,7 +103,7 @@ export default class Tool {
     }
 
     /**
-     * 获取区间[min, max)的整数，传入1个参数则区间为[0, arg1)
+     * 获取区间[min, max)的整数，传入1个参数则区间为[0, min)
      */
     public static randInt(min: number, max: number = undefined) {
         if (max === undefined) {
@@ -116,7 +116,7 @@ export default class Tool {
     }
 
     /**
-     * 获取区间[min, max)的浮点数，传入1个参数则区间为[0, arg1)
+     * 获取区间[min, max)的浮点数，传入1个参数则区间为[0, min)
      */
     public static randFloat(min: number, max: number = undefined) {
         if (max === undefined) {
@@ -232,5 +232,15 @@ export default class Tool {
         } else {
             node.forEach((n: cc.Node) => { this.nodeRecursive(n, cb, thisArg); });
         }
+    }
+
+    /**
+     * destroy并立即remove传入节点的所有子节点
+     */
+    public static clearChildren(...nodes: cc.Node[]) {
+        nodes.forEach((e) => {
+            e.destroyAllChildren();
+            e.removeAllChildren();
+        });
     }
 }
