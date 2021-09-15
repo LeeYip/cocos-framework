@@ -1,7 +1,39 @@
 import { EventName } from "../const/EventName";
 
 /**
- * 非静态成员函数装饰器，用于预先载入待注册的事件，配合targetOn使用
+ * 类装饰器。用于覆盖onLoad和onDestroy方法，在onLoad中注册preloadEvent绑定的所有事件，在onDestroy注销绑定的所有事件
+ */
+export function eventsOnLoad(constructor: any) {
+    let onFunc = constructor.prototype.onLoad;
+    let offFunc = constructor.prototype.onDestroy;
+    constructor.prototype.onLoad = function () {
+        Events.targetOn(this);
+        onFunc && onFunc.call(this);
+    }
+    constructor.prototype.onDestroy = function () {
+        Events.targetOff(this);
+        offFunc && offFunc.call(this);
+    }
+}
+
+/**
+ * 类装饰器。用于覆盖onEnable和onDisable方法，在onEnable中注册preloadEvent绑定的所有事件，在onDisable注销绑定的所有事件
+ */
+export function eventsOnEnable(constructor: any) {
+    let onFunc = constructor.prototype.onEnable;
+    let offFunc = constructor.prototype.onDisable;
+    constructor.prototype.onEnable = function () {
+        Events.targetOn(this);
+        onFunc && onFunc.call(this);
+    }
+    constructor.prototype.onDisable = function () {
+        Events.targetOff(this);
+        offFunc && offFunc.call(this);
+    }
+}
+
+/**
+ * 非静态成员函数装饰器。用于预先载入待注册的事件，配合targetOn使用
  * @param event 事件名
  * @param once 事件是否只会触发一次，默认false
  */
@@ -244,7 +276,7 @@ export default class Events {
 
         let i: number;
         let callArr: Array<{ cb: (...args: any[]) => void; target: Object }> = [];
-        let onceArr: Array<{ cb: (...args: any[]) => void; target: Object }> = [];        
+        let onceArr: Array<{ cb: (...args: any[]) => void; target: Object }> = [];
         map.forEach((list, target) => {
             for (i = 0; i < list.length; i++) {
                 let listener = list[i];

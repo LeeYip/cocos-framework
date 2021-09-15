@@ -1,10 +1,11 @@
 import { EventName } from "../common/const/EventName";
-import Events, { preloadEvent } from "../common/util/Events";
+import { eventsOnLoad, preloadEvent } from "../common/util/Events";
 import I18n from "./I18n";
 
 const { ccclass, property, executeInEditMode, menu } = cc._decorator;
 
 @ccclass
+@eventsOnLoad
 @executeInEditMode
 @menu('Framework/I18N/LocalizedLabel')
 export default class LocalizedLabel extends cc.Component {
@@ -40,15 +41,6 @@ export default class LocalizedLabel extends cc.Component {
         try {
             I18n.init();
             this.updateLabel();
-            Events.targetOn(this);
-        } catch (err) {
-            cc.error(err);
-        }
-    }
-
-    protected onDestroy() {
-        try {
-            Events.targetOff(this);
         } catch (err) {
             cc.error(err);
         }

@@ -1,23 +1,16 @@
 import DialogBase from "../../common/cmpt/base/DialogBase";
 import { EventName } from "../../common/const/EventName";
-import Events, { preloadEvent } from "../../common/util/Events";
+import Events, { eventsOnEnable, preloadEvent } from "../../common/util/Events";
 import Tool from "../../common/util/Tool";
 
 const { ccclass, property } = cc._decorator;
 
 @ccclass
+@eventsOnEnable
 export default class DlgEvents extends DialogBase {
     public static pUrl: string = 'DlgEvents';
 
     @property(cc.Label) Lab1: cc.Label = null;
-
-    protected onEnable() {
-        Events.targetOn(this);
-    }
-
-    protected onDisable() {
-        Events.targetOff(this);
-    }
 
     private async onClickEmit() {
         await Events.emitAsync(EventName.EVENT_TEST1, '触发了事件1，请等待事件2');

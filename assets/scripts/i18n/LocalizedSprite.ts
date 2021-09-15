@@ -1,11 +1,12 @@
 import { EventName } from "../common/const/EventName";
-import Events, { preloadEvent } from "../common/util/Events";
+import { eventsOnLoad, preloadEvent } from "../common/util/Events";
 import Res from "../common/util/Res";
 import I18n, { LangType } from "./I18n";
 
 const { ccclass, property, executeInEditMode, menu, requireComponent } = cc._decorator;
 
 @ccclass
+@eventsOnLoad
 @executeInEditMode
 @requireComponent(cc.Sprite)
 @menu('Framework/I18N/LocalizedSprite')
@@ -30,15 +31,6 @@ export default class LocalizedSprite extends cc.Component {
             if (this._sprite.spriteFrame) {
                 this.imageKey = this._sprite.spriteFrame.name;
             }
-            Events.targetOn(this);
-        } catch (err) {
-            cc.error(err);
-        }
-    }
-
-    protected onDestroy() {
-        try {
-            Events.targetOff(this);
         } catch (err) {
             cc.error(err);
         }

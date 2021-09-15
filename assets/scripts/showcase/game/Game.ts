@@ -1,6 +1,6 @@
 import Layer from "../../common/cmpt/base/Layer";
 import { DirUrl } from "../../common/const/Url";
-import Events from "../../common/util/Events";
+import { eventsOnLoad } from "../../common/util/Events";
 import Res from "../../common/util/Res";
 import DlgAnimValue from "../dialog/DlgAnimValue";
 import DlgAudio from "../dialog/DlgAudio";
@@ -15,15 +15,8 @@ import DlgVirtualList from "../dialog/DlgVirtualList";
 const { ccclass, property } = cc._decorator;
 
 @ccclass
+@eventsOnLoad
 export default class Game extends cc.Component {
-
-    protected onLoad() {
-        Events.targetOn(this);
-    }
-
-    protected onDestroy() {
-        Events.targetOff(this);
-    }
 
     private onClickHome() {
         Layer.inst.enterHome();

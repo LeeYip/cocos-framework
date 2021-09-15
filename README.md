@@ -150,7 +150,7 @@ await Layer.inst.waitCloseDialog(DlgExample.pUrl);
 ```typescript
 export default class Test extends cc.Component {
     protected onLoad() {
-        // 注册当前类使用装饰器绑定的所有事件
+        // 注册当前类使用preloadEvent装饰器绑定的所有事件
         Events.targetOn(this);
     }
 
@@ -159,6 +159,29 @@ export default class Test extends cc.Component {
         Events.targetOff(this);
     }
 
+    // 使用装饰器绑定对应事件监听的函数
+    @preloadEvent(EventName.GAME_PAUSE)
+    private eventGamePause() {
+        
+    }
+
+    @preloadEvent(EventName.GAME_RESUME)
+    private eventGameResume() {
+        
+    }
+
+    // 若装饰器第二个参数传true，则触发一次监听函数后会自动注销事件
+    @preloadEvent(EventName.TIME_SCALE, true)
+    private eventTimeScale() {
+        
+    }
+}
+```
+
+或者也可使用类装饰器覆盖onLoad中和onDestroy方法，并分别在其中调用targetOn与targetOff
+```typescript
+@eventsOnLoad // 也可使用@eventsOnEnable，对应于onEnable和onDisable
+export default class Test extends cc.Component {
     // 使用装饰器绑定对应事件监听的函数
     @preloadEvent(EventName.GAME_PAUSE)
     private eventGamePause() {
@@ -187,7 +210,9 @@ export default class Test extends cc.Component {
 ```
 
 - **装饰器**
-    - **`preloadEvent(event: EventName, once: boolean = false)`**  非静态成员函数装饰器，用于预先载入待注册的事件，配合targetOn使用
+    - **`eventsOnLoad`** 类装饰器。用于覆盖onLoad和onDestroy方法，在onLoad中注册preloadEvent绑定的所有事件，在onDestroy注销绑定的所有事件
+    - **`eventsOnEnable`** 类装饰器。用于覆盖onEnable和onDisable方法，在onEnable中注册preloadEvent绑定的所有事件，在onDisable注销绑定的所有事件
+    - **`preloadEvent(event: EventName, once: boolean = false)`**  非静态成员函数装饰器。用于预先载入待注册的事件，配合targetOn使用
     
 - **方法**
     - **`targetOn(target: Object, onSuper: boolean = true)`**  注册与target构造函数预先绑定的所有事件，配合装饰器preloadEvent使用
