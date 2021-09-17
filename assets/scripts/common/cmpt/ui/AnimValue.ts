@@ -116,44 +116,47 @@ export default class AnimValue extends cc.Component {
 
     /**
      * @virtual
-     * 设置进度值
+     * 设置进度值。异步方法，进度动画结束后resolve
      * @param end 目标进度值
      * @param anim 是否执行动画，默认true
      */
-    public setValue(end: number, anim: boolean = true) {
+    public async setValue(end: number, anim: boolean = true): Promise<void> {
         if (!anim) {
             this.setValueImmediately(end);
             return;
         }
 
-        this._endValue = end;
-        this._isAdd = this._endValue - this._curValue > 0;
-        this._tween?.stop();
-        this._tween = this.TimeScale ? new Tween(this, SCALE_TWEEN) : new Tween(this);
-        let duration = this.AnimType === AnimType.DURATION ? this.Duration : Math.abs(this._endValue - this._curValue) / this.Speed;
-        switch (this.EasingType) {
-            case EasingType.IN:
-                this._tween.easing(Easing.Quadratic.In);
-                break;
-            case EasingType.OUT:
-                this._tween.easing(Easing.Quadratic.Out);
-                break;
-            case EasingType.IN_OUT:
-                this._tween.easing(Easing.Quadratic.InOut);
-                break;
-            default:
-                break;
-        }
-        this._tween.to({ _curValue: this._endValue }, duration * 1000)
-            .onStart(() => {
-                this.onAnimStart();
-            })
-            .onUpdate(() => {
-                this.onAnimUpdate();
-            })
-            .onComplete(() => {
-                this.onAnimComplete();
-            })
-            .start();
+        return new Promise((resolve, reject) => {
+            this._endValue = end;
+            this._isAdd = this._endValue - this._curValue > 0;
+            this._tween?.stop();
+            this._tween = this.TimeScale ? new Tween(this, SCALE_TWEEN) : new Tween(this);
+            let duration = this.AnimType === AnimType.DURATION ? this.Duration : Math.abs(this._endValue - this._curValue) / this.Speed;
+            switch (this.EasingType) {
+                case EasingType.IN:
+                    this._tween.easing(Easing.Quadratic.In);
+                    break;
+                case EasingType.OUT:
+                    this._tween.easing(Easing.Quadratic.Out);
+                    break;
+                case EasingType.IN_OUT:
+                    this._tween.easing(Easing.Quadratic.InOut);
+                    break;
+                default:
+                    break;
+            }
+            this._tween.to({ _curValue: this._endValue }, duration * 1000)
+                .onStart(() => {
+                    this.onAnimStart();
+                })
+                .onUpdate(() => {
+                    this.onAnimUpdate();
+                })
+                .onComplete(() => {
+                    this.onAnimComplete();
+                    resolve();
+                })
+                .start();
+        });
     }
 }
