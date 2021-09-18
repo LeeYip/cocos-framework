@@ -81,7 +81,7 @@ export default class Layer extends cc.Component {
         Events.emit(EventName.CAMERA_MOVE);
 
         this.MainLayer.destroyAllChildren();
-        this.clearDialogs();
+        this.closeDialogs();
         this.clearTips();
         let node: cc.Node = cc.instantiate(prefab);
         node.setPosition(0, 0);
@@ -102,7 +102,7 @@ export default class Layer extends cc.Component {
         }
 
         this.MainLayer.destroyAllChildren();
-        this.clearDialogs();
+        this.closeDialogs();
         this.clearTips();
         let node: cc.Node = cc.instantiate(prefab);
         node.setPosition(0, 0);
@@ -216,33 +216,19 @@ export default class Layer extends cc.Component {
     }
 
     /**
-     * 关闭所有同路径弹窗
+     * 关闭所有同路径弹窗，不传参则关闭所有弹窗
      * @param url prefab在resources/prefab/dialog/下的路径
      */
-    public closeDialogs(url: string) {
+    public closeDialogs(url: string = '') {
         for (let i = this.DialogLayer.childrenCount - 1; i >= 0; i--) {
             let node = this.DialogLayer.children[i];
             let cmpt = node.getComponent(DialogBase);
             if (!cmpt) {
                 continue;
             }
-            if (cmpt.prefabUrl === url) {
+            if (!url || cmpt.prefabUrl === url) {
                 cmpt.close();
             }
-        }
-    }
-
-    /**
-     * 关闭所有弹窗
-     */
-    public clearDialogs() {
-        for (let i = this.DialogLayer.childrenCount - 1; i >= 0; i--) {
-            let node = this.DialogLayer.children[i];
-            let cmpt = node.getComponent(DialogBase);
-            if (!cmpt) {
-                continue;
-            }
-            cmpt.close();
         }
     }
 

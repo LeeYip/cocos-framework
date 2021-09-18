@@ -72,6 +72,8 @@ export default class AnimValue extends cc.Component {
     })
     public TimeScale: boolean = false;
 
+    /** 缓存动画的resolve */
+    private _animResolve: (value: void | PromiseLike<void>) => void
     private _tween: Tween<this> = null;
     private _isAdd: boolean = false;
     /** 当前是否为增量变化 */
@@ -106,6 +108,10 @@ export default class AnimValue extends cc.Component {
      * 立即设置value，不执行动画
      */
     protected setValueImmediately(end: number) {
+        if (this._animResolve) {
+            this._animResolve();
+            this._animResolve = null;
+        }
         if (this._tween) {
             this._tween.stop();
             this._tween = null;
@@ -127,6 +133,7 @@ export default class AnimValue extends cc.Component {
         }
 
         return new Promise((resolve, reject) => {
+            this._animResolve = resolve;
             this._endValue = end;
             this._isAdd = this._endValue - this._curValue > 0;
             this._tween?.stop();
@@ -154,9 +161,26 @@ export default class AnimValue extends cc.Component {
                 })
                 .onComplete(() => {
                     this.onAnimComplete();
-                    resolve();
+                    if (this._animResolve) {
+                        this._animResolve();
+                        this._animResolve = null;
+                    }
                 })
                 .start();
         });
+    }
+
+    /**
+     * @virtual
+     * 停止动画，并中止之前未结束的Promise
+     */
+    public stop() {
+        if (this._animResolve) {
+            this._animResolve = null;
+        }
+        if (this._tween) {
+            this._tween.stop();
+            this._tween = null;
+        }
     }
 }

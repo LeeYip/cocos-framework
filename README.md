@@ -133,8 +133,7 @@ await Layer.inst.waitCloseDialog(DlgExample.pUrl);
     - **`openDialogAsync(url: string, ...args: any[]): Promise<void>`**  （异步方法）打开弹窗
     - **`openUniDialogAsync(url: string, ...args: any[]): Promise<void>`**  （异步方法）打开唯一弹窗，同一弹窗节点只能同时存在一个
     - **`closeDialog(url: string)`**  关闭遍历到的第一个弹窗
-    - **`closeDialogs(url: string)`**  关闭所有同路径弹窗
-    - **`clearDialogs()`**  关闭所有弹窗
+    - **`closeDialogs(url: string = '')`**  关闭所有同路径弹窗，不传参则关闭所有弹窗
     - **`waitCloseDialog(url: string): Promise<void>`**  异步等待弹窗关闭（只等待遍历到的第一个）
     - **`waitCloseDialogs(url: string): Promise<void>`**  异步等待所有同路径弹窗关闭
     - **`showTip(data: TipData | string)`**  弹出一条文字提示
