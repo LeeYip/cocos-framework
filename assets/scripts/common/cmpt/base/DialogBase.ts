@@ -64,6 +64,9 @@ export default class DialogBase extends cc.Component {
      */
     public playClose() {
         if (this.DlgAnim && this.CloseClip) {
+            if (this.DlgAnim.getAnimationState(this.CloseClip.name).isPlaying) {
+                return;
+            }
             this.DlgAnim.play(this.CloseClip.name);
         } else {
             this.close();
