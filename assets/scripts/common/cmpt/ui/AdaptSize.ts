@@ -1,3 +1,6 @@
+import { EventName } from "../../const/EventName";
+import { eventsOnLoad, preloadEvent } from "../../util/Events";
+
 const { ccclass, property, menu, executeInEditMode } = cc._decorator;
 
 /**
@@ -5,17 +8,15 @@ const { ccclass, property, menu, executeInEditMode } = cc._decorator;
  * - 不使用cc.Widget是因为某些需要改变节点position的情况下会产生冲突
  */
 @ccclass
+@eventsOnLoad
 @executeInEditMode
 @menu('Framework/UI组件/AdaptSize')
 export default class AdaptSize extends cc.Component {
     protected onLoad() {
         this.adapt();
-        // 仅web有效
-        cc.view.setResizeCallback(() => {
-            this.adapt();
-        });
     }
 
+    @preloadEvent(EventName.RESIZE)
     private adapt() {
         if (CC_EDITOR) {
             this.node.width = cc['engine'].getDesignResolutionSize().width;

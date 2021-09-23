@@ -209,17 +209,22 @@ export default class Layer extends cc.Component {
     /**
      * 关闭遍历到的第一个弹窗
      * @param url prefab在resources/prefab/dialog/下的路径
+     * @param play true：调用playClose播放弹窗关闭动画；false：直接调用close关闭弹窗
      */
-    public closeDialog(url: string) {
+    public closeDialog(url: string, play: boolean = false) {
         let cmpt = this.getDialog(url);
-        cmpt?.close();
+        if (!cmpt) {
+            return;
+        }
+        play ? cmpt.playClose() : cmpt.close();
     }
 
     /**
      * 关闭所有同路径弹窗，不传参则关闭所有弹窗
      * @param url prefab在resources/prefab/dialog/下的路径
+     * @param play true：调用playClose播放弹窗关闭动画；false：直接调用close关闭弹窗
      */
-    public closeDialogs(url: string = '') {
+    public closeDialogs(url: string = '', play: boolean = false) {
         for (let i = this.DialogLayer.childrenCount - 1; i >= 0; i--) {
             let node = this.DialogLayer.children[i];
             let cmpt = node.getComponent(DialogBase);
@@ -227,7 +232,7 @@ export default class Layer extends cc.Component {
                 continue;
             }
             if (!url || cmpt.prefabUrl === url) {
-                cmpt.close();
+                play ? cmpt.playClose() : cmpt.close();
             }
         }
     }
