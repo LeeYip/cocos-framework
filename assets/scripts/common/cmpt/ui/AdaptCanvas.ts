@@ -12,7 +12,7 @@ cc.view.setResizeCallback(() => {
  * 分辨率适配组件，保证设计分辨率区域全部都能显示
  */
 @ccclass
-@eventsOnLoad
+@eventsOnLoad()
 @disallowMultiple
 @menu('Framework/UI组件/AdaptCanvas')
 export default class AdaptCanvas extends cc.Component {

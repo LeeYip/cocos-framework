@@ -6,7 +6,7 @@ import Tool from "../../common/util/Tool";
 const { ccclass, property } = cc._decorator;
 
 @ccclass
-@eventsOnEnable
+@eventsOnEnable()
 export default class DlgEvents extends DialogBase {
     public static pUrl: string = 'DlgEvents';
 

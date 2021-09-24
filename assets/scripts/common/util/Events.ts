@@ -1,39 +1,71 @@
 import { EventName } from "../const/EventName";
 
 /**
- * 类装饰器。用于覆盖onLoad和onDestroy方法，在onLoad中注册preloadEvent绑定的所有事件，在onDestroy注销绑定的所有事件
+ * 装饰器预加载数据
  */
-export function eventsOnLoad(constructor: any) {
-    let onFunc = constructor.prototype.onLoad;
-    let offFunc = constructor.prototype.onDestroy;
-    constructor.prototype.onLoad = function () {
-        Events.targetOn(this);
+interface PreloadData {
+    /** 事件名 */
+    event: EventName;
+    /** 事件回调函数名 */
+    funcName: string;
+    /** 事件是否只会触发一次 */
+    once: boolean;
+}
+
+/**
+ * 监听器
+ */
+interface Listener {
+    /** 回调 */
+    cb: (...args: any[]) => void;
+    /** 是否只触发一次 */
+    once: boolean;
+}
+
+//#region 装饰器
+
+/**
+ * 重写类方法
+ * @param constructor 构造函数
+ * @param onKey 在该方法内部调用Events.targetOn
+ * @param offKey 在该方法内部调用Events.targetOff
+ * @param onSuper 是否注册父类成员函数上绑定的事件，默认true
+ */
+function rewrite(constructor: any, onKey: string, offKey: string, onSuper: boolean = true) {
+    let onFunc = constructor.prototype[onKey];
+    let offFunc = constructor.prototype[offKey];
+    constructor.prototype[onKey] = function () {
+        Events.targetOn(this, onSuper);
         onFunc && onFunc.call(this);
     }
-    constructor.prototype.onDestroy = function () {
+    constructor.prototype[offKey] = function () {
         Events.targetOff(this);
         offFunc && offFunc.call(this);
     }
+}
+
+/**
+ * 类装饰器。用于覆盖onLoad和onDestroy方法，在onLoad中注册preloadEvent绑定的所有事件，在onDestroy注销绑定的所有事件
+ * @param onSuper 是否注册父类成员函数上绑定的事件，默认true
+ */
+export function eventsOnLoad(onSuper: boolean = true) {
+    return function (constructor: any) {
+        rewrite(constructor, 'onLoad', 'onDestroy', onSuper);
+    };
 }
 
 /**
  * 类装饰器。用于覆盖onEnable和onDisable方法，在onEnable中注册preloadEvent绑定的所有事件，在onDisable注销绑定的所有事件
+ * @param onSuper 是否注册父类成员函数上绑定的事件，默认true
  */
-export function eventsOnEnable(constructor: any) {
-    let onFunc = constructor.prototype.onEnable;
-    let offFunc = constructor.prototype.onDisable;
-    constructor.prototype.onEnable = function () {
-        Events.targetOn(this);
-        onFunc && onFunc.call(this);
-    }
-    constructor.prototype.onDisable = function () {
-        Events.targetOff(this);
-        offFunc && offFunc.call(this);
-    }
+export function eventsOnEnable(onSuper: boolean = true) {
+    return function (constructor: any) {
+        rewrite(constructor, 'onEnable', 'onDisable', onSuper);
+    };
 }
 
 /**
- * 非静态成员函数装饰器。用于预先载入待注册的事件，配合targetOn使用
+ * 非静态成员函数装饰器。用于预先载入待注册的事件，配合eventsOnLoad、eventsOnEnable、targetOn使用
  * @param event 事件名
  * @param once 事件是否只会触发一次，默认false
  */
@@ -61,27 +93,7 @@ export function preloadEvent(event: EventName, once: boolean = false) {
     };
 }
 
-/**
- * 装饰器预加载数据
- */
-interface PreloadData {
-    /** 事件名 */
-    event: EventName;
-    /** 事件回调函数名 */
-    funcName: string;
-    /** 事件是否只会触发一次 */
-    once: boolean;
-}
-
-/**
- * 监听器
- */
-interface Listener {
-    /** 回调 */
-    cb: (...args: any[]) => void;
-    /** 是否只触发一次 */
-    once: boolean;
-}
+//#endregion
 
 /**
  * 事件收发管理类
@@ -258,7 +270,7 @@ export default class Events {
         // 延迟到此处调用事件回调，防止受到回调过程中的 注册/注销 影响
         for (i = 0; i < callArr.length; i++) {
             let e = callArr[i];
-            e.cb.call(e.target, ...args);
+            e.cb.apply(e.target, args);
         }
     }
 
@@ -295,7 +307,7 @@ export default class Events {
         let arr: Promise<any>[] = [];
         for (i = 0; i < callArr.length; i++) {
             let e = callArr[i];
-            arr.push(e.cb.call(e.target, ...args));
+            arr.push(e.cb.apply(e.target, args));
         }
         await Promise.all(arr);
     }

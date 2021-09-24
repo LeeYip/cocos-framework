@@ -8,7 +8,7 @@ const { ccclass, property, menu, executeInEditMode } = cc._decorator;
  * - 不使用cc.Widget是因为某些需要改变节点position的情况下会产生冲突
  */
 @ccclass
-@eventsOnLoad
+@eventsOnLoad()
 @executeInEditMode
 @menu('Framework/UI组件/AdaptSize')
 export default class AdaptSize extends cc.Component {

@@ -179,7 +179,9 @@ export default class Test extends cc.Component {
 
 或者也可使用类装饰器覆盖onLoad中和onDestroy方法，并分别在其中调用targetOn与targetOff
 ```typescript
-@eventsOnLoad // 也可使用@eventsOnEnable，对应于onEnable和onDisable
+// 参数为true则会注册父类用preloadEvent绑定的事件
+// 参数为false则只注册当前类用preloadEvent绑定的事件
+@eventsOnLoad(true) // 也可使用@eventsOnEnable，对应于onEnable和onDisable
 export default class Test extends cc.Component {
     // 使用装饰器绑定对应事件监听的函数
     @preloadEvent(EventName.GAME_PAUSE)
@@ -209,9 +211,9 @@ export default class Test extends cc.Component {
 ```
 
 - **装饰器**
-    - **`eventsOnLoad`** 类装饰器。用于覆盖onLoad和onDestroy方法，在onLoad中注册preloadEvent绑定的所有事件，在onDestroy注销绑定的所有事件
-    - **`eventsOnEnable`** 类装饰器。用于覆盖onEnable和onDisable方法，在onEnable中注册preloadEvent绑定的所有事件，在onDisable注销绑定的所有事件
-    - **`preloadEvent(event: EventName, once: boolean = false)`**  非静态成员函数装饰器。用于预先载入待注册的事件，配合targetOn使用
+    - **`eventsOnLoad(onSuper: boolean = true)`** 类装饰器。用于覆盖onLoad和onDestroy方法，在onLoad中注册preloadEvent绑定的所有事件，在onDestroy注销绑定的所有事件
+    - **`eventsOnEnable(onSuper: boolean = true)`** 类装饰器。用于覆盖onEnable和onDisable方法，在onEnable中注册preloadEvent绑定的所有事件，在onDisable注销绑定的所有事件
+    - **`preloadEvent(event: EventName, once: boolean = false)`**  非静态成员函数装饰器。用于预先载入待注册的事件，配合eventsOnLoad、eventsOnEnable、targetOn使用
     
 - **方法**
     - **`targetOn(target: Object, onSuper: boolean = true)`**  注册与target构造函数预先绑定的所有事件，配合装饰器preloadEvent使用

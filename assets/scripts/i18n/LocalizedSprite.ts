@@ -6,7 +6,7 @@ import I18n, { LangType } from "./I18n";
 const { ccclass, property, executeInEditMode, menu, requireComponent } = cc._decorator;
 
 @ccclass
-@eventsOnLoad
+@eventsOnLoad()
 @executeInEditMode
 @requireComponent(cc.Sprite)
 @menu('Framework/I18N/LocalizedSprite')

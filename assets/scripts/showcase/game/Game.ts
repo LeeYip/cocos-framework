@@ -15,7 +15,7 @@ import DlgVirtualList from "../dialog/DlgVirtualList";
 const { ccclass, property } = cc._decorator;
 
 @ccclass
-@eventsOnLoad
+@eventsOnLoad()
 export default class Game extends cc.Component {
 
     private onClickHome() {

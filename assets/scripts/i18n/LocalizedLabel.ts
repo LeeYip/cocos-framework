@@ -5,7 +5,7 @@ import I18n from "./I18n";
 const { ccclass, property, executeInEditMode, menu } = cc._decorator;
 
 @ccclass
-@eventsOnLoad
+@eventsOnLoad()
 @executeInEditMode
 @menu('Framework/I18N/LocalizedLabel')
 export default class LocalizedLabel extends cc.Component {
