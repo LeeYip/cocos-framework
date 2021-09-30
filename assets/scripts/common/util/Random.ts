@@ -10,9 +10,10 @@ export default class Random {
     /**
      * 计算字符串的hash值 返回值>=0
      * @param str 
+     * @param initHash 计算的初始值
      */
-    public static hashCode(str: string) {
-        let hash = 0;
+    public static hashCode(str: string, initHash: number = 0) {
+        let hash = initHash;
         if (!str) {
             return hash;
         }

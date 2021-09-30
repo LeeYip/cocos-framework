@@ -1,10 +1,7 @@
-import { EventName } from "../../const/EventName";
 import { DirUrl, ResUrl } from "../../const/Url";
-import Events from "../../util/Events";
 import Res from "../../util/Res";
 import Tool from "../../util/Tool";
 import DialogBase from "./DialogBase";
-import Timer from "./Timer";
 import Tip from "./Tip";
 
 const { ccclass, property, disallowMultiple, menu } = cc._decorator;
@@ -75,10 +72,6 @@ export default class Layer extends cc.Component {
             cc.error(`[Layer.enterHome] can not find home prefab: ${ResUrl.PREFAB.HOME}`);
             return;
         }
-
-        Timer.reset();
-        cc.Camera.main.node.position = cc.v3(0, 0);
-        Events.emit(EventName.CAMERA_MOVE);
 
         this.MainLayer.destroyAllChildren();
         this.closeDialogs();
