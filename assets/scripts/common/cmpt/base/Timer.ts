@@ -113,6 +113,9 @@ export default class Timer extends cc.Component {
         Timer._scaleGameSec += Timer.scaleDt;
 
         TWEEN.update(Timer.gameMs);
-        SCALE_TWEEN.update(Timer.scaleGameMs);
+        // scaleDt大于0时更新SCALE_TWEEN
+        if (Timer.scaleDt > 0) {
+            SCALE_TWEEN.update(Timer.scaleGameMs);
+        }
     }
 }
