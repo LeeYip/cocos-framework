@@ -15,8 +15,8 @@ const { ccclass, property, executionOrder, menu, disallowMultiple } = cc._decora
 export default class Timer extends cc.Component {
     //#region 静态成员
 
-    /** 游戏是否暂停 */
-    private static _isPause: boolean = false;
+    /** 游戏调用暂停的计数 */
+    private static _puaseCount: number = 0;
 
     private static _lastTimeScale: number = 1;
     private static _timeScale: number = 1;
@@ -54,34 +54,36 @@ export default class Timer extends cc.Component {
      * 重置 timeScale
      */
     public static reset() {
-        this._isPause = false;
+        this._puaseCount = 0;
         this._timeScale = 1;
         this._lastTimeScale = 1;
     }
 
     /**
-     * 暂停游戏 timeScale设置为0
+     * 暂停游戏 timeScale设置为0 （需要与gameResume成对调用）
      */
     public static gamePause() {
-        if (this._isPause) {
+        this._puaseCount++;
+        if (this._puaseCount > 1) {
             return;
         }
-        this._isPause = true;
         this._lastTimeScale = this._timeScale;
         this._timeScale = 0;
         Events.emit(EventName.GAME_PAUSE);
     }
 
     /**
-     * 恢复游戏
+     * 恢复游戏 （需要与gamePause成对调用）
      */
     public static gameResume() {
-        if (!this._isPause) {
+        if (this._puaseCount <= 0) {
             return;
         }
-        this._isPause = false;
-        this._timeScale = this._lastTimeScale;
-        Events.emit(EventName.GAME_RESUME);
+        this._puaseCount--;
+        if (this._puaseCount <= 0) {
+            this._timeScale = this._lastTimeScale;
+            Events.emit(EventName.GAME_RESUME);
+        }
     }
 
     /**
