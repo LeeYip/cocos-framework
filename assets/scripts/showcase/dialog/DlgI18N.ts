@@ -9,12 +9,14 @@ export default class DlgI18N extends DialogBase {
     public static pUrl: string = 'DlgI18N';
 
     @property(LocalizedLabel) Text1: LocalizedLabel = null;
+    @property(LocalizedLabel) Text2: LocalizedLabel = null;
 
     /**
      * @override
      */
     public open() {
         this.Text1.setOption({ num: 10 });
+        this.Text2.setOption(10, '---');
     }
 
     private onClickZh() {

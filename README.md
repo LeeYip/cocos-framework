@@ -253,20 +253,27 @@ export default class Test extends cc.Component {
 
 支持文字以及图片的多语言切换，不同语言的同一图片需命名一致，配置路径如下，如需更改配置路径请自行更换。详见工程示例
 
-语言表路径：scripts/i18n/config/En.ts和scripts/i18n/config/Zh.ts
+>语言表路径：scripts/i18n/config/En.ts和scripts/i18n/config/Zh.ts
 
-图片路径：resources/textures/localizedImage/en/和resources/textures/localizedImage/zh/
+>图片路径：resources/textures/localizedImage/en/和resources/textures/localizedImage/zh/
 
+
+如果需要替换字符串中的占位符（形如"**%{xxx}**"的字符串为占位符），支持以下两种不同的传参形式来获取替换后的字符串
+```typescript
+// 语言表 {"test": "test %{arg1} %{arg2} !!!"}
+I18n.getText('test', {arg1: 'somthing', arg2: 2}); // => 'test somthing 2 !!!'
+I18n.getText('test', 'somthing', 2); // => 'test somthing 2 !!!'
+```
 
 - **属性**
-    - **`curLang: LangType`**  当前语言
+    - **`curLang: LangType`**  当前语言类型
 
 - **方法**
     - **`init(language: LangType = LangType.NONE)`**  初始化语言
     - **`switch(language: LangType)`**  切换语言
     - **`updateLocalizedCmpt()`**  更新所有多语言组件
     - **`getKeyByValue(value: string): string`**  通过语言表value获取对应的key
-    - **`getText(key: string, opt?: any): string`**  获取语言表中的字符串
+    - **`getText(key: string, ...option: [{ [k: string]: string | number }] | Array<string | number>): string`**  通过key获取语言表中的字符串
 
 
 #### <a id="framework-ui"></a>一些ui组件

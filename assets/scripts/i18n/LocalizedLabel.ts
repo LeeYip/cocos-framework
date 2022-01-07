@@ -23,7 +23,7 @@ export default class LocalizedLabel extends cc.Component {
     /**
      * 用于正则替换的配置
      */
-    private _option: any = null;
+    private _option: { [k: string]: string | number } | Array<string | number> = [];
 
     private _label: cc.Label | cc.RichText = null;
     public get label() {
@@ -62,7 +62,7 @@ export default class LocalizedLabel extends cc.Component {
      */
     @preloadEvent(EventName.UPDATE_LOCALIZED_CMPT)
     public updateLabel() {
-        let localizedString = I18n.getText(this._textKey, this._option);
+        let localizedString = this._option instanceof Array ? I18n.getText(this._textKey, ...this._option) : I18n.getText(this._textKey, this._option);
         if (localizedString) {
             this.label.string = localizedString;
         }
@@ -73,18 +73,21 @@ export default class LocalizedLabel extends cc.Component {
      * @param key
      * @param option
      */
-    public setTextKeyAndOption(key: string, option: any) {
+    public setTextKeyAndOption(key: string, ...option: [{ [k: string]: string | number }] | Array<string | number>) {
         this._textKey = key;
-        this._option = option ? option : null;
-        this.updateLabel();
+        this.setOption(...option);
     }
 
     /**
      * 仅设置配置
      * @param option
      */
-    public setOption(option: any) {
-        this._option = option ? option : null;
+    public setOption(...option: [{ [k: string]: string | number }] | Array<string | number>) {
+        if (option.length === 1 && Object.prototype.toString.call(option[0]) === '[object Object]') {
+            this._option = option[0] as { [k: string]: string | number };
+        } else {
+            this._option = option as Array<string | number>;
+        }
         this.updateLabel();
     }
 
