@@ -1,7 +1,7 @@
 /**
  * 工具类
  */
- export default class Tool {
+export default class Tool {
     /**
      * 深拷贝
      * @param source 源数据
@@ -165,9 +165,11 @@
 
     /**
      * 判断数组中是否有某个元素
+     * @param arr 数组
+     * @param param 元素值或表达元素值满足某种条件的函数
      */
-    public static arrayHas<T>(arr: T[], ele: T): boolean {
-        let idx = arr.findIndex((e) => { return e === ele; });
+    public static arrayHas<T>(arr: T[], param: T | ((ele: T) => boolean)): boolean {
+        let idx = typeof param !== "function" ? arr.findIndex((e) => { return e === param; }) : arr.findIndex(param as ((ele: T) => boolean));
         return idx >= 0;
     }
 
