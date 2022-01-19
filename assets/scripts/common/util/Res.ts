@@ -27,7 +27,7 @@ export default class Res {
             return asset;
         }
 
-        return await new Promise((resolve, reject) => {
+        asset = await new Promise((resolve, reject) => {
             cc.resources.load(url, type, (error: Error, resource: T) => {
                 if (error) {
                     cc.error(`[Res.load] error: ${error}`);
@@ -37,6 +37,7 @@ export default class Res {
                 }
             });
         });
+        return asset;
     }
 
     /**
@@ -44,8 +45,8 @@ export default class Res {
      * @param url 资源路径
      * @param type 资源类型
      */
-    public static async loadDir<T extends cc.Asset>(url: string, type: typeof cc.Asset): Promise<T[]> {
-        return await new Promise((resolve, reject) => {
+    public static loadDir<T extends cc.Asset>(url: string, type: typeof cc.Asset): Promise<T[]> {
+        return new Promise((resolve, reject) => {
             cc.resources.loadDir(url, type, (error: Error, resource: T[]) => {
                 if (error) {
                     cc.error(`[Res.loadDir] error: ${error}`);

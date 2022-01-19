@@ -154,7 +154,7 @@ export default class VirtualList extends cc.Component {
      * @param args 
      */
     public unshift(...args: any[]) {
-        this._layout.unshift();
+        this._layout.unshift(...args);
     }
 
     /**
