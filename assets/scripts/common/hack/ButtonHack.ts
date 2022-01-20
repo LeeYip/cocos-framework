@@ -25,4 +25,4 @@ cc.Button.prototype._applyTransition = function (state: any) {
 
     // 状态变更通知
     this.node.emit(ButtonHackEvent.STATE_CHANGE, state);
-}
+};
