@@ -231,7 +231,7 @@ export default class Tool {
         if (node instanceof cc.Node) {
             cb.call(thisArg, node);
             node.children.forEach((n: cc.Node) => { this.nodeRecursive(n, cb, thisArg); });
-        } else {
+        } else if (Array.isArray(node)) {
             node.forEach((n: cc.Node) => { this.nodeRecursive(n, cb, thisArg); });
         }
     }
