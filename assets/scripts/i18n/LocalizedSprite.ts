@@ -38,6 +38,10 @@ export default class LocalizedSprite extends cc.Component {
 
     @preloadEvent(EventName.UPDATE_LOCALIZED_CMPT)
     public updateSprite() {
+        if (!this.imageKey) {
+            return;
+        }
+
         let url = '';
         switch (I18n.curLang) {
             case LangType.ZH:

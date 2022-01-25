@@ -20,6 +20,7 @@ interface PrefabCacheData extends CacheData {
  * 3. 调用load接口时如需传入release参数，则同一资源在全局调用load时release参数都应保持一致，否则可能不符合预期
  */
 export default class Res {
+    /** 节点与关联prefab路径 */
     private static _nodePath: Map<cc.Node, string> = new Map();
 
     private static _prefabCache: Map<string, PrefabCacheData> = new Map();
@@ -36,7 +37,7 @@ export default class Res {
         let url = '';
         if (node instanceof cc.Prefab) {
             url = node['_resCacheUrl'] || '';
-        } else {
+        } else if (node instanceof cc.Node) {
             let cur = node;
             while (cur) {
                 if (cur['_prefab'] && cur['_prefab']['root']) {
@@ -69,7 +70,7 @@ export default class Res {
             let cacheData: CacheData = {
                 asset: asset,
                 release: release
-            }
+            };
             map.set(url, cacheData);
         };
 
@@ -171,10 +172,15 @@ export default class Res {
      * 获取节点实例，建立节点与缓存prefab的联系
      * @param original 用于创建节点的prefab或node
      * @param related 如果original不是动态加载的prefab，则需传入与original相关联的动态加载的prefab或node，便于资源释放的管理
-     * @example 
-     * // A为动态加载的prefab，aNode为A的实例节点，original为A上静态引用的prefab，则调用时需要用如下方式，保证引用关系正确
-     * Res.instantiate(original, A)
-     * Res.instantiate(original, aNode)
+	 * @example 
+	 * // A为动态加载的prefab，aNode为A的实例节点（aNode = Res.instantiate(A)），original为被A静态引用的prefab，则调用时需要用如下方式，保证引用关系正确
+	 * Res.instantiate(original, A)
+	 * Res.instantiate(original, aNode)
+	 * 
+	 * // A为动态加载的prefab，aNode为A的实例节点（aNode = Res.instantiate(A)），original为aNode的某个子节点，则如下方式均可保证引用关系正确
+	 * Res.instantiate(original)
+	 * Res.instantiate(original, A)
+	 * Res.instantiate(original, aNode)
      */
     public static instantiate(original: cc.Node | cc.Prefab, related?: cc.Node | cc.Prefab): cc.Node {
         if (!original) {
@@ -184,7 +190,7 @@ export default class Res {
 
         let node = cc.instantiate(original) as cc.Node;
         let cacheData: PrefabCacheData = null;
-        let url = related ? this.getCachePrefabUrl(related) : this.getCachePrefabUrl(original);
+        let url = this.getCachePrefabUrl(related) || this.getCachePrefabUrl(original);
         if (url) {
             cacheData = this._prefabCache.get(url);
             // release为true才缓存关联节点
@@ -219,7 +225,7 @@ export default class Res {
                     cacheData.nodes.splice(i, 1);
                 }
                 if (cacheData.nodes.length === 0) {
-                    delete cacheData.nodes
+                    delete cacheData.nodes;
                 }
             }
 
