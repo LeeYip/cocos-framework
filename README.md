@@ -9,6 +9,7 @@
     - [全局时间管理器](#framework-timer)
     - [全局层级管理](#framework-layer)
     - [全局事件管理器](#framework-events)
+    - [资源管理器](#framework-res)
     - [音频管理器](#framework-audio)
     - [多语言](#framework-i18n)
     - [一些ui组件](#framework-ui)
@@ -223,6 +224,21 @@ export default class Test extends cc.Component {
     - **`targetOff(target: Object)`**  移除target上注册的所有事件
     - **`emit(event: EventName, ...args: any[])`**  派发事件
     - **`emitAsync(event: EventName, ...args: any[]): Promise<void>`**  派发事件--异步
+
+#### <a id="framework-res"></a>资源管理器
+>文件路径(scripts/common/util/Res.ts)
+
+主要是对prefab、图片等进行资源管理，内部自动进行引用计数的加减,使用时需要注意以下要点：
+1. 尽量使用此类加载所有资源、instantiate节点实例，否则需要自行管理引用计数
+2. Res.instantiate不要对动态生成的节点使用，尽量只instantiate prefab上预设好的节点，否则有可能会导致引用计数的管理出错
+3. 调用load接口时如需传入release参数，则同一资源在全局调用load时release参数都应保持一致，否则可能不符合预期
+
+- **方法**
+    - **`get<T extends cc.Asset>(url: string, type: typeof cc.Asset): T`**  获取缓存资源。通常不应直接调用此接口，除非调用前能确保资源已加载并且能自行管理引用计数
+    - **`load<T extends cc.Asset>(url: string, type: typeof cc.Asset, release: boolean = true): Promise<T>`**  加载resources文件夹下单个资源
+    - **`loadDir<T extends cc.Asset>(url: string, type: typeof cc.Asset, release: boolean = true): Promise<T[]>`**  加载resources文件夹下某个文件夹内某类资源
+    - **`instantiate(original: cc.Node | cc.Prefab, related?: cc.Node | cc.Prefab): cc.Node`**  获取节点实例，建立节点与缓存prefab的联系
+    - **`releaseAll()`**  尝试释放所有缓存资源
 
 #### <a id="framework-audio"></a>音频管理器
 >文件路径(scripts/common/util/AudioManager.ts)

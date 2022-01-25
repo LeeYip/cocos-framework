@@ -1,3 +1,4 @@
+import Res from "../../util/Res";
 import VirtualItem from "./VirtualItem";
 import VirtualList, { TemplateType } from "./VirtualList";
 
@@ -531,7 +532,7 @@ export default class VirtualLayout extends cc.Component {
             });
         } else {
             let tmp: any = this.list.Main.TemplateType === TemplateType.PREFAB ? this.list.Main.TemplatePrefab : this.list.Main.TemplateNode;
-            node = cc.instantiate(tmp);
+            node = Res.instantiate(tmp, this.node);
             node.getComponent(VirtualItem) || node.addComponent(VirtualItem);
             this.node.addChild(node);
             if (active) {
@@ -544,7 +545,7 @@ export default class VirtualLayout extends cc.Component {
 
             this.list.Others.forEach((e, i) => {
                 let otherTmp: any = e.TemplateType === TemplateType.PREFAB ? e.TemplatePrefab : e.TemplateNode;
-                let otherNode = cc.instantiate(otherTmp);
+                let otherNode = Res.instantiate(otherTmp, this.node);
                 e.Content.addChild(otherNode);
                 if (active) {
                     otherNode.active = true;

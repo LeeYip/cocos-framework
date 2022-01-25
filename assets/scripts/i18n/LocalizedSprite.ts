@@ -1,6 +1,6 @@
+import ResSprite from "../common/cmpt/ui/ResSprite";
 import { EventName } from "../common/const/EventName";
 import { eventsOnLoad, preloadEvent } from "../common/util/Events";
-import Res from "../common/util/Res";
 import I18n, { LangType } from "./I18n";
 
 const { ccclass, property, executeInEditMode, menu, requireComponent } = cc._decorator;
@@ -8,10 +8,10 @@ const { ccclass, property, executeInEditMode, menu, requireComponent } = cc._dec
 @ccclass
 @eventsOnLoad()
 @executeInEditMode
-@requireComponent(cc.Sprite)
+@requireComponent(ResSprite)
 @menu('Framework/I18N/LocalizedSprite')
 export default class LocalizedSprite extends cc.Component {
-    private _sprite: cc.Sprite = null;
+    private _sprite: ResSprite = null;
     private _imageKey: string = '';
     /** 图片名 */
     public get imageKey() { return this._imageKey; }
@@ -27,7 +27,7 @@ export default class LocalizedSprite extends cc.Component {
         try {
             I18n.init();
 
-            this._sprite = this.getComponent(cc.Sprite);
+            this._sprite = this.getComponent(ResSprite);
             if (this._sprite.spriteFrame) {
                 this.imageKey = this._sprite.spriteFrame.name;
             }
@@ -37,7 +37,7 @@ export default class LocalizedSprite extends cc.Component {
     }
 
     @preloadEvent(EventName.UPDATE_LOCALIZED_CMPT)
-    public async updateSprite() {
+    public updateSprite() {
         let url = '';
         switch (I18n.curLang) {
             case LangType.ZH:
@@ -63,10 +63,7 @@ export default class LocalizedSprite extends cc.Component {
             //     this._sprite.spriteFrame = new cc.SpriteFrame(texture);
             // });
         } else {
-            let sf: cc.SpriteFrame = await Res.load(url, cc.SpriteFrame);
-            if (sf) {
-                this._sprite.spriteFrame = sf;
-            }
+            this._sprite.setSpriteFrame(url);
         }
     }
 }

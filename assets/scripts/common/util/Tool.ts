@@ -1,3 +1,5 @@
+import { Group, Tween, TWEEN } from "./Tween";
+
 /**
  * 工具类
  */
@@ -47,6 +49,21 @@ export default class Tool {
             cmpt.scheduleOnce(() => {
                 resolve();
             }, seconds);
+        });
+    }
+
+    /**
+     * 异步等待 - tween 默认group为TWEEN
+     */
+    public static waitTween(cmpt: cc.Component, seconds: number, group: Group = TWEEN): Promise<void> {
+        return new Promise((resolve, reject) => {
+            new Tween({ k: 0 }, group)
+                .to({ k: 1 }, seconds * 1000)
+                .onComplete(() => {
+                    resolve();
+                })
+                .start()
+                .bindCCObject(cmpt);
         });
     }
 

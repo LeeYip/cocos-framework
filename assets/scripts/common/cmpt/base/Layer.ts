@@ -76,7 +76,7 @@ export default class Layer extends cc.Component {
         this.MainLayer.destroyAllChildren();
         this.closeDialogs();
         this.clearTips();
-        let node: cc.Node = cc.instantiate(prefab);
+        let node: cc.Node = Res.instantiate(prefab);
         node.setPosition(0, 0);
         this.MainLayer.addChild(node);
         return node;
@@ -97,7 +97,7 @@ export default class Layer extends cc.Component {
         this.MainLayer.destroyAllChildren();
         this.closeDialogs();
         this.clearTips();
-        let node: cc.Node = cc.instantiate(prefab);
+        let node: cc.Node = Res.instantiate(prefab);
         node.setPosition(0, 0);
         this.MainLayer.addChild(node);
         return node;
@@ -133,7 +133,7 @@ export default class Layer extends cc.Component {
             return;
         }
 
-        let node = cc.instantiate(prefab);
+        let node = Res.instantiate(prefab);
         this.DialogLayer.addChild(node);
         node.setPosition(0, 0);
         let cmpt = node.getComponent(DialogBase);
@@ -173,7 +173,7 @@ export default class Layer extends cc.Component {
             return;
         }
 
-        let node = cc.instantiate(prefab);
+        let node = Res.instantiate(prefab);
         this.DialogLayer.addChild(node);
         node.setPosition(0, 0);
         let cmpt = node.getComponent(DialogBase);
@@ -311,7 +311,7 @@ export default class Layer extends cc.Component {
                 cc.error(`[Layer.showTip] can not load prefab: ${ResUrl.PREFAB.TIP}`);
                 return;
             }
-            tipNode = cc.instantiate(prefab);
+            tipNode = Res.instantiate(prefab);
             this.TipLayer.addChild(tipNode);
         }
 
