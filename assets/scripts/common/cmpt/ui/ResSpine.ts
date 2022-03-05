@@ -30,11 +30,11 @@ export default class ResSpine extends cc.Component {
      * @param url 
      */
     public async setSkeletonData(url: string) {
-        let result = await Res.load(url, sp.SkeletonData);
+        let result = Res.get(url, sp.SkeletonData) || await Res.load(url, sp.SkeletonData);
         if (result instanceof sp.SkeletonData) {
-            this._asset?.decRef();
-            this._asset = result;
-            this._asset.addRef();
+			result.addRef();
+			this._asset?.decRef();
+			this._asset = result;
             this.spine.skeletonData = result;
         }
     }

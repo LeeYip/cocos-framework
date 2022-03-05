@@ -4,6 +4,7 @@ import { eventsOnLoad } from "../../common/util/Events";
 import Res from "../../common/util/Res";
 import DlgAnimValue from "../dialog/DlgAnimValue";
 import DlgAudio from "../dialog/DlgAudio";
+import DlgCircleList from "../dialog/DlgCircleList";
 import DlgEvents from "../dialog/DlgEvents";
 import DlgI18N from "../dialog/DlgI18N";
 import DlgLayer from "../dialog/DlgLayer";
@@ -46,8 +47,12 @@ export default class Game extends cc.Component {
         Layer.inst.openUniDialogAsync(DlgShake.pUrl);
     }
 
-    private onClickList() {
+    private onClickVirtualList() {
         Layer.inst.openUniDialogAsync(DlgVirtualList.pUrl);
+    }
+
+    private onClickCircleList() {
+        Layer.inst.openUniDialogAsync(DlgCircleList.pUrl);
     }
 
     private async onClickAudio() {

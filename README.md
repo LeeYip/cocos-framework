@@ -1,5 +1,5 @@
 # Cocos Framework
-一个基于Cocos Creator2.4.7的框架
+一个基于Cocos Creator2.4.8的框架
 
 ## 目录
 - [前言](#preface)
@@ -295,12 +295,14 @@ I18n.getText('test', 'somthing', 2); // => 'test somthing 2 !!!'
 #### <a id="framework-ui"></a>一些ui组件
 >文件路径(scripts/common/cmpt/)
 - 虚拟列表VirtualList
+    - 仅生成mask区域内所需的最少节点，且支持节点分层
 
-    仅生成mask区域内所需的最少节点，且支持节点分层
+- 无限循环列表/轮播图CircleList
 
 - 按钮相关
     - 按钮分组，阻止同一分组内的多个按钮同时点击
     - 按钮按下时改变子节点的坐标
+    - 按钮子节点置灰
 - ......
 
 #### <a id="framework-tool"></a>常用工具类

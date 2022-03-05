@@ -36,11 +36,11 @@ export default class ResSprite extends cc.Component {
      */
     public async setSpriteFrame(url: string, key: string = '') {
         let type = key ? cc.SpriteAtlas : cc.SpriteFrame;
-        let result = await Res.load(url, type);
+        let result = Res.get(url, type) || await Res.load(url, type);
         if (result instanceof type) {
-            this._asset?.decRef();
-            this._asset = result;
-            this._asset.addRef();
+			result.addRef();
+			this._asset?.decRef();
+			this._asset = result;
             this.sprite.spriteFrame = result instanceof cc.SpriteAtlas ? result.getSpriteFrame(key) : result;
         }
     }
