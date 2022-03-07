@@ -16,12 +16,12 @@ cc.view.setResizeCallback(() => {
 @disallowMultiple
 @menu('Framework/UI组件/AdaptCanvas')
 export default class AdaptCanvas extends cc.Component {
-    protected onLoad() {
+    protected onLoad(): void {
         this.adapt();
     }
 
     @preloadEvent(EventName.RESIZE)
-    private adapt() {
+    private adapt(): void {
         let resolutionRatio = cc.Canvas.instance.designResolution.width / cc.Canvas.instance.designResolution.height;
         let ratio = cc.winSize.width / cc.winSize.height;
         if (ratio > resolutionRatio) {

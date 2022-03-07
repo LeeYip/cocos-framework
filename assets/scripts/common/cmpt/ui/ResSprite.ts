@@ -14,14 +14,14 @@ export default class ResSprite extends cc.Component {
     private _asset: cc.SpriteFrame | cc.SpriteAtlas = null;
 
     private _sprite: cc.Sprite = null;
-    private get sprite() {
+    private get sprite(): cc.Sprite {
         if (!this._sprite) {
             this._sprite = this.getComponent(cc.Sprite);
         }
         return this._sprite;
     }
 
-    public get spriteFrame() {
+    public get spriteFrame(): cc.SpriteFrame {
         return this.sprite.spriteFrame;
     }
 
@@ -34,13 +34,13 @@ export default class ResSprite extends cc.Component {
      * @param url 
      * @param key 如果需要加载的url为图集时，需传入图集的key
      */
-    public async setSpriteFrame(url: string, key: string = '') {
+    public async setSpriteFrame(url: string, key: string = ''): Promise<void> {
         let type = key ? cc.SpriteAtlas : cc.SpriteFrame;
         let result = Res.get(url, type) || await Res.load(url, type);
         if (result instanceof type) {
-			result.addRef();
-			this._asset?.decRef();
-			this._asset = result;
+            result.addRef();
+            this._asset?.decRef();
+            this._asset = result;
             this.sprite.spriteFrame = result instanceof cc.SpriteAtlas ? result.getSpriteFrame(key) : result;
         }
     }

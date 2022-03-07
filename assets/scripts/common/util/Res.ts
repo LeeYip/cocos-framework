@@ -3,6 +3,8 @@ interface CacheData {
     asset: cc.Asset,
     /** 资源是否需要释放 */
     release: boolean,
+    /** 资源最后一次被加载的时间点 s */
+    lastLoadTime: number,
 }
 
 /** 预制体资源缓存数据 */
@@ -17,7 +19,7 @@ interface PrefabCacheData extends CacheData {
  * 资源释放要点：
  * 1. 尽量使用此类加载所有资源、instantiate节点实例，否则需要自行管理引用计数
  * 2. Res.instantiate不要对动态生成的节点使用，尽量只instantiate prefab上预设好的节点，否则有可能会导致引用计数的管理出错
- * 3. 调用load接口时如需传入release参数，则同一资源在全局调用load时release参数都应保持一致，否则可能不符合预期
+ * 3. 调用load接口时如需传入release参数，则同一资源在全局调用load时release参数尽量保持一致，否则可能不符合预期
  */
 export default class Res {
     /** 节点与关联prefab路径 */
@@ -28,6 +30,9 @@ export default class Res {
     private static _spriteAtlasCache: Map<string, CacheData> = new Map();
     private static _skeletonDataCache: Map<string, CacheData> = new Map();
     private static _otherCache: Map<string, cc.Asset> = new Map();
+
+    /** 资源释放的间隔时间 s，资源超过此间隔未被load才可释放 */
+    public static releaseSec: number = 0;
 
     /**
      * 通过节点查找对应的缓存prefab url
@@ -69,7 +74,8 @@ export default class Res {
             }
             let cacheData: CacheData = {
                 asset: asset,
-                release: release
+                release: release,
+                lastLoadTime: Date.now() / 1000
             };
             map.set(url, cacheData);
         };
@@ -102,6 +108,7 @@ export default class Res {
             let data = map.get(url);
             if (data) {
                 asset = data.asset;
+                data.lastLoadTime = Date.now() / 1000;
             }
         };
 
@@ -172,15 +179,15 @@ export default class Res {
      * 获取节点实例，建立节点与缓存prefab的联系
      * @param original 用于创建节点的prefab或node
      * @param related 如果original不是动态加载的prefab，则需传入与original相关联的动态加载的prefab或node，便于资源释放的管理
-	 * @example 
-	 * // A为动态加载的prefab，aNode为A的实例节点（aNode = Res.instantiate(A)），original为被A静态引用的prefab，则调用时需要用如下方式，保证引用关系正确
-	 * Res.instantiate(original, A)
-	 * Res.instantiate(original, aNode)
-	 * 
-	 * // A为动态加载的prefab，aNode为A的实例节点（aNode = Res.instantiate(A)），original为aNode的某个子节点，则如下方式均可保证引用关系正确
-	 * Res.instantiate(original)
-	 * Res.instantiate(original, A)
-	 * Res.instantiate(original, aNode)
+     * @example 
+     * // A为动态加载的prefab，aNode为A的实例节点（aNode = Res.instantiate(A)），original为被A静态引用的prefab，则调用时需要用如下方式，保证引用关系正确
+     * Res.instantiate(original, A)
+     * Res.instantiate(original, aNode)
+     * 
+     * // A为动态加载的prefab，aNode为A的实例节点（aNode = Res.instantiate(A)），original为aNode的某个子节点，则如下方式均可保证引用关系正确
+     * Res.instantiate(original)
+     * Res.instantiate(original, A)
+     * Res.instantiate(original, aNode)
      */
     public static instantiate(original: cc.Node | cc.Prefab, related?: cc.Node | cc.Prefab): cc.Node {
         if (!original) {
@@ -209,9 +216,10 @@ export default class Res {
      * 尝试释放所有缓存资源
      */
     public static releaseAll(): void {
+        let nowSec = Date.now() / 1000;
         // prefab
         this._prefabCache.forEach((cacheData, url) => {
-            if (!cacheData.release) {
+            if (!cacheData.release || nowSec - cacheData.lastLoadTime < this.releaseSec) {
                 return;
             }
 
@@ -238,7 +246,7 @@ export default class Res {
         let arr = [this._spriteFrameCache, this._spriteAtlasCache, this._skeletonDataCache];
         arr.forEach((map) => {
             map.forEach((cacheData, url) => {
-                if (!cacheData.release) {
+                if (!cacheData.release || nowSec - cacheData.lastLoadTime < this.releaseSec) {
                     return;
                 }
                 cacheData.asset.decRef();

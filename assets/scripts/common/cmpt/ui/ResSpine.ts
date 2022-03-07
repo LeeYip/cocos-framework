@@ -14,7 +14,7 @@ export default class ResSpine extends cc.Component {
     private _asset: sp.SkeletonData = null;
 
     private _spine: sp.Skeleton = null;
-    private get spine() {
+    private get spine(): sp.Skeleton {
         if (!this._spine) {
             this._spine = this.getComponent(sp.Skeleton);
         }
@@ -29,12 +29,12 @@ export default class ResSpine extends cc.Component {
      * 设置skeletonData
      * @param url 
      */
-    public async setSkeletonData(url: string) {
+    public async setSkeletonData(url: string): Promise<void> {
         let result = Res.get(url, sp.SkeletonData) || await Res.load(url, sp.SkeletonData);
         if (result instanceof sp.SkeletonData) {
-			result.addRef();
-			this._asset?.decRef();
-			this._asset = result;
+            result.addRef();
+            this._asset?.decRef();
+            this._asset = result;
             this.spine.skeletonData = result;
         }
     }
