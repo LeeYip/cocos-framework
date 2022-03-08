@@ -3,7 +3,7 @@ interface CacheData {
     asset: cc.Asset,
     /** 资源是否需要释放 */
     release: boolean,
-    /** 资源最后一次被加载的时间点 s */
+    /** 资源最后一次被加载的时间点（秒） */
     lastLoadTime: number,
 }
 
@@ -17,9 +17,10 @@ interface PrefabCacheData extends CacheData {
  * 资源管理类
  * 
  * 资源释放要点：
- * 1. 尽量使用此类加载所有资源、instantiate节点实例，否则需要自行管理引用计数
+ * 1. 尽量使用此类的接口加载所有资源、instantiate节点实例，否则需要自行管理引用计数
  * 2. Res.instantiate不要对动态生成的节点使用，尽量只instantiate prefab上预设好的节点，否则有可能会导致引用计数的管理出错
  * 3. 调用load接口时如需传入release参数，则同一资源在全局调用load时release参数尽量保持一致，否则可能不符合预期
+ * 4. 请使用ResSpine、ResSprite组件去动态加载spine、图片资源，否则需要自行管理这些资源的引用计数
  */
 export default class Res {
     /** 节点与关联prefab路径 */
@@ -31,7 +32,7 @@ export default class Res {
     private static _skeletonDataCache: Map<string, CacheData> = new Map();
     private static _otherCache: Map<string, cc.Asset> = new Map();
 
-    /** 资源释放的间隔时间 s，资源超过此间隔未被load才可释放 */
+    /** 资源释放的间隔时间（秒），资源超过此间隔未被load才可释放 */
     public static releaseSec: number = 0;
 
     /**

@@ -29,7 +29,7 @@ interface Listener {
  * @param constructor 构造函数
  * @param onKey 在该方法内部调用Events.targetOn
  * @param offKey 在该方法内部调用Events.targetOff
- * @param onSuper 是否注册父类成员函数上绑定的事件，默认true
+ * @param onSuper 是否注册父类成员方法上绑定的事件，默认true
  */
 function rewrite(constructor: any, onKey: string, offKey: string, onSuper: boolean = true) {
     let onFunc = constructor.prototype[onKey];
@@ -46,7 +46,7 @@ function rewrite(constructor: any, onKey: string, offKey: string, onSuper: boole
 
 /**
  * 类装饰器。用于覆盖onLoad和onDestroy方法，在onLoad中注册preloadEvent绑定的所有事件，在onDestroy注销绑定的所有事件
- * @param onSuper 是否注册父类成员函数上绑定的事件，默认true
+ * @param onSuper 是否注册父类成员方法上绑定的事件，默认true
  */
 export function eventsOnLoad(onSuper: boolean = true) {
     return function (constructor: any) {
@@ -56,7 +56,7 @@ export function eventsOnLoad(onSuper: boolean = true) {
 
 /**
  * 类装饰器。用于覆盖onEnable和onDisable方法，在onEnable中注册preloadEvent绑定的所有事件，在onDisable注销绑定的所有事件
- * @param onSuper 是否注册父类成员函数上绑定的事件，默认true
+ * @param onSuper 是否注册父类成员方法上绑定的事件，默认true
  */
 export function eventsOnEnable(onSuper: boolean = true) {
     return function (constructor: any) {
@@ -65,7 +65,7 @@ export function eventsOnEnable(onSuper: boolean = true) {
 }
 
 /**
- * 非静态成员函数装饰器。用于预先载入待注册的事件，配合eventsOnLoad、eventsOnEnable、targetOn使用
+ * 非静态成员方法装饰器。用于预先载入待注册的事件，配合eventsOnLoad、eventsOnEnable、targetOn使用
  * @param event 事件名
  * @param once 事件是否只会触发一次，默认false
  */
@@ -112,7 +112,7 @@ export default class Events {
     /**
      * 注册与target构造函数预先绑定的所有事件
      * @param target 注册目标
-     * @param onSuper 是否注册父类成员函数上绑定的事件，默认true
+     * @param onSuper 是否注册父类成员方法上绑定的事件，默认true
      */
     public static targetOn(target: Object, onSuper: boolean = true) {
         if (onSuper) {

@@ -229,12 +229,13 @@ export default class Test extends cc.Component {
 >文件路径(scripts/common/util/Res.ts)
 
 主要是对prefab、图片等进行资源管理，内部自动进行引用计数的加减,使用时需要注意以下要点：
-1. 尽量使用此类加载所有资源、instantiate节点实例，否则需要自行管理引用计数
+1. 尽量使用此类的接口加载所有资源、instantiate节点实例，否则需要自行管理引用计数
 2. Res.instantiate不要对动态生成的节点使用，尽量只instantiate prefab上预设好的节点，否则有可能会导致引用计数的管理出错
 3. 调用load接口时如需传入release参数，则同一资源在全局调用load时release参数尽量保持一致，否则可能不符合预期
+4. 请使用ResSpine、ResSprite组件去动态加载spine、图片资源，否则需要自行管理这些资源的引用计数
 
 - **属性**
-    - **`releaseSec: number`**  资源释放的间隔时间 s，资源超过此间隔未被load才可释放
+    - **`releaseSec: number`**  资源释放的间隔时间（秒），资源超过此间隔未被load才可释放
 
 - **方法**
     - **`get<T extends cc.Asset>(url: string, type: typeof cc.Asset): T`**  获取缓存资源。通常不应直接调用此接口，除非调用前能确保资源已加载并且能自行管理引用计数
@@ -297,25 +298,36 @@ I18n.getText('test', 'somthing', 2); // => 'test somthing 2 !!!'
 
 #### <a id="framework-ui"></a>一些ui组件
 >文件路径(scripts/common/cmpt/)
-- 虚拟列表VirtualList
-    - 仅生成mask区域内所需的最少节点，且支持节点分层
+- **VirtualList** 虚拟列表，仅生成mask区域内所需的最少节点，且支持节点分层
 
-- 无限循环列表/轮播图CircleList
+- **CircleList** 无限循环列表/轮播图
 
-- 按钮相关
-    - 按钮分组，阻止同一分组内的多个按钮同时点击
-    - 按钮按下时改变子节点的坐标
-    - 按钮子节点置灰
+- **AnimValue** 渐变动画组件基类，可基于此组件实现各种数值渐变动画
+    - **AnimValueLabel** 数字渐变动画组件
+    - **AnimValueProgress** 进度条渐变动画组件
+    - **AnimValueProgressHP** 游戏血条组件
+
+- 按钮组件
+    - **ButtonSingle** 按钮分组，阻止同一分组内的多个按钮同时点击
+    - **ButtonChildPos** 根据按钮状态改变子节点的坐标
+    - **ButtonChildGray** 根据按钮状态将子节点置灰
+
+- 资源管理组件，结合[资源管理器](#framework-res)，自动管理动态加载的资源引用计数
+    - **ResSpine**
+    - **ResSprite**
+
 - ......
 
 #### <a id="framework-tool"></a>常用工具类
 >文件路径(scripts/common/util/)
+- **Tool** 常用工具接口
+- **Decorator** 装饰器
 
 #### <a id="framework-hack"></a>引擎源码hack
 >文件路径(scripts/common/hack/)
 
 #### <a id="framework-shader"></a>几个shader
-
+>文件路径(res/shader/)
 
 ## <a id="name"></a>命名规范
 - 文件夹使用小驼峰 files

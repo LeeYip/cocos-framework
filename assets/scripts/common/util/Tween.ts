@@ -456,7 +456,7 @@ export class Tween<T extends UnknownProps> {
     /**
      * 绑定cc.Object，则cc.Object销毁时，tween也会销毁
      */
-     bindCCObject(obj: cc.Object) {
+    bindCCObject(obj: cc.Object) {
         this._ccObject = obj;
     }
 
