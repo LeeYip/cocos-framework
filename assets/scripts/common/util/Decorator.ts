@@ -1,10 +1,10 @@
 import Tool from "./Tool";
 
-type AsyncData = [(value: unknown) => void, (reason?: any) => void, any[]];
+type AsyncData = [(value: unknown) => void, (reason?: unknown) => void, unknown[]];
 
 /** 异步成员方法 */
 interface AsyncProperty extends PropertyDescriptor {
-    value?: (...args: any[]) => Promise<any>;
+    value?: (...args: unknown[]) => Promise<unknown>;
 }
 
 /**
@@ -18,9 +18,9 @@ export default class Decorator {
      * - 对于非静态成员，每一个对象实例都存在一个独立的队列
      * - 对于静态成员，仅存在一个队列
      */
-    public static queue(target: any, funcName: string, desc: AsyncProperty): void {
+    public static queue(target: unknown, funcName: string, desc: AsyncProperty): void {
         let old = desc.value;
-        let queueMap: Map<any, AsyncData[]> = new Map();
+        let queueMap: Map<unknown, AsyncData[]> = new Map();
         let queueRun = async function (): Promise<void> {
             let queue = queueMap.get(this);
             if (queue === undefined) {
@@ -44,8 +44,8 @@ export default class Decorator {
                 queue.shift();
                 queueRun.apply(this);
             }
-        }
-        desc.value = function (...args: any[]): Promise<any> {
+        };
+        desc.value = function (...args: unknown[]): Promise<unknown> {
             return new Promise((resolve, reject) => {
                 let queue = queueMap.get(this);
                 if (queue === undefined) {
@@ -57,7 +57,7 @@ export default class Decorator {
                     queueRun.apply(this);
                 }
             });
-        }
+        };
     }
 
     /**
@@ -66,10 +66,10 @@ export default class Decorator {
      * @param seconds 锁定的秒数
      */
     public static lock(seconds: number = 0) {
-        return function (target: any, funcName: string, desc: PropertyDescriptor): void {
+        return function (target: unknown, funcName: string, desc: PropertyDescriptor): void {
             let old = desc.value;
-            let callingSet: Set<any> = new Set();
-            desc.value = function (...args: any[]): any {
+            let callingSet: Set<unknown> = new Set();
+            desc.value = function (...args: unknown[]): unknown {
                 if (callingSet.has(this)) {
                     return;
                 }
@@ -77,10 +77,10 @@ export default class Decorator {
                 let result = old.apply(this, args);
                 if (result instanceof Promise) {
                     return new Promise((resolve, reject) => {
-                        result.then((value: any) => {
+                        result.then((value: unknown) => {
                             Tool.wait(Math.max(seconds, 0)).then(() => { callingSet.delete(this); });
                             resolve(value);
-                        }, (reason: any) => {
+                        }, (reason: unknown) => {
                             Tool.wait(Math.max(seconds, 0)).then(() => { callingSet.delete(this); });
                             reject(reason);
                         });
@@ -89,8 +89,8 @@ export default class Decorator {
                     Tool.wait(Math.max(seconds, 0)).then(() => { callingSet.delete(this); });
                     return result;
                 }
-            }
-        }
+            };
+        };
     }
 
     //#endregion

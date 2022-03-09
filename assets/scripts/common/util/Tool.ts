@@ -36,7 +36,7 @@ export default class Tool {
     public static wait(seconds: number): Promise<void> {
         return new Promise((resolve, reject) => {
             setTimeout(() => {
-                resolve(null);
+                resolve();
             }, seconds * 1000);
         });
     }
