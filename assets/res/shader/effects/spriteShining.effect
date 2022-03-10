@@ -1,0 +1,119 @@
+// Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+
+CCEffect %{
+  techniques:
+  - passes:
+    - vert: vs
+      frag: fs
+      blendState:
+        targets:
+        - blend: true
+      rasterizerState:
+        cullMode: none
+      properties:
+        texture: { value: white }
+        alphaThreshold: { value: 0.5 }
+
+        shiningData: { value: [1, 1, 1, 1] }
+        extra: { value: [1, 1, 1, 1] }
+}%
+
+
+CCProgram vs %{
+  precision highp float;
+
+  #include <cc-global>
+  #include <cc-local>
+
+  in vec3 a_position;
+  in vec4 a_color;
+  out vec4 v_color;
+
+  #if USE_TEXTURE
+  in vec2 a_uv0;
+  out vec2 v_uv0;
+  #endif
+
+  void main () {
+    vec4 pos = vec4(a_position, 1);
+
+    #if CC_USE_MODEL
+    pos = cc_matViewProj * cc_matWorld * pos;
+    #else
+    pos = cc_matViewProj * pos;
+    #endif
+
+    #if USE_TEXTURE
+    v_uv0 = a_uv0;
+    #endif
+
+    v_color = a_color;
+
+    gl_Position = pos;
+  }
+}%
+
+
+CCProgram fs %{
+  precision highp float;
+
+  #include <alpha-test>
+  #include <texture>
+
+  in vec4 v_color;
+
+  #if USE_TEXTURE
+  in vec2 v_uv0;
+  uniform sampler2D texture;
+  #endif
+
+  uniform Constant {
+    // 流光数据 x:流光速度 y:流光斜率 z:流光宽度 w:两次流光动画之间的间隔时间
+    // 可以通过改变速度和斜率的正负号来改变流光方向
+    vec4 shiningData;
+    // x:当前时间 y:流光强度
+    vec4 extra;
+  };
+
+  vec4 shining(vec4 color, vec2 uv) {
+    float speed = shiningData.x;
+    float slope = shiningData.y;
+    float width = shiningData.z;
+    float interval = shiningData.w;
+    float time = extra.x;
+    float strength = extra.y;
+
+    float len = 2.0 + width + abs(speed) * interval;
+    float delta = mod(speed * time, len);
+    if (delta < 0.0) {
+      delta += len;
+    }
+    float dir = step(0.0, slope);
+    // 左下-右上
+    float result1 = step(slope * uv.x + slope * (1.0 - delta), uv.y) - step(slope * uv.x + slope * (1.0 - (delta - width)), uv.y);
+    // 左上-右下
+    float result2 = step(slope * uv.x - slope * (delta - width), uv.y) - step(slope * uv.x - slope * delta, uv.y);
+    float result = result1 * dir + result2 * (1.0 - dir);
+    color += color * result * strength * step(1.0, color.a);
+    return color;
+  }
+
+  void main () {
+    vec4 o = vec4(1, 1, 1, 1);
+
+    #if USE_TEXTURE
+      CCTexture(texture, v_uv0, o);
+    #endif
+
+    o *= v_color;
+    o = shining(o, v_uv0);
+
+    ALPHA_TEST(o);
+
+    #if USE_BGRA
+      gl_FragColor = o.bgra;
+    #else
+      gl_FragColor = o.rgba;
+    #endif
+  }
+}%

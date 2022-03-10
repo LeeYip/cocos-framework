@@ -23,24 +23,24 @@ export default class ShaderOutline extends cc.Component {
     public TextureSize: cc.Size = new cc.Size(1, 1);
 
     private _mat: cc.Material = null;
-    public get mat() {
+    public get mat(): cc.Material {
         if (!this._mat) {
             this._mat = this.getComponent(cc.RenderComponent).getMaterial(0);
         }
         return this._mat;
     }
 
-    protected start() {
+    protected start(): void {
         this.updateShader();
     }
 
-    protected update() {
+    protected update(): void {
         if (CC_EDITOR) {
             this.updateShader();
         }
     }
 
-    public updateShader() {
+    public updateShader(): void {
         this.mat.setProperty('outlineColor', this.OutlineColor);
         this.mat.setProperty('outlineInfo', new cc.Vec4(this.TextureSize.width, this.TextureSize.height, this.OutLineWidth, this.OutlineType));
     }

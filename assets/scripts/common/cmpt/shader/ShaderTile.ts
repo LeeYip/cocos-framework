@@ -11,24 +11,24 @@ export default class ShaderTile extends cc.Component {
     public Offset: cc.Vec2 = new cc.Vec2(0, 0);
 
     private _mat: cc.Material = null;
-    public get mat() {
+    public get mat(): cc.Material {
         if (!this._mat) {
             this._mat = this.getComponent(cc.RenderComponent).getMaterial(0);
         }
         return this._mat;
     }
 
-    protected start() {
+    protected start(): void {
         this.updateShader();
     }
 
-    protected update() {
+    protected update(): void {
         if (CC_EDITOR) {
             this.updateShader();
         }
     }
 
-    public updateShader() {
+    public updateShader(): void {
         this.mat.setProperty('tile', new cc.Vec4(this.Scale.x, this.Scale.y, this.Offset.x, this.Offset.y));
     }
 }
