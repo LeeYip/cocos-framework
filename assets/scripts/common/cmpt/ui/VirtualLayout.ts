@@ -1,6 +1,7 @@
 import Res from "../../util/Res";
+import Tool from "../../util/Tool";
 import VirtualItem from "./VirtualItem";
-import VirtualList, { TemplateType } from "./VirtualList";
+import VirtualList, { MainTemplateType, OtherTemplateType, VirtualArgs } from "./VirtualList";
 
 const { ccclass, property, disallowMultiple } = cc._decorator;
 
@@ -45,7 +46,7 @@ enum VerticalDirection {
  */
 @ccclass
 @disallowMultiple
-export default class VirtualLayout extends cc.Component {
+export default class VirtualLayout<T extends VirtualArgs> extends cc.Component {
     @property({ type: cc.Enum(LayoutType), tooltip: CC_DEV && '布局模式' })
     public Type: LayoutType = LayoutType.VERTICAL;
 
@@ -100,18 +101,17 @@ export default class VirtualLayout extends cc.Component {
     private _items: cc.Node[] = [];
     /** main content被回收的item池（不移出节点树，只设置active） */
     private _itemPool: cc.Node[] = [];
-
     /** others content激活状态的item，下标顺序与this.list.Others数组一致 */
     private _otherItemsArr: cc.Node[][] = [];
     /** others content被回收的item池（不移出节点树，只设置active），下标顺序与this.list.Others数组一致 */
     private _otherItemPoolArr: cc.Node[][] = [];
 
     /** 所属虚拟列表 */
-    public list: VirtualList = null;
+    public list: VirtualList<T> = null;
     /** 列表缓存的所有数据 */
-    public dataArr: any[][] = [];
+    public dataArr: T[] = [];
 
-    public onInit() {
+    public onInit(): void {
         this._view = this.node.parent;
         this._viewEdge = this.getNodeEdgeRect(this._view);
 
@@ -133,12 +133,12 @@ export default class VirtualLayout extends cc.Component {
         this.node.on(cc.Node.EventType.POSITION_CHANGED, this.onPositionChanged, this);
     }
 
-    protected onDestroy() {
+    protected onDestroy(): void {
         // 注销事件
         this.node.off(cc.Node.EventType.POSITION_CHANGED, this.onPositionChanged, this);
     }
 
-    protected lateUpdate() {
+    protected lateUpdate(): void {
         this.updateSize();
         this.updateView();
     }
@@ -146,7 +146,7 @@ export default class VirtualLayout extends cc.Component {
     /**
      * 更新content size
      */
-    private updateSize() {
+    private updateSize(): void {
         if (!this._sizeDirty) {
             return;
         }
@@ -159,7 +159,7 @@ export default class VirtualLayout extends cc.Component {
         }
     }
 
-    private updateSizeFixed() {
+    private updateSizeFixed(): void {
         if (this.Type === LayoutType.VERTICAL) {
             if (this.dataArr.length <= 0) {
                 this.node.height = 0;
@@ -205,38 +205,14 @@ export default class VirtualLayout extends cc.Component {
         }
     }
 
-    private updateSizeUnfixed() {
-        // if (this.Type === LayoutType.VERTICAL) {
-        //   if (this._dataArr.length <= 0) {
-        //     this.node.height = 0;
-        //     return;
-        //   }
+    private updateSizeUnfixed(): void {
 
-        //   let height = this.Top + this.Bottom + (this._dataArr.length - 1) * this.SpacingY;
-        //   this._dataArr.forEach((e) => {
-        //     height += e.size.height;
-        //   });
-        //   this.node.height = height;
-        // } else if (this.Type === LayoutType.HORIZONTAL) {
-        //   if (this._dataArr.length <= 0) {
-        //     this.node.width = 0;
-        //     return;
-        //   }
-
-        //   let width = this.Left + this.Right + (this._dataArr.length - 1) * this.SpacingX;
-        //   this._dataArr.forEach((e) => {
-        //     width += e.size.width;
-        //   });
-        //   this.node.width = width;
-        // } else {
-
-        // }
     }
 
     /**
      * 更新view区域数据显示
      */
-    private updateView() {
+    private updateView(): void {
         if (!this._viewDirty || this.dataArr.length <= 0) {
             return;
         }
@@ -249,7 +225,7 @@ export default class VirtualLayout extends cc.Component {
         }
     }
 
-    private updateViewFixed() {
+    private updateViewFixed(): void {
         let viewResult = this.checkViewItem();
         let inView = viewResult.inView;
         let outView = viewResult.outView;
@@ -278,7 +254,7 @@ export default class VirtualLayout extends cc.Component {
                 }
 
                 // 判断显示区域内部是否有节点显示此条数据
-                let found = inView.findIndex((e) => { return this._items[e].getComponent(VirtualItem).DataIdx === i; });
+                let found = inView.findIndex((e) => { return this._items[e].getComponent(VirtualItem).dataIdx === i; });
                 if (found !== -1) {
                     continue;
                 }
@@ -311,7 +287,7 @@ export default class VirtualLayout extends cc.Component {
                 }
 
                 // 判断显示区域内部是否有节点显示此条数据
-                let found = inView.findIndex((e) => { return this._items[e].getComponent(VirtualItem).DataIdx === i; });
+                let found = inView.findIndex((e) => { return this._items[e].getComponent(VirtualItem).dataIdx === i; });
                 if (found !== -1) {
                     continue;
                 }
@@ -415,7 +391,7 @@ export default class VirtualLayout extends cc.Component {
                 }
 
                 // 判断显示区域内部是否有节点显示此条数据
-                let found = inView.findIndex((e) => { return this._items[e].getComponent(VirtualItem).DataIdx === i; });
+                let found = inView.findIndex((e) => { return this._items[e].getComponent(VirtualItem).dataIdx === i; });
                 if (found !== -1) {
                     continue;
                 }
@@ -428,7 +404,7 @@ export default class VirtualLayout extends cc.Component {
         }
     }
 
-    private updateViewUnfixed() {
+    private updateViewUnfixed(): void {
 
     }
 
@@ -496,12 +472,12 @@ export default class VirtualLayout extends cc.Component {
      * @param dataIdx this._dataArr的下标 
      * @param itemIdx this._items的下标
      */
-    private setItem(p: cc.Vec3, dataIdx: number, itemIdx: number) {
+    private setItem(p: cc.Vec3, dataIdx: number, itemIdx: number): void {
         let item = this._items[itemIdx];
         item.position = p;
         let vi = item.getComponent(VirtualItem);
-        vi.DataIdx = dataIdx;
-        vi.onInit(...this.dataArr[dataIdx]);
+        vi.dataIdx = dataIdx;
+        vi.onRefresh(this.dataArr[dataIdx]);
 
         if (this.list.Others.length > 0) {
             let nodes: cc.Node[] = [];
@@ -509,7 +485,7 @@ export default class VirtualLayout extends cc.Component {
                 e[itemIdx].position = p;
                 nodes.push(e[itemIdx]);
             });
-            vi.setOtherNode(...nodes);
+            vi.onRefreshOthers(...nodes);
         }
     }
 
@@ -531,9 +507,11 @@ export default class VirtualLayout extends cc.Component {
                 this._otherItemsArr[i].push(otherNode);
             });
         } else {
-            let tmp: any = this.list.Main.TemplateType === TemplateType.PREFAB ? this.list.Main.TemplatePrefab : this.list.Main.TemplateNode;
+            let tmp: cc.Node | cc.Prefab = this.list.Main.TemplateType === MainTemplateType.PREFAB ? this.list.Main.TemplatePrefab : this.list.Main.TemplateNode;
             node = Res.instantiate(tmp, this.node);
-            node.getComponent(VirtualItem) || node.addComponent(VirtualItem);
+            if (!node.getComponent(VirtualItem)) {
+                node.addComponent(VirtualItem);
+            }
             this.node.addChild(node);
             if (active) {
                 node.active = true;
@@ -544,8 +522,26 @@ export default class VirtualLayout extends cc.Component {
             }
 
             this.list.Others.forEach((e, i) => {
-                let otherTmp: any = e.TemplateType === TemplateType.PREFAB ? e.TemplatePrefab : e.TemplateNode;
-                let otherNode = Res.instantiate(otherTmp, this.node);
+                let otherNode: cc.Node = null;
+                switch (e.TemplateType) {
+                    case OtherTemplateType.NODE:
+                        otherNode = Res.instantiate(e.TemplateNode, this.node);
+                        break;
+                    case OtherTemplateType.PREFAB:
+                        otherNode = Res.instantiate(e.TemplatePrefab, this.node);
+                        break;
+                    case OtherTemplateType.MAIN_ITEM_CHILD:
+                        if (!Tool.inRange(0, node.childrenCount - 1, e.TemplateChild)) {
+                            cc.error(`[VirtualLayout.addItemNode] error e.TemplateChild: ${e.TemplateChild}`);
+                            return;
+                        }
+                        otherNode = node.children[e.TemplateChild];
+                        otherNode.removeFromParent();
+                        break;
+                    default:
+                        cc.error(`[VirtualLayout.addItemNode] error e.TemplateType: ${e.TemplateType}`);
+                        return;
+                }
                 e.Content.addChild(otherNode);
                 if (active) {
                     otherNode.active = true;
@@ -566,7 +562,7 @@ export default class VirtualLayout extends cc.Component {
      * @param isOther 是否为Others下的节点
      * @param otherIdx Others的下标
      */
-    private putItemNode(node: cc.Node, isOther: boolean = false, otherIdx: number = 0) {
+    private putItemNode(node: cc.Node, isOther: boolean = false, otherIdx: number = 0): void {
         node.active = false;
         if (isOther) {
             this._otherItemPoolArr[otherIdx].push(node);
@@ -580,14 +576,14 @@ export default class VirtualLayout extends cc.Component {
     /**
      * 子节点坐标系下坐标转换为父节点坐标系下坐标
      */
-    private convertToParentPos(pos: cc.Vec3, child: cc.Node) {
+    private convertToParentPos(pos: cc.Vec3, child: cc.Node): cc.Vec3 {
         return pos.add(child.position);
     }
 
     /**
      * 父节点坐标系下坐标转换为子节点坐标系下坐标
      */
-    private convertToChildPos(pos: cc.Vec3, child: cc.Node) {
+    private convertToChildPos(pos: cc.Vec3, child: cc.Node): cc.Vec3 {
         return pos.sub(child.position);
     }
 
@@ -601,7 +597,7 @@ export default class VirtualLayout extends cc.Component {
     /**
      * content位移监听回调
      */
-    private onPositionChanged() {
+    private onPositionChanged(): void {
         this._viewDirty = true;
 
         this.list.Others.forEach((e) => {
@@ -612,19 +608,13 @@ export default class VirtualLayout extends cc.Component {
     /**
      * 清空节点重新排列
      */
-    private clearAllItem() {
+    private clearAllItem(): void {
         this._items.forEach((e, i) => {
             this.putItemNode(e);
-
-            this._otherItemsArr.forEach((arr, otherIdx) => {
-                this.putItemNode(arr[i], true, otherIdx);
-            });
+            this._otherItemsArr.forEach((arr, otherIdx) => { this.putItemNode(arr[i], true, otherIdx); });
         });
         this._items.length = 0;
-
-        this._otherItemsArr.forEach((arr) => {
-            arr.length = 0;
-        });
+        this._otherItemsArr.forEach((arr) => { arr.length = 0; });
     }
 
     /**
@@ -704,8 +694,8 @@ export default class VirtualLayout extends cc.Component {
         return null;
     }
 
-    public reset(index: number, ...args: any[]) {
-        if (index >= 0 && index < this.dataArr.length) {
+    public reset(index: number, args: T): void {
+        if (Tool.inRange(0, this.dataArr.length - 1, index)) {
             this.dataArr[index] = args;
             this.clearAllItem();
             this._sizeDirty = true;
@@ -713,54 +703,60 @@ export default class VirtualLayout extends cc.Component {
         }
     }
 
-    public push(...args: any[]) {
-        this.dataArr.push(args);
+    public push(args: T): number {
+        let result = this.dataArr.push(args);
         this._sizeDirty = true;
         this._viewDirty = true;
+        return result;
     }
 
-    public pop() {
-        this.dataArr.pop();
+    public pop(): T {
+        let result = this.dataArr.pop();
         this.clearAllItem();
         this._sizeDirty = true;
         this._viewDirty = true;
+        return result;
     }
 
-    public unshift(...args: any[]) {
-        this.dataArr.unshift(args);
+    public unshift(args: T): number {
+        let result = this.dataArr.unshift(args);
         this.clearAllItem();
         this._sizeDirty = true;
         this._viewDirty = true;
+        return result;
     }
 
-    public shift() {
-        this.dataArr.shift();
+    public shift(): T {
+        let result = this.dataArr.shift();
         this.clearAllItem();
         this._sizeDirty = true;
         this._viewDirty = true;
+        return result;
     }
 
-    public splice(start: number, deleteCount?: number, ...argsArr: any[][]) {
+    public splice(start: number, deleteCount?: number, ...argsArr: T[]): T[] {
+        let result: T[];
         if (deleteCount === undefined) {
-            this.dataArr.splice(start);
+            result = this.dataArr.splice(start);
         } else {
             if (argsArr === undefined || argsArr.length === 0) {
-                this.dataArr.splice(start, deleteCount);
+                result = this.dataArr.splice(start, deleteCount);
             } else {
-                this.dataArr.splice(start, deleteCount, ...argsArr);
+                result = this.dataArr.splice(start, deleteCount, ...argsArr);
             }
         }
 
         this.clearAllItem();
         this._sizeDirty = true;
         this._viewDirty = true;
+        return result;
     }
 
-    public sort(call: (a: any[], b: any[]) => number) {
-        this.dataArr.sort(call);
-
+    public sort(call: (a: T, b: T) => number): T[] {
+        let result = this.dataArr.sort(call);
         this.clearAllItem();
         this._sizeDirty = true;
         this._viewDirty = true;
+        return result;
     }
 }

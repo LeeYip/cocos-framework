@@ -1,7 +1,12 @@
 import Res from "../../util/Res";
-import { TemplateType } from "./VirtualList";
 
 const { ccclass, property, requireComponent, disallowMultiple, menu } = cc._decorator;
+
+/** 列表元素模板类型 */
+enum TemplateType {
+    NODE,
+    PREFAB
+}
 
 /**
  * 无限循环列表(轮播图)

@@ -1,6 +1,7 @@
 import DialogBase from "../../common/cmpt/base/DialogBase";
 import VirtualList from "../../common/cmpt/ui/VirtualList";
 import Tool from "../../common/util/Tool";
+import { ItemArgs } from "./ListItem";
 
 const { ccclass, property } = cc._decorator;
 
@@ -8,7 +9,7 @@ const { ccclass, property } = cc._decorator;
 export default class DlgVirtualList extends DialogBase {
     public static pUrl: string = 'DlgVirtualList';
 
-    @property(VirtualList) List: VirtualList = null;
+    @property(VirtualList) List: VirtualList<ItemArgs> = null;
     @property(cc.Label) RndLab: cc.Label = null;
 
     private _rnd: number = 0;
@@ -18,7 +19,7 @@ export default class DlgVirtualList extends DialogBase {
      */
     public open() {
         for (let i = 0; i < 50; i++) {
-            this.List.push(null);
+            this.List.push({num: Tool.randInt(0, 1000)});
         }
 
         this._rnd = Tool.randInt(0, this.List.getDataArr().length);
@@ -26,7 +27,7 @@ export default class DlgVirtualList extends DialogBase {
     }
 
     private onClickAdd() {
-        this.List.push(null);
+        this.List.push({num: Tool.randInt(0, 1000)});
     }
 
     private onClickDelete() {

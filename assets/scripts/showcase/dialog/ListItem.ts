@@ -1,20 +1,27 @@
 import VirtualItem from "../../common/cmpt/ui/VirtualItem";
+import { VirtualArgs } from "../../common/cmpt/ui/VirtualList";
 
 const { ccclass, property } = cc._decorator;
 
+export interface ItemArgs extends VirtualArgs {
+    num: number
+}
+
 @ccclass
-export default class ListItem extends VirtualItem {
+export default class ListItem extends VirtualItem<ItemArgs> {
+    @property(cc.Label) Lab: cc.Label = null;
+
     /**
      * @override
      */
-    public onInit(i: number) {
-        
+    public onRefresh(args: ItemArgs) {
+        this.Lab.string = `idx: ${this.dataIdx}`;
+        cc.log(`[ListItem.onRefresh] idx: ${this.dataIdx}, args.num: ${args.num}`);
     }
 
     /**
      * @override
      */
-    public setOtherNode(labNode: cc.Node) {
-        labNode.getComponent(cc.Label).string = `idx: ${this.DataIdx}`;
+    public onRefreshOthers(labNode: cc.Node) {
     }
 }

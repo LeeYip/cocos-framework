@@ -1,34 +1,35 @@
-const { ccclass, property, disallowMultiple } = cc._decorator;
+import { VirtualArgs } from "./VirtualList";
+
+const { ccclass, disallowMultiple } = cc._decorator;
 
 /**
  * 虚拟列表的元素组件
  */
 @ccclass
 @disallowMultiple
-export default class VirtualItem extends cc.Component {
+export default class VirtualItem<T extends VirtualArgs> extends cc.Component {
     /** 列表数据索引 */
-    public DataIdx: number = 0;
+    public dataIdx: number = 0;
 
     /**
-     * 根据数据初始化item信息
-     * - 需通过VirtualList去调用，一般不能主动调用
+     * 根据数据刷新item显示
      * @virtual
      */
-    public onInit(...args: any[]) {
+    public onRefresh(args: T): void {
     }
 
     /**
-     * 在onInit之后调用，参数为分层显示的节点，参数顺序为Others数组的顺序
+     * 在onRefresh之后调用，参数为分层显示的节点，参数顺序为Others数组的顺序
      * @virtual
      */
-    public setOtherNode(...nodes: cc.Node[]) {
+    public onRefreshOthers(...nodes: cc.Node[]): void {
     }
 
     /**
      * 回收item时重置内部状态
      * @virtual
      */
-    public onReset() {
+    public onReset(): void {
     }
 
     /**
