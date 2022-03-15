@@ -521,6 +521,8 @@ export default class VirtualLayout<T extends VirtualArgs> extends cc.Component {
                 this.putItemNode(node);
             }
 
+            // 拷贝一份子节点数组，防止子节点移除时改变下标
+            let childrenCopy = node.children.slice(0);
             this.list.Others.forEach((e, i) => {
                 let otherNode: cc.Node = null;
                 switch (e.TemplateType) {
@@ -531,11 +533,11 @@ export default class VirtualLayout<T extends VirtualArgs> extends cc.Component {
                         otherNode = Res.instantiate(e.TemplatePrefab, this.node);
                         break;
                     case OtherTemplateType.MAIN_ITEM_CHILD:
-                        if (!Tool.inRange(0, node.childrenCount - 1, e.TemplateChild)) {
+                        if (!Tool.inRange(0, childrenCopy.length - 1, e.TemplateChild)) {
                             cc.error(`[VirtualLayout.addItemNode] error e.TemplateChild: ${e.TemplateChild}`);
                             return;
                         }
-                        otherNode = node.children[e.TemplateChild];
+                        otherNode = childrenCopy[e.TemplateChild];
                         otherNode.removeFromParent();
                         break;
                     default:
