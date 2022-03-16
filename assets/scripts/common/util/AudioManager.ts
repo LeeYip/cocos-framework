@@ -59,9 +59,7 @@ export default class AudioManager {
 
     private static _bgmVolume: number = 1;
     /** 全局bgm音量 */
-    public static get bgmVolume() {
-        return this._bgmVolume;
-    }
+    public static get bgmVolume(): number { return this._bgmVolume; }
     public static set bgmVolume(volume: number) {
         if (this._bgmVolume === volume) {
             return;
@@ -75,9 +73,7 @@ export default class AudioManager {
 
     private static _sfxVolume: number = 1;
     /** 全局sfx音量 */
-    public static get sfxVolume() {
-        return this._sfxVolume;
-    }
+    public static get sfxVolume(): number { return this._sfxVolume; }
     public static set sfxVolume(volume: number) {
         if (this._sfxVolume === volume) {
             return;
@@ -98,9 +94,7 @@ export default class AudioManager {
 
     private static _bgmOff: boolean = false;
     /** bgm是否关闭 */
-    public static get bgmOff() {
-        return this._bgmOff;
-    }
+    public static get bgmOff(): boolean { return this._bgmOff; }
     public static set bgmOff(isOff: boolean) {
         if (this._bgmOff === isOff) {
             return;
@@ -117,9 +111,7 @@ export default class AudioManager {
 
     private static _sfxOff: boolean = false;
     /** sfx是否关闭 */
-    public static get sfxOff() {
-        return this._sfxOff;
-    }
+    public static get sfxOff(): boolean { return this._sfxOff; }
     public static set sfxOff(isOff: boolean) {
         if (this._sfxOff === isOff) {
             return;
@@ -144,9 +136,7 @@ export default class AudioManager {
 
     private static _bgmPause: boolean = false;
     /** bgm是否暂停 */
-    public static get bgmPause() {
-        return this._bgmPause;
-    }
+    public static get bgmPause(): boolean { return this._bgmPause; }
     public static set bgmPause(isPause: boolean) {
         if (this.bgmOff || this._bgmPause === isPause) {
             return;
@@ -166,9 +156,7 @@ export default class AudioManager {
 
     private static _sfxPause: boolean = false;
     /** sfx是否暂停，暂停时不暂停ui音效 */
-    public static get sfxPause() {
-        return this._sfxPause;
-    }
+    public static get sfxPause(): boolean { return this._sfxPause; }
     public static set sfxPause(isPause: boolean) {
         if (this.sfxOff || this._sfxPause === isPause) {
             return;
@@ -201,7 +189,7 @@ export default class AudioManager {
      * @param to 音量目标值
      * @param call 渐变结束的回调
      */
-    private static volumeFade(data: AudioData, duration: number, from: number, to: number, call?: () => void) {
+    private static volumeFade(data: AudioData, duration: number, from: number, to: number, call?: () => void): void {
         data.tween?.stop();
         data.volume = from;
         cc.audioEngine.setVolume(data.id, data.volume * this.bgmVolume);
@@ -223,7 +211,7 @@ export default class AudioManager {
      * 停止音频
      * @param audioData 
      */
-    private static stop(audioData: AudioData) {
+    private static stop(audioData: AudioData): void {
         if (audioData.tween) {
             audioData.tween.stop();
             audioData.tween = null;
@@ -273,7 +261,7 @@ export default class AudioManager {
     /**
      * 播放bgm
      */
-    public static playBgm(args: cc.AudioClip | AudioPlayArgs) {
+    public static playBgm(args: cc.AudioClip | AudioPlayArgs): void {
         let clip = args instanceof cc.AudioClip ? args : args.clip;
         if (this.bgmOff || !clip) {
             return;
@@ -292,7 +280,7 @@ export default class AudioManager {
     /**
      * 播放sfx
      */
-    public static playSfx(args: cc.AudioClip | AudioPlayArgs, type: SfxType = SfxType.NORMAL) {
+    public static playSfx(args: cc.AudioClip | AudioPlayArgs, type: SfxType = SfxType.NORMAL): void {
         let clip = args instanceof cc.AudioClip ? args : args.clip;
         if (this.sfxOff || !clip) {
             return;
@@ -357,7 +345,7 @@ export default class AudioManager {
      * @param clip 需停止的音频，clip返回值为false则停止所有
      * @param fadeDuration 音量渐变时长 单位s
      */
-    public static stopBgm(clip: cc.AudioClip = null, fadeDuration: number = 0) {
+    public static stopBgm(clip: cc.AudioClip = null, fadeDuration: number = 0): void {
         if (this.bgmOff) {
             return;
         }
@@ -399,7 +387,7 @@ export default class AudioManager {
      * @param clip 需停止的音频，clip返回值为false则停止所有
      * @param type 音效类型
      */
-    public static stopSfx(clip: cc.AudioClip = null, type: SfxType = SfxType.NORMAL) {
+    public static stopSfx(clip: cc.AudioClip = null, type: SfxType = SfxType.NORMAL): void {
         if (this.sfxOff) {
             return;
         }
@@ -433,7 +421,7 @@ export default class AudioManager {
     /**
      * 停止所有音频
      */
-    public static stopAll() {
+    public static stopAll(): void {
         this.stopBgm();
         this.stopSfx();
     }
@@ -441,7 +429,7 @@ export default class AudioManager {
     /**
      * 暂停所有音频
      */
-    public static pauseAll() {
+    public static pauseAll(): void {
         this.bgmPause = true;
         this.sfxPause = true;
     }
@@ -449,7 +437,7 @@ export default class AudioManager {
     /**
      * 恢复所有音频
      */
-    public static resumeAll() {
+    public static resumeAll(): void {
         this.bgmPause = false;
         this.sfxPause = false;
     }
@@ -457,7 +445,7 @@ export default class AudioManager {
     /**
      * 停止所有音频，清除所有音频缓存
      */
-    public static uncacheAll() {
+    public static uncacheAll(): void {
         this.stopAll();
         this._bgmMap.clear();
         this._normalSfxMap.clear();

@@ -115,14 +115,14 @@ export default class Tool {
      * @param value
      * @param includeEdge 是否包含边界值min和max，默认包含
      */
-    public static inRange(min: number, max: number, value: number, includeEdge: boolean = true) {
+    public static inRange(min: number, max: number, value: number, includeEdge: boolean = true): boolean {
         return includeEdge ? value >= min && value <= max : value > min && value < max;
     }
 
     /**
      * 获取区间[min, max)的整数，传入1个参数则区间为[0, min)
      */
-    public static randInt(min: number, max: number = undefined) {
+    public static randInt(min: number, max: number = undefined): number {
         if (max === undefined) {
             max = min;
             min = 0;
@@ -135,7 +135,7 @@ export default class Tool {
     /**
      * 获取区间[min, max)的浮点数，传入1个参数则区间为[0, min)
      */
-    public static randFloat(min: number, max: number = undefined) {
+    public static randFloat(min: number, max: number = undefined): number {
         if (max === undefined) {
             max = min;
             min = 0;
@@ -193,7 +193,7 @@ export default class Tool {
     /**
      * 根据下标交换数组两个元素位置
      */
-    public static arraySwap<T>(arr: T[], idx1: number, idx2: number) {
+    public static arraySwap<T>(arr: T[], idx1: number, idx2: number): void {
         if (idx1 === idx2 || !this.inRange(0, arr.length - 1, idx1) || !this.inRange(0, arr.length - 1, idx2)) {
             return;
         }
@@ -203,7 +203,7 @@ export default class Tool {
     /**
      * 将元素从fromIdx位置移到toIdx位置，其余元素相对位置不变
      */
-    public static arrayMove<T>(arr: T[], fromIdx: number, toIdx: number) {
+    public static arrayMove<T>(arr: T[], fromIdx: number, toIdx: number): void {
         if (fromIdx === toIdx || !this.inRange(0, arr.length - 1, fromIdx) || !this.inRange(0, arr.length - 1, toIdx)) {
             return;
         }
@@ -244,7 +244,7 @@ export default class Tool {
      * @param cb 节点处理函数
      * @param thisArg cb绑定的this对象
      */
-    public static nodeRecursive(node: cc.Node | cc.Node[], cb: (n: cc.Node) => void, thisArg: any = undefined) {
+    public static nodeRecursive(node: cc.Node | cc.Node[], cb: (n: cc.Node) => void, thisArg: any = undefined): void {
         if (node instanceof cc.Node) {
             cb.call(thisArg, node);
             node.children.forEach((n: cc.Node) => { this.nodeRecursive(n, cb, thisArg); });
@@ -256,7 +256,7 @@ export default class Tool {
     /**
      * destroy并立即remove传入节点的所有子节点
      */
-    public static clearChildren(...nodes: cc.Node[]) {
+    public static clearChildren(...nodes: cc.Node[]): void {
         nodes.forEach((e) => {
             e.destroyAllChildren();
             e.removeAllChildren();

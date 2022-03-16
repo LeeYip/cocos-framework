@@ -26,19 +26,19 @@ enum AxisDirection {
 }
 
 /**
- * 横向排列方向
- */
-enum HorizontalDirection {
-    LEFT_TO_RIGHT,
-    RIGHT_TO_LEFT
-}
-
-/**
  * 纵向排列方向
  */
 enum VerticalDirection {
     TOP_TO_BOTTOM,
     BOTTOM_TO_TOP
+}
+
+/**
+ * 横向排列方向
+ */
+enum HorizontalDirection {
+    LEFT_TO_RIGHT,
+    RIGHT_TO_LEFT
 }
 
 /**
@@ -108,8 +108,6 @@ export default class VirtualLayout<T extends VirtualArgs> extends cc.Component {
 
     /** 所属虚拟列表 */
     public list: VirtualList<T> = null;
-    /** 列表缓存的所有数据 */
-    public dataArr: T[] = [];
 
     public onInit(): void {
         this._view = this.node.parent;
@@ -161,22 +159,22 @@ export default class VirtualLayout<T extends VirtualArgs> extends cc.Component {
 
     private updateSizeFixed(): void {
         if (this.Type === LayoutType.VERTICAL) {
-            if (this.dataArr.length <= 0) {
+            if (this.list.argsArr.length <= 0) {
                 this.node.height = 0;
                 return;
             }
 
-            this.node.height = this.Top + this.Bottom + (this.dataArr.length - 1) * this.SpacingY + this._fixedSize.height * this.dataArr.length;
+            this.node.height = this.Top + this.Bottom + (this.list.argsArr.length - 1) * this.SpacingY + this._fixedSize.height * this.list.argsArr.length;
         } else if (this.Type === LayoutType.HORIZONTAL) {
-            if (this.dataArr.length <= 0) {
+            if (this.list.argsArr.length <= 0) {
                 this.node.width = 0;
                 return;
             }
 
-            this.node.width = this.Left + this.Right + (this.dataArr.length - 1) * this.SpacingX + this._fixedSize.width * this.dataArr.length;
+            this.node.width = this.Left + this.Right + (this.list.argsArr.length - 1) * this.SpacingX + this._fixedSize.width * this.list.argsArr.length;
         } else {
             if (this.StartAxis === AxisDirection.HORIZONTAL) {
-                if (this.dataArr.length <= 0) {
+                if (this.list.argsArr.length <= 0) {
                     this.node.height = 0;
                     return;
                 }
@@ -185,11 +183,11 @@ export default class VirtualLayout<T extends VirtualArgs> extends cc.Component {
                 let num = Math.floor((this.node.width - this.Left - this.Right + this.SpacingX) / (this._fixedSize.width + this.SpacingX));
                 num = Math.max(num, 1);
                 // 计算可以排列几行
-                let row = Math.ceil(this.dataArr.length / num);
+                let row = Math.ceil(this.list.argsArr.length / num);
                 // 高度
                 this.node.height = this.Top + this.Bottom + (row - 1) * this.SpacingY + this._fixedSize.height * row;
             } else {
-                if (this.dataArr.length <= 0) {
+                if (this.list.argsArr.length <= 0) {
                     this.node.width = 0;
                     return;
                 }
@@ -198,7 +196,7 @@ export default class VirtualLayout<T extends VirtualArgs> extends cc.Component {
                 let num = Math.floor((this.node.height - this.Top - this.Bottom + this.SpacingY) / (this._fixedSize.height + this.SpacingY));
                 num = Math.max(num, 1);
                 // 计算可以排列几列
-                let column = Math.ceil(this.dataArr.length / num);
+                let column = Math.ceil(this.list.argsArr.length / num);
                 // 宽度
                 this.node.width = this.Left + this.Right + (column - 1) * this.SpacingX + this._fixedSize.width * column;
             }
@@ -213,7 +211,7 @@ export default class VirtualLayout<T extends VirtualArgs> extends cc.Component {
      * 更新view区域数据显示
      */
     private updateView(): void {
-        if (!this._viewDirty || this.dataArr.length <= 0) {
+        if (!this._viewDirty || this.list.argsArr.length <= 0) {
             return;
         }
         this._viewDirty = false;
@@ -232,7 +230,7 @@ export default class VirtualLayout<T extends VirtualArgs> extends cc.Component {
         let contentEdge = this.getNodeEdgeRect(this.node);
         let xMax: number, xMin: number, yMax: number, yMin: number;
         if (this.Type === LayoutType.VERTICAL) {
-            for (let i = 0; i < this.dataArr.length; i++) {
+            for (let i = 0; i < this.list.argsArr.length; i++) {
                 if (this.VerticalDirection === VerticalDirection.TOP_TO_BOTTOM) {
                     yMax = contentEdge.yMax - (this.Top + i * this.SpacingY + this._fixedSize.height * i);
                     yMin = yMax - this._fixedSize.height;
@@ -265,7 +263,7 @@ export default class VirtualLayout<T extends VirtualArgs> extends cc.Component {
                 this.setItem(cc.v3(0, yMin + item.anchorY * item.height), i, itemIdx);
             }
         } else if (this.Type === LayoutType.HORIZONTAL) {
-            for (let i = 0; i < this.dataArr.length; i++) {
+            for (let i = 0; i < this.list.argsArr.length; i++) {
                 if (this.HorizontalDirection === HorizontalDirection.RIGHT_TO_LEFT) {
                     xMax = contentEdge.xMax - (this.Right + i * this.SpacingX + this._fixedSize.width * i);
                     xMin = xMax - this._fixedSize.width;
@@ -298,7 +296,7 @@ export default class VirtualLayout<T extends VirtualArgs> extends cc.Component {
                 this.setItem(cc.v3(xMin + item.anchorX * item.width, 0), i, itemIdx);
             }
         } else {
-            for (let i = 0; i < this.dataArr.length; i++) {
+            for (let i = 0; i < this.list.argsArr.length; i++) {
                 // 计算当前元素排在第几行第几列，从0开始
                 let rowIndex: number = 0;
                 let columnIndex: number = 0;
@@ -477,7 +475,8 @@ export default class VirtualLayout<T extends VirtualArgs> extends cc.Component {
         item.position = p;
         let vi = item.getComponent(VirtualItem);
         vi.dataIdx = dataIdx;
-        vi.onRefresh(this.dataArr[dataIdx]);
+        vi.args = this.list.argsArr[dataIdx];
+        vi.onRefresh(vi.args);
 
         if (this.list.Others.length > 0) {
             let nodes: cc.Node[] = [];
@@ -485,7 +484,8 @@ export default class VirtualLayout<T extends VirtualArgs> extends cc.Component {
                 e[itemIdx].position = p;
                 nodes.push(e[itemIdx]);
             });
-            vi.onRefreshOthers(...nodes);
+            vi.others = nodes;
+            vi.onRefreshOthers(...vi.others);
         }
     }
 
@@ -608,25 +608,13 @@ export default class VirtualLayout<T extends VirtualArgs> extends cc.Component {
     }
 
     /**
-     * 清空节点重新排列
-     */
-    private clearAllItem(): void {
-        this._items.forEach((e, i) => {
-            this.putItemNode(e);
-            this._otherItemsArr.forEach((arr, otherIdx) => { this.putItemNode(arr[i], true, otherIdx); });
-        });
-        this._items.length = 0;
-        this._otherItemsArr.forEach((arr) => { arr.length = 0; });
-    }
-
-    /**
      * 获取content相对view左上角原点位置的偏移值
      * @param idx 元素下标
      * @param itemAnchor 元素的锚点位置（左下角为0点）
      * @param viewAnchor view的锚点位置（左下角为0点）
      */
     public getScrollOffset(idx: number, itemAnchor: cc.Vec2, viewAnchor: cc.Vec2): cc.Vec2 {
-        idx = Math.min(idx, this.dataArr.length - 1);
+        idx = Math.min(idx, this.list.argsArr.length - 1);
         return this.list.IsFixedSize ? this.getScrollOffsetFixed(idx, itemAnchor, viewAnchor) : this.getScrollOffsetUnfixed(idx, itemAnchor, viewAnchor);
     }
 
@@ -696,69 +684,33 @@ export default class VirtualLayout<T extends VirtualArgs> extends cc.Component {
         return null;
     }
 
-    public reset(index: number, args: T): void {
-        if (Tool.inRange(0, this.dataArr.length - 1, index)) {
-            this.dataArr[index] = args;
-            this.clearAllItem();
-            this._sizeDirty = true;
-            this._viewDirty = true;
+    /**
+     * 重新排列
+     * @param clear 是否清空节点
+     */
+    public rearrange(clear: boolean = true): void {
+        this._sizeDirty = true;
+        this._viewDirty = true;
+        if (clear) {
+            this._items.forEach((e, i) => {
+                this.putItemNode(e);
+                this._otherItemsArr.forEach((arr, otherIdx) => { this.putItemNode(arr[i], true, otherIdx); });
+            });
+            this._items.length = 0;
+            this._otherItemsArr.forEach((arr) => { arr.length = 0; });
         }
     }
 
-    public push(args: T): number {
-        let result = this.dataArr.push(args);
-        this._sizeDirty = true;
-        this._viewDirty = true;
-        return result;
-    }
-
-    public pop(): T {
-        let result = this.dataArr.pop();
-        this.clearAllItem();
-        this._sizeDirty = true;
-        this._viewDirty = true;
-        return result;
-    }
-
-    public unshift(args: T): number {
-        let result = this.dataArr.unshift(args);
-        this.clearAllItem();
-        this._sizeDirty = true;
-        this._viewDirty = true;
-        return result;
-    }
-
-    public shift(): T {
-        let result = this.dataArr.shift();
-        this.clearAllItem();
-        this._sizeDirty = true;
-        this._viewDirty = true;
-        return result;
-    }
-
-    public splice(start: number, deleteCount?: number, ...argsArr: T[]): T[] {
-        let result: T[];
-        if (deleteCount === undefined) {
-            result = this.dataArr.splice(start);
-        } else {
-            if (argsArr === undefined || argsArr.length === 0) {
-                result = this.dataArr.splice(start, deleteCount);
-            } else {
-                result = this.dataArr.splice(start, deleteCount, ...argsArr);
+    /**
+     * 刷新所有激活的item
+     */
+    public refreshAllItems(): void {
+        this._items.forEach((item) => {
+            let vi = item.getComponent(VirtualItem);
+            vi.onRefresh(vi.args);
+            if (this.list.Others.length > 0) {
+                vi.onRefreshOthers(...vi.others);
             }
-        }
-
-        this.clearAllItem();
-        this._sizeDirty = true;
-        this._viewDirty = true;
-        return result;
-    }
-
-    public sort(call: (a: T, b: T) => number): T[] {
-        let result = this.dataArr.sort(call);
-        this.clearAllItem();
-        this._sizeDirty = true;
-        this._viewDirty = true;
-        return result;
+        });
     }
 }

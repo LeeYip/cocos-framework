@@ -12,9 +12,7 @@ export default class LocalizedLabel extends cc.Component {
     @property(cc.String) private _textKey: string = '';
 
     @property({ type: cc.String, tooltip: 'i18n key' })
-    public get TextKey() {
-        return this._textKey;
-    }
+    public get TextKey(): string { return this._textKey; }
     public set TextKey(key: string) {
         this._textKey = key;
         this.updateLabel();
@@ -26,7 +24,7 @@ export default class LocalizedLabel extends cc.Component {
     private _option: { [k: string]: string | number } | Array<string | number> = [];
 
     private _label: cc.Label | cc.RichText = null;
-    public get label() {
+    public get label(): cc.Label | cc.RichText {
         if (!this._label) {
             this._label = this.node.getComponent(cc.Label) || this.node.getComponent(cc.RichText);
             if (!this._label) {
@@ -37,7 +35,7 @@ export default class LocalizedLabel extends cc.Component {
         return this._label;
     }
 
-    protected onLoad() {
+    protected onLoad(): void {
         try {
             I18n.init();
             this.updateLabel();
@@ -46,7 +44,7 @@ export default class LocalizedLabel extends cc.Component {
         }
     }
 
-    protected update() {
+    protected update(): void {
         if (CC_EDITOR) {
             if (this.label.string) {
                 let key = I18n.getKeyByValue(this.label.string);
@@ -61,7 +59,7 @@ export default class LocalizedLabel extends cc.Component {
      * 更新语言
      */
     @preloadEvent(EventName.UPDATE_LOCALIZED_CMPT)
-    public updateLabel() {
+    public updateLabel(): void {
         let localizedString = this._option instanceof Array ? I18n.getText(this._textKey, ...this._option) : I18n.getText(this._textKey, this._option);
         if (localizedString) {
             this.label.string = localizedString;
@@ -73,7 +71,7 @@ export default class LocalizedLabel extends cc.Component {
      * @param key
      * @param option
      */
-    public setTextKeyAndOption(key: string, ...option: [{ [k: string]: string | number }] | Array<string | number>) {
+    public setTextKeyAndOption(key: string, ...option: [{ [k: string]: string | number }] | Array<string | number>): void {
         this._textKey = key;
         this.setOption(...option);
     }
@@ -82,7 +80,7 @@ export default class LocalizedLabel extends cc.Component {
      * 仅设置配置
      * @param option
      */
-    public setOption(...option: [{ [k: string]: string | number }] | Array<string | number>) {
+    public setOption(...option: [{ [k: string]: string | number }] | Array<string | number>): void {
         if (option.length === 1 && Object.prototype.toString.call(option[0]) === '[object Object]') {
             this._option = option[0] as { [k: string]: string | number };
         } else {
@@ -94,7 +92,7 @@ export default class LocalizedLabel extends cc.Component {
     /**
      * 清除key
      */
-    public clear() {
+    public clear(): void {
         this.label.string = '';
         this.TextKey = '';
     }

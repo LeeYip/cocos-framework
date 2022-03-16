@@ -1,3 +1,4 @@
+import Tool from "../../util/Tool";
 import VirtualLayout from "./VirtualLayout";
 
 const { ccclass, property, requireComponent, executeInEditMode, disallowMultiple, menu } = cc._decorator;
@@ -160,6 +161,13 @@ export default class VirtualList<T extends VirtualArgs> extends cc.Component {
 
     private _scrollView: cc.ScrollView = null;
     private _layout: VirtualLayout<T> = null;
+    private _argsArr: T[] = [];
+    /** 列表缓存的所有数据 */
+    public get argsArr(): T[] { return this._argsArr; }
+    public set argsArr(v: T[]) {
+        this.argsArr = v;
+        this._layout.rearrange();
+    }
 
     protected onLoad(): void {
         if (CC_EDITOR) {
@@ -229,10 +237,10 @@ export default class VirtualList<T extends VirtualArgs> extends cc.Component {
     }
 
     /**
-     * 获取列表数据
+     * 刷新所有激活的item
      */
-    public getDataArr(): T[] {
-        return this._layout.dataArr;
+    public refreshAllItems(): void {
+        this._layout.refreshAllItems();
     }
 
     /**
@@ -241,7 +249,10 @@ export default class VirtualList<T extends VirtualArgs> extends cc.Component {
      * @param args 元素所需参数
      */
     public reset(index: number, args: T): void {
-        this._layout.reset(index, args);
+        if (Tool.inRange(0, this._argsArr.length - 1, index)) {
+            this._argsArr[index] = args;
+            this._layout.rearrange();
+        }
     }
 
     /**
@@ -249,14 +260,18 @@ export default class VirtualList<T extends VirtualArgs> extends cc.Component {
      * @param args 元素所需参数
      */
     public push(args: T): number {
-        return this._layout.push(args);
+        let result = this._argsArr.push(args);
+        this._layout.rearrange(false);
+        return result;
     }
 
     /**
      * 删除尾部元素数据
      */
     public pop(): T {
-        return this._layout.pop();
+        let result = this._argsArr.pop();
+        this._layout.rearrange();
+        return result;
     }
 
     /**
@@ -264,21 +279,37 @@ export default class VirtualList<T extends VirtualArgs> extends cc.Component {
      * @param args 
      */
     public unshift(args: T): number {
-        return this._layout.unshift(args);
+        let result = this._argsArr.unshift(args);
+        this._layout.rearrange();
+        return result;
     }
 
     /**
      * 删除头部元素数据
      */
     public shift(): T {
-        return this._layout.shift();
+        let result = this._argsArr.shift();
+        this._layout.rearrange();
+        return result;
     }
 
     /**
      * 插入或删除元素 用法同数组splice
      */
     public splice(start: number, deleteCount?: number, ...argsArr: T[]): T[] {
-        return this._layout.splice(start, deleteCount, ...argsArr);
+        let result: T[];
+        if (deleteCount === undefined) {
+            result = this._argsArr.splice(start);
+        } else {
+            if (argsArr === undefined || argsArr.length === 0) {
+                result = this._argsArr.splice(start, deleteCount);
+            } else {
+                result = this._argsArr.splice(start, deleteCount, ...argsArr);
+            }
+        }
+
+        this._layout.rearrange();
+        return result;
     }
 
     /**
@@ -286,6 +317,17 @@ export default class VirtualList<T extends VirtualArgs> extends cc.Component {
      * @param call 
      */
     public sort(call: (a: T, b: T) => number): T[] {
-        return this._layout.sort(call);
+        let result = this._argsArr.sort(call);
+        this._layout.rearrange();
+        return result;
+    }
+
+    /**
+     * 数据过滤
+     */
+    public filter(call: (value: T, index: number, array: T[]) => boolean): T[] {
+        let result = this._argsArr.filter(call);
+        this._layout.rearrange();
+        return result;
     }
 }

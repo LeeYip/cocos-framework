@@ -19,15 +19,15 @@ export default class DlgVirtualList extends DialogBase {
      */
     public open() {
         for (let i = 0; i < 50; i++) {
-            this.List.push({num: Tool.randInt(0, 1000)});
+            this.List.push({ num: Tool.randInt(0, 1000) });
         }
 
-        this._rnd = Tool.randInt(0, this.List.getDataArr().length);
+        this._rnd = Tool.randInt(0, this.List.argsArr.length);
         this.RndLab.string = `-> 下一次滚动到的下标为：${this._rnd}`;
     }
 
     private onClickAdd() {
-        this.List.push({num: Tool.randInt(0, 1000)});
+        this.List.push({ num: Tool.randInt(0, 1000) });
     }
 
     private onClickDelete() {
@@ -37,7 +37,7 @@ export default class DlgVirtualList extends DialogBase {
     private onClickScroll() {
         // 滚动到对应下标的item的左上角对齐view的左上角
         this.List.scrollItemToView(this._rnd, cc.v2(0, 1), cc.v2(0, 1), 0.5, true);
-        this._rnd = Tool.randInt(0, this.List.getDataArr().length);
+        this._rnd = Tool.randInt(0, this.List.argsArr.length);
         this.RndLab.string = `-> 下一次滚动到的下标为：${this._rnd}`;
     }
 }

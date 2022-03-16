@@ -16,7 +16,7 @@ export default class AnimValueProgressHP extends AnimValueProgress {
     })
     public BarShadow: cc.Sprite = null;
 
-    private setBarShadow(progress: number) {
+    private setBarShadow(progress: number): void {
         switch (this.progressBar.mode) {
             case cc.ProgressBar.Mode.HORIZONTAL:
                 this.BarShadow.node.width = this.progressBar.totalLength * progress;
@@ -34,7 +34,7 @@ export default class AnimValueProgressHP extends AnimValueProgress {
     /**
      * @override
      */
-    protected onAnimStart() {
+    protected onAnimStart(): void {
         if (this.isAdd) {
 
         } else {
@@ -45,7 +45,7 @@ export default class AnimValueProgressHP extends AnimValueProgress {
     /**
      * @override
      */
-    protected onAnimUpdate() {
+    protected onAnimUpdate(): void {
         if (this.isAdd) {
             this.setBarShadow(this.curValue);
             this.progressBar.progress = this.curValue;
@@ -57,7 +57,7 @@ export default class AnimValueProgressHP extends AnimValueProgress {
     /**
      * @override
      */
-    protected setValueImmediately(end: number) {
+    protected setValueImmediately(end: number): void {
         super.setValueImmediately(end);
         this.setBarShadow(this.curValue);
     }

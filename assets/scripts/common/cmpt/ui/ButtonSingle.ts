@@ -31,7 +31,7 @@ export default class ButtonSingle extends cc.Component {
 
     /** 记录所有绑定该组件的按钮数据 */
     private static _groupMap: Map<ButtonGroup, GroupData> = null;
-    private static get groupMap() {
+    private static get groupMap(): Map<ButtonGroup, GroupData> {
         if (this._groupMap === null) {
             this._groupMap = new Map();
         }
@@ -40,7 +40,7 @@ export default class ButtonSingle extends cc.Component {
 
     private _button: cc.Button = null;
 
-    protected onLoad() {
+    protected onLoad(): void {
         this._button = this.getComponent(cc.Button);
         let groupData: GroupData = ButtonSingle.groupMap.get(this.ButtonGroup);
         if (groupData === undefined) {
@@ -58,7 +58,7 @@ export default class ButtonSingle extends cc.Component {
         this.node.on(cc.Node.EventType.TOUCH_CANCEL, this.onTouchEnd, this);
     }
 
-    protected onDestroy() {
+    protected onDestroy(): void {
         let groupData: GroupData = ButtonSingle.groupMap.get(this.ButtonGroup);
         if (groupData === undefined) {
             cc.error(`[ButtonSingle.onDestroy] 数据异常 ButtonGroup: ${this.ButtonGroup}`);
@@ -68,7 +68,7 @@ export default class ButtonSingle extends cc.Component {
         this.unlock(groupData);
     }
 
-    private onTouchStart(event: cc.Event.EventTouch) {
+    private onTouchStart(event: cc.Event.EventTouch): void {
         let groupData: GroupData = ButtonSingle.groupMap.get(this.ButtonGroup);
         if (groupData === undefined) {
             cc.error(`[ButtonSingle.onTouchStart] 数据异常 ButtonGroup: ${this.ButtonGroup}`);
@@ -84,7 +84,7 @@ export default class ButtonSingle extends cc.Component {
         });
     }
 
-    private onTouchEnd(event: cc.Event.EventTouch) {
+    private onTouchEnd(event: cc.Event.EventTouch): void {
         let groupData: GroupData = ButtonSingle.groupMap.get(this.ButtonGroup);
         if (groupData === undefined) {
             cc.error(`[ButtonSingle.onTouchEnd] 数据异常 ButtonGroup: ${this.ButtonGroup}`);
@@ -97,7 +97,7 @@ export default class ButtonSingle extends cc.Component {
     /**
      * 当前按钮松开或销毁时解除同组按钮锁定状态
      */
-    private unlock(groupData: GroupData) {
+    private unlock(groupData: GroupData): void {
         if (groupData.lock && this._button.enabled) {
             groupData.lock = false;
             groupData.buttonSet.forEach((e) => {

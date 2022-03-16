@@ -65,7 +65,7 @@ export default class Decorator {
      * - 忽略调用时不会有返回值
      * @param seconds 锁定的秒数
      */
-    public static lock(seconds: number = 0) {
+    public static lock(seconds: number = 0): (target: unknown, funcName: string, desc: PropertyDescriptor) => void {
         return function (target: unknown, funcName: string, desc: PropertyDescriptor): void {
             let old = desc.value;
             let callingSet: Set<unknown> = new Set();

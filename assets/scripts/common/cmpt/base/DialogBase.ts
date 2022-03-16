@@ -1,3 +1,4 @@
+import EditorTool from "../../util/EditorTool";
 import Tool from "../../util/Tool";
 
 const { ccclass, property, disallowMultiple, menu } = cc._decorator;
@@ -34,9 +35,9 @@ export default class DialogBase extends cc.Component {
 
     private _prefabUrl: string = '';
     /** 弹窗prefab在resources/prefab/dialog/下的路径 */
-    public get prefabUrl() { return this._prefabUrl; }
+    public get prefabUrl(): string { return this._prefabUrl; }
 
-    protected onLoad() {
+    protected onLoad(): void {
         if (this.DlgAnim) {
             this.OpenClip && this.DlgAnim.addClip(this.OpenClip);
             this.CloseClip && this.DlgAnim.addClip(this.CloseClip);
@@ -44,7 +45,21 @@ export default class DialogBase extends cc.Component {
         }
     }
 
-    protected onAnimFinished() {
+    protected resetInEditor(): void {
+        if (CC_EDITOR) {
+            for (let i = 0; i < this.node.childrenCount; i++) {
+                let anim: cc.Animation = this.node.children[i].getComponent(cc.Animation);
+                if (anim) {
+                    this.DlgAnim = anim;
+                    EditorTool.load<cc.AnimationClip>('res/animation/dialog/open.anim').then((v) => { this.OpenClip = v; });
+                    EditorTool.load<cc.AnimationClip>('res/animation/dialog/close.anim').then((v) => { this.CloseClip = v; });
+                    break;
+                }
+            }
+        }
+    }
+
+    protected onAnimFinished(): void {
         if (this.DlgAnim.currentClip === this.CloseClip) {
             this.close();
         }
@@ -53,7 +68,7 @@ export default class DialogBase extends cc.Component {
     /**
      * 打开动画
      */
-    public playOpen() {
+    public playOpen(): void {
         if (this.DlgAnim && this.OpenClip) {
             this.DlgAnim.play(this.OpenClip.name);
         }
@@ -62,7 +77,7 @@ export default class DialogBase extends cc.Component {
     /**
      * 关闭动画，动画结束回调中会调用close销毁
      */
-    public playClose() {
+    public playClose(): void {
         if (this.DlgAnim && this.CloseClip) {
             if (this.DlgAnim.getAnimationState(this.CloseClip.name).isPlaying) {
                 return;
@@ -95,14 +110,14 @@ export default class DialogBase extends cc.Component {
      * @virtual
      * 关闭按钮回调
      */
-    protected onClickClose() {
+    protected onClickClose(): void {
         this.playClose();
     }
 
     /**
      * 添加外部resolve函数，在弹窗close时调用
      */
-    public addResolve(resolve: (value?: any) => void) {
+    public addResolve(resolve: (value?: any) => void): void {
         Tool.arrayAdd(this._resolveList, resolve);
     }
 }

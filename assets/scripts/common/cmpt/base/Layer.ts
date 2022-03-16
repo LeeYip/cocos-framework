@@ -45,19 +45,19 @@ export default class Layer extends cc.Component {
     /** 当前存在的tip文字数组 */
     private _tipTexts: string[] = [];
 
-    protected onLoad() {
+    protected onLoad(): void {
         Layer.inst = this;
         this.hideLoading();
     }
 
-    protected onDestroy() {
+    protected onDestroy(): void {
         Layer.inst = null;
     }
 
     /**
      * 获取文件名（截取url最后一个斜杠后的内容）
      */
-    public getNameByUrl(url: string) {
+    public getNameByUrl(url: string): string {
         return url.substring(url.lastIndexOf('/') + 1, url.length);
     }
 
@@ -126,7 +126,7 @@ export default class Layer extends cc.Component {
      * @param url prefab在resources/prefab/dialog/下的路径
      * @param args DialogBase.open调用参数
      */
-    public openDialog(url: string, ...args: any[]) {
+    public openDialog(url: string, ...args: any[]): void {
         let prefab: cc.Prefab = Res.get(DirUrl.PREFAB_DIALOG + url, cc.Prefab);
         if (!prefab) {
             cc.error(`[Layer.openDialog] can not find dialog prefab: ${DirUrl.PREFAB_DIALOG + url}`);
@@ -150,7 +150,7 @@ export default class Layer extends cc.Component {
      * @param url prefab在resources/prefab/dialog/下的路径
      * @param args DialogBase.open调用参数
      */
-    public openUniDialog(url: string, ...args: any[]) {
+    public openUniDialog(url: string, ...args: any[]): void {
         if (this.getDialog(url)) {
             return;
         }
@@ -164,7 +164,7 @@ export default class Layer extends cc.Component {
      * @param url prefab在resources/prefab/dialog/下的路径
      * @param args DialogBase.open调用参数
      */
-    public async openDialogAsync(url: string, ...args: any[]) {
+    public async openDialogAsync(url: string, ...args: any[]): Promise<void> {
         this.showLoading();
         let prefab: cc.Prefab = await Res.load(DirUrl.PREFAB_DIALOG + url, cc.Prefab);
         this.hideLoading();
@@ -191,7 +191,7 @@ export default class Layer extends cc.Component {
      * @param url prefab在resources/prefab/dialog/下的路径
      * @param args DialogBase.open调用参数
      */
-    public async openUniDialogAsync(url: string, ...args: any[]) {
+    public async openUniDialogAsync(url: string, ...args: any[]): Promise<void> {
         if (this.getDialog(url)) {
             return;
         }
@@ -204,7 +204,7 @@ export default class Layer extends cc.Component {
      * @param url prefab在resources/prefab/dialog/下的路径
      * @param play true：调用playClose播放弹窗关闭动画；false：直接调用close关闭弹窗
      */
-    public closeDialog(url: string, play: boolean = false) {
+    public closeDialog(url: string, play: boolean = false): void {
         let cmpt = this.getDialog(url);
         if (!cmpt) {
             return;
@@ -217,7 +217,7 @@ export default class Layer extends cc.Component {
      * @param url prefab在resources/prefab/dialog/下的路径
      * @param play true：调用playClose播放弹窗关闭动画；false：直接调用close关闭弹窗
      */
-    public closeDialogs(url: string = '', play: boolean = false) {
+    public closeDialogs(url: string = '', play: boolean = false): void {
         for (let i = this.DialogLayer.childrenCount - 1; i >= 0; i--) {
             let node = this.DialogLayer.children[i];
             let cmpt = node.getComponent(DialogBase);
@@ -234,7 +234,7 @@ export default class Layer extends cc.Component {
      * 异步等待弹窗关闭（只等待遍历到的第一个）
      * @param url prefab在resources/prefab/dialog/下的路径
      */
-    public async waitCloseDialog(url: string) {
+    public async waitCloseDialog(url: string): Promise<void> {
         let cmpt = this.getDialog(url);
         if (!cmpt) {
             return;
@@ -248,8 +248,8 @@ export default class Layer extends cc.Component {
      * 异步等待所有同路径弹窗关闭
      * @param url prefab在resources/prefab/dialog/下的路径
      */
-    public async waitCloseDialogs(url: string) {
-        let arr: Array<Promise<any>> = [];
+    public async waitCloseDialogs(url: string): Promise<void[]> {
+        let arr: Array<Promise<void>> = [];
         for (let i = 0; i < this.DialogLayer.childrenCount; i++) {
             let node = this.DialogLayer.children[i];
             let cmpt = node.getComponent(DialogBase);
@@ -269,7 +269,7 @@ export default class Layer extends cc.Component {
      * 弹出一条文字提示
      * @param data TipData | string 提示数据
      */
-    public async showTip(data: TipData | string) {
+    public async showTip(data: TipData | string): Promise<void> {
         // 处理tipData默认值
         let tipData: TipData = null;
         if (typeof data === 'string') {
@@ -337,7 +337,7 @@ export default class Layer extends cc.Component {
     /**
      * 清空所有提示
      */
-    public clearTips() {
+    public clearTips(): void {
         this._tipPool.length = 0;
         this._tipTexts.length = 0;
         this.TipLayer.destroyAllChildren();
@@ -346,7 +346,7 @@ export default class Layer extends cc.Component {
     /**
      * 打开全局loading遮罩（打开与关闭的调用必须一一对应）
      */
-    public showLoading() {
+    public showLoading(): void {
         this._loadingCount++;
         if (!this.LoadingLayer.active) {
             this.LoadingLayer.active = true;
@@ -365,7 +365,7 @@ export default class Layer extends cc.Component {
     /**
      * 关闭全局loading遮罩
      */
-    public hideLoading() {
+    public hideLoading(): void {
         this._loadingCount--;
         if (this._loadingCount <= 0) {
             this._loadingCount = 0;

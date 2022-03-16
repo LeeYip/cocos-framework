@@ -77,29 +77,29 @@ export default class AnimValue extends cc.Component {
     private _tween: Tween<this> = null;
     private _isAdd: boolean = false;
     /** 当前是否为增量变化 */
-    public get isAdd() { return this._isAdd; }
+    public get isAdd(): boolean { return this._isAdd; }
 
     /** 变化的目标值 */
-    public get endValue() { return this._endValue; }
+    public get endValue(): number { return this._endValue; }
     /** 变化过程的当前值 */
-    public get curValue() { return this._curValue; }
+    public get curValue(): number { return this._curValue; }
 
     /**
      * @virtual
      */
-    protected onAnimStart() {
+    protected onAnimStart(): void {
     }
 
     /**
      * @virtual
      */
-    protected onAnimUpdate() {
+    protected onAnimUpdate(): void {
     }
 
     /**
      * @virtual
      */
-    protected onAnimComplete() {
+    protected onAnimComplete(): void {
         this._tween = null;
     }
 
@@ -107,7 +107,7 @@ export default class AnimValue extends cc.Component {
      * @virtual
      * 立即设置value，不执行动画
      */
-    protected setValueImmediately(end: number) {
+    protected setValueImmediately(end: number): void {
         if (this._animResolve) {
             this._animResolve();
             this._animResolve = null;
@@ -174,7 +174,7 @@ export default class AnimValue extends cc.Component {
      * @virtual
      * 停止动画，并中止之前未结束的Promise
      */
-    public stop() {
+    public stop(): void {
         if (this._animResolve) {
             this._animResolve = null;
         }

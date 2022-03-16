@@ -14,11 +14,11 @@ export default class ButtonChildPos extends cc.Component {
     @property({ tooltip: CC_DEV && '悬停状态下按钮子节点坐标' }) public Hover: cc.Vec2 = cc.v2(0, 0);
     @property({ tooltip: CC_DEV && '禁用状态下按钮子节点坐标' }) public Disabled: cc.Vec2 = cc.v2(0, 0);
 
-    protected onLoad() {
+    protected onLoad(): void {
         this.node.on(ButtonHackEvent.STATE_CHANGE, this.onStateChange, this);
     }
 
-    private onStateChange(state: ButtonState) {
+    private onStateChange(state: ButtonState): void {
         let pos = cc.v2(0, 0);
         switch (state) {
             case ButtonState.NORMAL:

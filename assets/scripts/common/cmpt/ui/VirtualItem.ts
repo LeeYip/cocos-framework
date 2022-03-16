@@ -10,6 +10,10 @@ const { ccclass, disallowMultiple } = cc._decorator;
 export default class VirtualItem<T extends VirtualArgs> extends cc.Component {
     /** 列表数据索引 */
     public dataIdx: number = 0;
+    /** 列表数据 */
+    public args: T = null;
+    /** 分层的其余节点，顺序为Others数组的顺序 */
+    public others: cc.Node[] = [];
 
     /**
      * 根据数据刷新item显示

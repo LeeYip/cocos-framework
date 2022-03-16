@@ -12,7 +12,7 @@ const { ccclass, property, menu, requireComponent, executeInEditMode } = cc._dec
 export default class AnimValueLabel extends AnimValue {
 
     private _label: cc.Label = null;
-    public get label() {
+    public get label(): cc.Label {
         if (!this._label) this._label = this.getComponent(cc.Label);
         return this._label;
     }
@@ -20,14 +20,14 @@ export default class AnimValueLabel extends AnimValue {
     /**
      * @override
      */
-    protected onAnimUpdate() {
+    protected onAnimUpdate(): void {
         this.label.string = `${Math.round(this.curValue)}`;
     }
 
     /**
      * @override
      */
-    protected setValueImmediately(end: number) {
+    protected setValueImmediately(end: number): void {
         super.setValueImmediately(end);
         this.label.string = `${Math.round(this.curValue)}`;
     }

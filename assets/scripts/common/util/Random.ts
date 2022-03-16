@@ -12,7 +12,7 @@ export default class Random {
      * @param str 
      * @param initHash 计算的初始值
      */
-    public static hashCode(str: string, initHash: number = 0) {
+    public static hashCode(str: string, initHash: number = 0): number {
         let hash = initHash;
         if (!str) {
             return hash;
@@ -40,7 +40,7 @@ export default class Random {
     /**
      * 获取区间[0, 1)的浮点数
      */
-    public static random(seed: string | number) {
+    public static random(seed: string | number): number {
         let seedCode: number = typeof seed === 'string' ? this.hashCode(seed) : seed;
         return (seedCode * 9301 + 49297) % 233280 / 233280;
     }
@@ -48,7 +48,7 @@ export default class Random {
     /**
      * 获取区间[min, max)的整数，传入1个参数则区间为[0, min)
      */
-    public static int(seed: string | number, min: number, max: number = undefined) {
+    public static int(seed: string | number, min: number, max: number = undefined): number {
         if (max === undefined) {
             max = min;
             min = 0;
@@ -61,7 +61,7 @@ export default class Random {
     /**
      * 获取区间[min, max)的浮点数，传入1个参数则区间为[0, min)
      */
-    public static float(seed: string | number, min: number, max: number = undefined) {
+    public static float(seed: string | number, min: number, max: number = undefined): number {
         if (max === undefined) {
             max = min;
             min = 0;

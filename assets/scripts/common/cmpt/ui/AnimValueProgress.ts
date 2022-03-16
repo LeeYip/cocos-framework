@@ -12,7 +12,7 @@ const { ccclass, property, menu, requireComponent, executeInEditMode } = cc._dec
 export default class AnimValueProgress extends AnimValue {
 
     private _progressBar: cc.ProgressBar = null;
-    public get progressBar() {
+    public get progressBar(): cc.ProgressBar {
         if (!this._progressBar) this._progressBar = this.getComponent(cc.ProgressBar);
         return this._progressBar;
     }
@@ -20,14 +20,14 @@ export default class AnimValueProgress extends AnimValue {
     /**
      * @override
      */
-    protected onAnimUpdate() {
+    protected onAnimUpdate(): void {
         this.progressBar.progress = this.curValue;
     }
 
     /**
      * @override
      */
-    protected setValueImmediately(end: number) {
+    protected setValueImmediately(end: number): void {
         super.setValueImmediately(end);
         this.progressBar.progress = this.curValue;
     }

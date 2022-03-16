@@ -35,7 +35,7 @@ export default class RecyclePool {
     /**
      * 清空节点
      */
-    public static clear(key: string | { prototype: cc.Component }) {
+    public static clear(key: string | { prototype: cc.Component }): void {
         if (typeof key === "string") {
             let list = this._urlMap.get(key);
             if (list === undefined) {
@@ -66,7 +66,7 @@ export default class RecyclePool {
     /**
      * 清空全部节点
      */
-    public static clearAll() {
+    public static clearAll(): void {
         this._urlMap.forEach((list: cc.Node[]) => {
             let count = list.length;
             for (let i = 0; i < count; ++i) {
@@ -119,7 +119,7 @@ export default class RecyclePool {
     /**
      * 根据类型将节点放入节点池
      */
-    public static put(key: string | { prototype: cc.Component }, node: cc.Node) {
+    public static put(key: string | { prototype: cc.Component }, node: cc.Node): void {
         if (!node) {
             cc.error(`[RecyclePool.put] error: 传入节点为空`);
             return;

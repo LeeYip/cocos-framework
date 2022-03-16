@@ -31,7 +31,7 @@ interface Listener {
  * @param offKey 在该方法内部调用Events.targetOff
  * @param onSuper 是否注册父类成员方法上绑定的事件，默认true
  */
-function rewrite(constructor: any, onKey: string, offKey: string, onSuper: boolean = true) {
+function rewrite(constructor: any, onKey: string, offKey: string, onSuper: boolean = true): void {
     let onFunc = constructor.prototype[onKey];
     let offFunc = constructor.prototype[offKey];
     constructor.prototype[onKey] = function () {
@@ -48,7 +48,7 @@ function rewrite(constructor: any, onKey: string, offKey: string, onSuper: boole
  * 类装饰器。用于覆盖onLoad和onDestroy方法，在onLoad中注册preloadEvent绑定的所有事件，在onDestroy注销绑定的所有事件
  * @param onSuper 是否注册父类成员方法上绑定的事件，默认true
  */
-export function eventsOnLoad(onSuper: boolean = true) {
+export function eventsOnLoad(onSuper: boolean = true): (constructor: any) => void {
     return function (constructor: any) {
         rewrite(constructor, 'onLoad', 'onDestroy', onSuper);
     };
@@ -58,7 +58,7 @@ export function eventsOnLoad(onSuper: boolean = true) {
  * 类装饰器。用于覆盖onEnable和onDisable方法，在onEnable中注册preloadEvent绑定的所有事件，在onDisable注销绑定的所有事件
  * @param onSuper 是否注册父类成员方法上绑定的事件，默认true
  */
-export function eventsOnEnable(onSuper: boolean = true) {
+export function eventsOnEnable(onSuper: boolean = true): (constructor: any) => void {
     return function (constructor: any) {
         rewrite(constructor, 'onEnable', 'onDisable', onSuper);
     };
@@ -69,7 +69,7 @@ export function eventsOnEnable(onSuper: boolean = true) {
  * @param event 事件名
  * @param once 事件是否只会触发一次，默认false
  */
-export function preloadEvent(event: EventName, once: boolean = false) {
+export function preloadEvent(event: EventName, once: boolean = false): (target: any, funcName: string, desc: PropertyDescriptor) => void {
     return function (target: any, funcName: string, desc: PropertyDescriptor) {
         let arr = Events.classMap.get(target.constructor);
         if (arr === undefined) {
@@ -114,7 +114,7 @@ export default class Events {
      * @param target 注册目标
      * @param onSuper 是否注册父类成员方法上绑定的事件，默认true
      */
-    public static targetOn(target: Object, onSuper: boolean = true) {
+    public static targetOn(target: Object, onSuper: boolean = true): void {
         if (onSuper) {
             this.classMap.forEach((value: PreloadData[], key: Function) => {
                 if (target instanceof key) {
@@ -142,7 +142,7 @@ export default class Events {
      * @param target 注册目标
      * @param once 事件是否只会触发一次，默认false
      */
-    public static on(event: EventName, cb: (...args: any[]) => void, target: Object, once: boolean = false) {
+    public static on(event: EventName, cb: (...args: any[]) => void, target: Object, once: boolean = false): void {
         if (!cb || !target) {
             cc.error(`event: ${EventName[event]} listener或target不能为空`);
             return;
@@ -181,7 +181,7 @@ export default class Events {
      * @param cb 处理事件的监听函数
      * @param target 注册目标
      */
-    public static once(event: EventName, cb: (...args: any[]) => void, target: Object) {
+    public static once(event: EventName, cb: (...args: any[]) => void, target: Object): void {
         this.on(event, cb, target, true);
     }
 
@@ -191,7 +191,7 @@ export default class Events {
      * @param cb 处理事件的监听函数
      * @param target 注册目标
      */
-    public static off(event: EventName, cb: (...args: any[]) => void, target: Object) {
+    public static off(event: EventName, cb: (...args: any[]) => void, target: Object): void {
         if (!cb || !target) {
             cc.error(`event: ${EventName[event]} listener或target不能为空`);
             return;
@@ -226,7 +226,7 @@ export default class Events {
      * 移除target上注册的所有事件
      * @param target 注册目标
      */
-    public static targetOff(target: Object) {
+    public static targetOff(target: Object): void {
         if (!target) {
             cc.error(`event: ${target} target不能为空`);
             return;
@@ -243,7 +243,7 @@ export default class Events {
      * @param event 事件名
      * @param args 事件参数
      */
-    public static emit(event: EventName, ...args: any[]) {
+    public static emit(event: EventName, ...args: any[]): void {
         let map: Map<Object, Listener[]> = this._eventsMap.get(event);
         if (map === undefined) {
             cc.warn(`event: ${EventName[event]} 未注册该事件`);
@@ -279,7 +279,7 @@ export default class Events {
      * @param event 事件名
      * @param args 事件参数
      */
-    public static async emitAsync(event: EventName, ...args: any[]) {
+    public static async emitAsync(event: EventName, ...args: any[]): Promise<void> {
         let map: Map<Object, Listener[]> = this._eventsMap.get(event);
         if (map === undefined) {
             cc.warn(`event: ${EventName[event]} 未注册该事件`);

@@ -23,13 +23,13 @@ export default class I18n {
 
     private static _curLang: LangType = LangType.NONE;
     /* 当前语言类型 */
-    public static get curLang() { return this._curLang; }
+    public static get curLang(): LangType { return this._curLang; }
 
     /**
      * 初始化语言
      * @param language
      */
-    public static init(language: LangType = LangType.NONE) {
+    public static init(language: LangType = LangType.NONE): void {
         if (this._init) {
             return;
         }
@@ -42,7 +42,7 @@ export default class I18n {
      * 切换语言
      * @param language
      */
-    public static switch(language: LangType) {
+    public static switch(language: LangType): void {
         if (this._curLang === language) {
             return;
         }
@@ -66,7 +66,7 @@ export default class I18n {
     /**
     * 更新所有多语言组件
     */
-    public static updateLocalizedCmpt() {
+    public static updateLocalizedCmpt(): void {
         Events.emit(EventName.UPDATE_LOCALIZED_CMPT);
     }
 
