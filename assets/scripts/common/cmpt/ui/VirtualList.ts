@@ -165,7 +165,7 @@ export default class VirtualList<T extends VirtualArgs> extends cc.Component {
     /** 列表缓存的所有数据 */
     public get argsArr(): T[] { return this._argsArr; }
     public set argsArr(v: T[]) {
-        this.argsArr = v;
+        this._argsArr = v;
         this._layout.rearrange();
     }
 
