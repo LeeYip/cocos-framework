@@ -326,8 +326,8 @@ export default class VirtualList<T extends VirtualArgs> extends cc.Component {
      * 数据过滤
      */
     public filter(call: (value: T, index: number, array: T[]) => boolean): T[] {
-        let result = this._argsArr.filter(call);
+        this._argsArr = this._argsArr.filter(call);
         this._layout.rearrange();
-        return result;
+        return this._argsArr;
     }
 }
