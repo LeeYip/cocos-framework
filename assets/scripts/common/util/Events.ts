@@ -17,7 +17,7 @@ interface PreloadData {
  */
 interface Listener {
     /** 回调 */
-    cb: (...args: any[]) => void;
+    cb: (...args: unknown[]) => void;
     /** 是否只触发一次 */
     once: boolean;
 }
@@ -243,7 +243,7 @@ export default class Events {
      * @param event 事件名
      * @param args 事件参数
      */
-    public static emit(event: EventName, ...args: any[]): void {
+    public static emit(event: EventName, ...args: unknown[]): void {
         let map: Map<Object, Listener[]> = this._eventsMap.get(event);
         if (map === undefined) {
             cc.warn(`event: ${EventName[event]} 未注册该事件`);
@@ -251,8 +251,8 @@ export default class Events {
         }
 
         let i: number;
-        let callArr: Array<{ cb: (...args: any[]) => void; target: Object }> = [];
-        let onceArr: Array<{ cb: (...args: any[]) => void; target: Object }> = [];
+        let callArr: Array<{ cb: (...args: unknown[]) => void; target: Object }> = [];
+        let onceArr: Array<{ cb: (...args: unknown[]) => void; target: Object }> = [];
         map.forEach((list, target) => {
             for (i = 0; i < list.length; i++) {
                 let listener = list[i];
@@ -279,7 +279,7 @@ export default class Events {
      * @param event 事件名
      * @param args 事件参数
      */
-    public static async emitAsync(event: EventName, ...args: any[]): Promise<void> {
+    public static async emitAsync(event: EventName, ...args: unknown[]): Promise<void> {
         let map: Map<Object, Listener[]> = this._eventsMap.get(event);
         if (map === undefined) {
             cc.warn(`event: ${EventName[event]} 未注册该事件`);
@@ -287,8 +287,8 @@ export default class Events {
         }
 
         let i: number;
-        let callArr: Array<{ cb: (...args: any[]) => void; target: Object }> = [];
-        let onceArr: Array<{ cb: (...args: any[]) => void; target: Object }> = [];
+        let callArr: Array<{ cb: (...args: unknown[]) => void; target: Object }> = [];
+        let onceArr: Array<{ cb: (...args: unknown[]) => void; target: Object }> = [];
         map.forEach((list, target) => {
             for (i = 0; i < list.length; i++) {
                 let listener = list[i];
@@ -304,7 +304,7 @@ export default class Events {
             this.off(event, e.cb, e.target);
         }
         // 延迟到此处调用事件回调，防止受到回调过程中的 注册/注销 影响
-        let arr: Promise<any>[] = [];
+        let arr: Promise<unknown>[] = [];
         for (i = 0; i < callArr.length; i++) {
             let e = callArr[i];
             arr.push(e.cb.apply(e.target, args));

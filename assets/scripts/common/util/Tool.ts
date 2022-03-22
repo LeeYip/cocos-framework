@@ -113,7 +113,7 @@ export default class Tool {
      * @param min 
      * @param max 
      * @param value
-     * @param includeEdge 是否包含边界值min和max，默认包含
+     * @param includeEdge true(默认值): [min, max]; false: (min, max)
      */
     public static inRange(min: number, max: number, value: number, includeEdge: boolean = true): boolean {
         return includeEdge ? value >= min && value <= max : value > min && value < max;

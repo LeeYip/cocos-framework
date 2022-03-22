@@ -1,6 +1,13 @@
 import Tool from "./Tool";
 
-const CHARS: string[] = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
+const CHARS: string[] = [
+    '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
+    'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
+    'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'
+];
+
+const BASE = 131;
+const MOD = 19260817;
 
 /**
  * 可设置随机种子的随机数生成器
@@ -19,8 +26,7 @@ export default class Random {
         }
 
         for (let i = 0; i < str.length; i++) {
-            hash = 31 * hash + str.charCodeAt(i);
-            hash %= 233280;
+            hash = (BASE * hash + str.charCodeAt(i)) % MOD;
         }
         return hash;
     }

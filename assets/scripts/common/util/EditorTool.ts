@@ -28,6 +28,6 @@ export default class EditorTool {
                     resolve(result);
                 });
             });
-        })
+        });
     }
 }

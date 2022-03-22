@@ -2,7 +2,7 @@ import { EventName } from "../../const/EventName";
 import Events from "../../util/Events";
 import { SCALE_TWEEN, TWEEN } from "../../util/Tween";
 
-const { ccclass, property, executionOrder, menu, disallowMultiple } = cc._decorator;
+const { ccclass, executionOrder, menu, disallowMultiple } = cc._decorator;
 
 /**
  * - 全局时间管理器，需绑定常驻节点，保证全局有且只有一个
