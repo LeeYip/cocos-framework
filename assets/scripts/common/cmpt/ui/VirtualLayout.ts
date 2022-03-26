@@ -99,11 +99,11 @@ export default class VirtualLayout<T extends VirtualArgs> extends cc.Component {
     private _viewDirty: boolean = false;
     /** main content激活状态的item */
     private _items: cc.Node[] = [];
-    /** main content被回收的item池（不移出节点树，只设置active） */
+    /** main content被回收的item池（不移出节点树，只设置opacity） */
     private _itemPool: cc.Node[] = [];
     /** others content激活状态的item，下标顺序与this.list.Others数组一致 */
     private _otherItemsArr: cc.Node[][] = [];
-    /** others content被回收的item池（不移出节点树，只设置active），下标顺序与this.list.Others数组一致 */
+    /** others content被回收的item池（不移出节点树，只设置opacity），下标顺序与this.list.Others数组一致 */
     private _otherItemPoolArr: cc.Node[][] = [];
 
     /** 所属虚拟列表 */
@@ -491,19 +491,19 @@ export default class VirtualLayout<T extends VirtualArgs> extends cc.Component {
 
     /**
      * 激活新的节点，并添加到content下
-     * @param active 默认为true，false时不激活节点并添加进节点池中(仅在onInit中使用)
+     * @param show 默认为true。false时不激活节点并添加进节点池中（仅在onInit中使用）
      * @returns 激活的节点在this._items中的下标
      */
-    private addItemNode(active: boolean = true): number {
+    private addItemNode(show: boolean = true): number {
         let node: cc.Node = null;
         if (this._itemPool.length > 0) {
             node = this._itemPool.pop();
-            node.active = true;
+            node.opacity = 255;
             this._items.push(node);
 
             this._otherItemPoolArr.forEach((e, i) => {
                 let otherNode = e.pop();
-                otherNode.active = true;
+                otherNode.opacity = 255;
                 this._otherItemsArr[i].push(otherNode);
             });
         } else {
@@ -513,11 +513,11 @@ export default class VirtualLayout<T extends VirtualArgs> extends cc.Component {
                 node.addComponent(VirtualItem);
             }
             this.node.addChild(node);
-            if (active) {
-                node.active = true;
+            if (show) {
+                node.opacity = 255;
                 this._items.push(node);
             } else {
-                node.active = false;
+                node.opacity = 0;
                 this.putItemNode(node);
             }
 
@@ -545,11 +545,11 @@ export default class VirtualLayout<T extends VirtualArgs> extends cc.Component {
                         return;
                 }
                 e.Content.addChild(otherNode);
-                if (active) {
-                    otherNode.active = true;
+                if (show) {
+                    otherNode.opacity = 255;
                     this._otherItemsArr[i].push(otherNode);
                 } else {
-                    otherNode.active = false;
+                    otherNode.opacity = 0;
                     this.putItemNode(otherNode, true, i);
                 }
             });
@@ -565,7 +565,7 @@ export default class VirtualLayout<T extends VirtualArgs> extends cc.Component {
      * @param otherIdx Others的下标
      */
     private putItemNode(node: cc.Node, isOther: boolean = false, otherIdx: number = 0): void {
-        node.active = false;
+        node.opacity = 0;
         if (isOther) {
             this._otherItemPoolArr[otherIdx].push(node);
         } else {
