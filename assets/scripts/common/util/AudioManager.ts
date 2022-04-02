@@ -19,7 +19,7 @@ export interface AudioPlayArgs {
     /** 音量渐变时长，单位s。默认0 */
     fadeDuration?: number;
     /** 播放结束的回调 */
-    finishCall?: () => {};
+    finishCall?: () => void;
 }
 
 /**

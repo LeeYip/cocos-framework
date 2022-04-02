@@ -144,6 +144,27 @@ export default class Tool {
     }
 
     /**
+     * 根据权重数组进行随机，返回结果下标
+     * @param weightArr 权重数组
+     * @returns 随机到的权重数组下标
+     */
+    public static randWeightIdx(weightArr: number[]) {
+        let sum = 0;
+        for (let i = 0; i < weightArr.length; i++) {
+            sum += weightArr[i];
+        }
+        let randNum = this.randFloat(0, sum);
+        let curValue = 0
+        for (let i = 0; i < weightArr.length; i++) {
+            curValue += weightArr[i];
+            if (randNum < curValue) {
+                return i;
+            }
+        }
+        return weightArr.length - 1;
+    }
+
+    /**
      * Fisher–Yates shuffle 字符串随机乱序
      */
     public static shuffleString(str: string): string {
