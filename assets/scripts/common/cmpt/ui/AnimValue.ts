@@ -1,9 +1,9 @@
 import { Easing, SCALE_TWEEN, Tween } from "../../util/Tween";
 
-const { ccclass, property, menu, requireComponent, executeInEditMode } = cc._decorator;
+const { ccclass, property, menu, executeInEditMode } = cc._decorator;
 
 /**
- * 进度变化类型
+ * 数值变化类型
  */
 enum AnimType {
     /** 以速度计算变化时长 */
@@ -23,11 +23,10 @@ enum EasingType {
 }
 
 /**
- * 数值渐变组件
+ * 数值渐变组件基类，可根据此组件拓展各种数值渐变的组件
  */
 @ccclass
 @executeInEditMode
-@requireComponent(cc.Label)
 @menu('Framework/UI组件/AnimValue')
 export default class AnimValue extends cc.Component {
     @property private _endValue: number = 0;
@@ -45,19 +44,19 @@ export default class AnimValue extends cc.Component {
 
     @property({
         type: cc.Enum(AnimType),
-        tooltip: CC_DEV && '进度变化类型'
+        tooltip: CC_DEV && '数值变化类型\nSPEED：以速度计算变化时长\nDURATION：固定时长'
     })
     public AnimType: AnimType = AnimType.SPEED;
 
     @property({
         tooltip: CC_DEV && '每秒数值变化速度',
-        visible() { return this.AnimType === AnimType.SPEED }
+        visible() { return this.AnimType === AnimType.SPEED; }
     })
     public Speed: number = 1;
 
     @property({
-        tooltip: CC_DEV && '数值变化的时长',
-        visible() { return this.AnimType === AnimType.DURATION }
+        tooltip: CC_DEV && '数值变化的总时长',
+        visible() { return this.AnimType === AnimType.DURATION; }
     })
     public Duration: number = 1;
 
@@ -73,7 +72,7 @@ export default class AnimValue extends cc.Component {
     public TimeScale: boolean = false;
 
     /** 缓存动画的resolve */
-    private _animResolve: (value: void | PromiseLike<void>) => void
+    private _animResolve: (value: void | PromiseLike<void>) => void;
     private _tween: Tween<this> = null;
     private _isAdd: boolean = false;
     /** 当前是否为增量变化 */
@@ -100,14 +99,6 @@ export default class AnimValue extends cc.Component {
      * @virtual
      */
     protected onAnimComplete(): void {
-        this._tween = null;
-    }
-
-    /**
-     * @virtual
-     * 立即设置value，不执行动画
-     */
-    protected setValueImmediately(end: number): void {
         if (this._animResolve) {
             this._animResolve();
             this._animResolve = null;
@@ -116,13 +107,24 @@ export default class AnimValue extends cc.Component {
             this._tween.stop();
             this._tween = null;
         }
-        this._endValue = end;
-        this._curValue = end;
     }
 
     /**
+     * 立即设置value，不执行动画
      * @virtual
+     */
+    protected setValueImmediately(end: number): void {
+        this._isAdd = this._endValue - this._curValue > 0;
+        this._endValue = end;
+        this._curValue = end;
+		this.onAnimStart();
+		this.onAnimUpdate();
+		this.onAnimComplete();
+    }
+
+    /**
      * 设置进度值。异步方法，进度动画结束后resolve
+     * @virtual
      * @param end 目标进度值
      * @param anim 是否执行动画，默认true
      */
@@ -161,18 +163,14 @@ export default class AnimValue extends cc.Component {
                 })
                 .onComplete(() => {
                     this.onAnimComplete();
-                    if (this._animResolve) {
-                        this._animResolve();
-                        this._animResolve = null;
-                    }
                 })
                 .start();
         });
     }
 
     /**
-     * @virtual
      * 停止动画，并中止之前未结束的Promise
+     * @virtual
      */
     public stop(): void {
         if (this._animResolve) {

@@ -89,16 +89,16 @@ export default class DialogBase extends cc.Component {
     }
 
     /**
-     * @virtual
      * 打开弹窗时的处理
+     * @virtual
      */
     public open(...args: any[]): any {
     }
 
     /**
-     * @virtual
      * 关闭弹窗，销毁节点时的处理。
      * - 必须使用此接口销毁，子类重写时请调用super.close()
+     * @virtual
      */
     public close(): any {
         this._resolveList.forEach((resolve) => { resolve(); });
@@ -107,8 +107,8 @@ export default class DialogBase extends cc.Component {
     }
 
     /**
-     * @virtual
      * 关闭按钮回调
+     * @virtual
      */
     protected onClickClose(): void {
         this.playClose();

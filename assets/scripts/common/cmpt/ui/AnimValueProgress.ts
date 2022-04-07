@@ -23,12 +23,4 @@ export default class AnimValueProgress extends AnimValue {
     protected onAnimUpdate(): void {
         this.progressBar.progress = this.curValue;
     }
-
-    /**
-     * @override
-     */
-    protected setValueImmediately(end: number): void {
-        super.setValueImmediately(end);
-        this.progressBar.progress = this.curValue;
-    }
 }

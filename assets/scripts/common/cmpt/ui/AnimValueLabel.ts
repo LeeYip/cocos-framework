@@ -23,12 +23,4 @@ export default class AnimValueLabel extends AnimValue {
     protected onAnimUpdate(): void {
         this.label.string = `${Math.round(this.curValue)}`;
     }
-
-    /**
-     * @override
-     */
-    protected setValueImmediately(end: number): void {
-        super.setValueImmediately(end);
-        this.label.string = `${Math.round(this.curValue)}`;
-    }
 }

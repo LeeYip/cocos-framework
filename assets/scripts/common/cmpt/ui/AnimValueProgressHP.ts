@@ -53,12 +53,4 @@ export default class AnimValueProgressHP extends AnimValueProgress {
             this.setBarShadow(this.curValue);
         }
     }
-
-    /**
-     * @override
-     */
-    protected setValueImmediately(end: number): void {
-        super.setValueImmediately(end);
-        this.setBarShadow(this.curValue);
-    }
 }
