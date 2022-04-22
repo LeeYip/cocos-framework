@@ -87,6 +87,8 @@ export default class VirtualLayout<T extends VirtualArgs> extends cc.Component {
     })
     public HorizontalDirection: HorizontalDirection = HorizontalDirection.LEFT_TO_RIGHT;
 
+    /** 所属虚拟列表 */
+    private _list: VirtualList<T> = null;
     /** mask节点（content父节点） */
     private _view: cc.Node = null;
     /** view坐标系下view的边界矩形 */
@@ -106,23 +108,21 @@ export default class VirtualLayout<T extends VirtualArgs> extends cc.Component {
     /** others content被回收的item池（不移出节点树，只设置opacity），下标顺序与this.list.Others数组一致 */
     private _otherItemPoolArr: cc.Node[][] = [];
 
-    /** 所属虚拟列表 */
-    public list: VirtualList<T> = null;
-
-    public onInit(): void {
+    public onInit(list: VirtualList<T>): void {
+        this._list = list;
         this._view = this.node.parent;
         this._viewEdge = this.getNodeEdgeRect(this._view);
 
         // 初始化分层相关数据
         this._otherItemsArr = [];
         this._otherItemPoolArr = [];
-        this.list.Others.forEach((e) => {
+        this._list.Others.forEach((e) => {
             this._otherItemsArr.push([]);
             this._otherItemPoolArr.push([]);
         });
 
         // 元素大小固定时初始化fixedSize
-        if (this.list.IsFixedSize && this._fixedSize === null) {
+        if (this._list.IsFixedSize && this._fixedSize === null) {
             this.addItemNode(false);
             this._fixedSize = this._itemPool[0].getContentSize();
         }
@@ -150,7 +150,7 @@ export default class VirtualLayout<T extends VirtualArgs> extends cc.Component {
         }
         this._sizeDirty = false;
 
-        if (this.list.IsFixedSize) {
+        if (this._list.IsFixedSize) {
             this.updateSizeFixed();
         } else {
             this.updateSizeUnfixed();
@@ -159,22 +159,22 @@ export default class VirtualLayout<T extends VirtualArgs> extends cc.Component {
 
     private updateSizeFixed(): void {
         if (this.Type === LayoutType.VERTICAL) {
-            if (this.list.argsArr.length <= 0) {
+            if (this._list.argsArr.length <= 0) {
                 this.node.height = 0;
                 return;
             }
 
-            this.node.height = this.Top + this.Bottom + (this.list.argsArr.length - 1) * this.SpacingY + this._fixedSize.height * this.list.argsArr.length;
+            this.node.height = this.Top + this.Bottom + (this._list.argsArr.length - 1) * this.SpacingY + this._fixedSize.height * this._list.argsArr.length;
         } else if (this.Type === LayoutType.HORIZONTAL) {
-            if (this.list.argsArr.length <= 0) {
+            if (this._list.argsArr.length <= 0) {
                 this.node.width = 0;
                 return;
             }
 
-            this.node.width = this.Left + this.Right + (this.list.argsArr.length - 1) * this.SpacingX + this._fixedSize.width * this.list.argsArr.length;
+            this.node.width = this.Left + this.Right + (this._list.argsArr.length - 1) * this.SpacingX + this._fixedSize.width * this._list.argsArr.length;
         } else {
             if (this.StartAxis === AxisDirection.HORIZONTAL) {
-                if (this.list.argsArr.length <= 0) {
+                if (this._list.argsArr.length <= 0) {
                     this.node.height = 0;
                     return;
                 }
@@ -183,11 +183,11 @@ export default class VirtualLayout<T extends VirtualArgs> extends cc.Component {
                 let num = Math.floor((this.node.width - this.Left - this.Right + this.SpacingX) / (this._fixedSize.width + this.SpacingX));
                 num = Math.max(num, 1);
                 // 计算可以排列几行
-                let row = Math.ceil(this.list.argsArr.length / num);
+                let row = Math.ceil(this._list.argsArr.length / num);
                 // 高度
                 this.node.height = this.Top + this.Bottom + (row - 1) * this.SpacingY + this._fixedSize.height * row;
             } else {
-                if (this.list.argsArr.length <= 0) {
+                if (this._list.argsArr.length <= 0) {
                     this.node.width = 0;
                     return;
                 }
@@ -196,7 +196,7 @@ export default class VirtualLayout<T extends VirtualArgs> extends cc.Component {
                 let num = Math.floor((this.node.height - this.Top - this.Bottom + this.SpacingY) / (this._fixedSize.height + this.SpacingY));
                 num = Math.max(num, 1);
                 // 计算可以排列几列
-                let column = Math.ceil(this.list.argsArr.length / num);
+                let column = Math.ceil(this._list.argsArr.length / num);
                 // 宽度
                 this.node.width = this.Left + this.Right + (column - 1) * this.SpacingX + this._fixedSize.width * column;
             }
@@ -211,12 +211,12 @@ export default class VirtualLayout<T extends VirtualArgs> extends cc.Component {
      * 更新view区域数据显示
      */
     private updateView(): void {
-        if (!this._viewDirty || this.list.argsArr.length <= 0) {
+        if (!this._viewDirty || this._list.argsArr.length <= 0) {
             return;
         }
         this._viewDirty = false;
 
-        if (this.list.IsFixedSize) {
+        if (this._list.IsFixedSize) {
             this.updateViewFixed();
         } else {
             this.updateViewUnfixed();
@@ -230,7 +230,7 @@ export default class VirtualLayout<T extends VirtualArgs> extends cc.Component {
         let contentEdge = this.getNodeEdgeRect(this.node);
         let xMax: number, xMin: number, yMax: number, yMin: number;
         if (this.Type === LayoutType.VERTICAL) {
-            for (let i = 0; i < this.list.argsArr.length; i++) {
+            for (let i = 0; i < this._list.argsArr.length; i++) {
                 if (this.VerticalDirection === VerticalDirection.TOP_TO_BOTTOM) {
                     yMax = contentEdge.yMax - (this.Top + i * this.SpacingY + this._fixedSize.height * i);
                     yMin = yMax - this._fixedSize.height;
@@ -263,7 +263,7 @@ export default class VirtualLayout<T extends VirtualArgs> extends cc.Component {
                 this.setItem(cc.v3(0, yMin + item.anchorY * item.height), i, itemIdx);
             }
         } else if (this.Type === LayoutType.HORIZONTAL) {
-            for (let i = 0; i < this.list.argsArr.length; i++) {
+            for (let i = 0; i < this._list.argsArr.length; i++) {
                 if (this.HorizontalDirection === HorizontalDirection.RIGHT_TO_LEFT) {
                     xMax = contentEdge.xMax - (this.Right + i * this.SpacingX + this._fixedSize.width * i);
                     xMin = xMax - this._fixedSize.width;
@@ -296,7 +296,7 @@ export default class VirtualLayout<T extends VirtualArgs> extends cc.Component {
                 this.setItem(cc.v3(xMin + item.anchorX * item.width, 0), i, itemIdx);
             }
         } else {
-            for (let i = 0; i < this.list.argsArr.length; i++) {
+            for (let i = 0; i < this._list.argsArr.length; i++) {
                 // 计算当前元素排在第几行第几列，从0开始
                 let rowIndex: number = 0;
                 let columnIndex: number = 0;
@@ -410,7 +410,7 @@ export default class VirtualLayout<T extends VirtualArgs> extends cc.Component {
      * 区分在view内部与外部的items数组下标
      */
     private checkViewItem(): { inView: number[], outView: number[] } {
-        return this.list.IsFixedSize ? this.checkViewItemFixed() : this.checkViewItemUnfixed();
+        return this._list.IsFixedSize ? this.checkViewItemFixed() : this.checkViewItemUnfixed();
     }
 
     private checkViewItemFixed(): { inView: number[], outView: number[] } {
@@ -475,10 +475,10 @@ export default class VirtualLayout<T extends VirtualArgs> extends cc.Component {
         item.position = p;
         let vi = item.getComponent(VirtualItem);
         vi.dataIdx = dataIdx;
-        vi.args = this.list.argsArr[dataIdx];
+        vi.args = this._list.argsArr[dataIdx];
         vi.onRefresh(vi.args);
 
-        if (this.list.Others.length > 0) {
+        if (this._list.Others.length > 0) {
             let nodes: cc.Node[] = [];
             this._otherItemsArr.forEach((e) => {
                 e[itemIdx].position = p;
@@ -507,7 +507,7 @@ export default class VirtualLayout<T extends VirtualArgs> extends cc.Component {
                 this._otherItemsArr[i].push(otherNode);
             });
         } else {
-            let tmp: cc.Node | cc.Prefab = this.list.Main.TemplateType === MainTemplateType.PREFAB ? this.list.Main.TemplatePrefab : this.list.Main.TemplateNode;
+            let tmp: cc.Node | cc.Prefab = this._list.Main.TemplateType === MainTemplateType.PREFAB ? this._list.Main.TemplatePrefab : this._list.Main.TemplateNode;
             node = Res.instantiate(tmp, this.node);
             if (!node.getComponent(VirtualItem)) {
                 node.addComponent(VirtualItem);
@@ -523,7 +523,7 @@ export default class VirtualLayout<T extends VirtualArgs> extends cc.Component {
 
             // 拷贝一份子节点数组，防止子节点移除时改变下标
             let childrenCopy = node.children.slice(0);
-            this.list.Others.forEach((e, i) => {
+            this._list.Others.forEach((e, i) => {
                 let otherNode: cc.Node = null;
                 switch (e.TemplateType) {
                     case OtherTemplateType.NODE:
@@ -602,7 +602,7 @@ export default class VirtualLayout<T extends VirtualArgs> extends cc.Component {
     private onPositionChanged(): void {
         this._viewDirty = true;
 
-        this.list.Others.forEach((e) => {
+        this._list.Others.forEach((e) => {
             e.Content.position = this.node.position;
         });
     }
@@ -614,8 +614,8 @@ export default class VirtualLayout<T extends VirtualArgs> extends cc.Component {
      * @param viewAnchor view的锚点位置（左下角为0点）
      */
     public getScrollOffset(idx: number, itemAnchor: cc.Vec2, viewAnchor: cc.Vec2): cc.Vec2 {
-        idx = Math.min(idx, this.list.argsArr.length - 1);
-        return this.list.IsFixedSize ? this.getScrollOffsetFixed(idx, itemAnchor, viewAnchor) : this.getScrollOffsetUnfixed(idx, itemAnchor, viewAnchor);
+        idx = Math.min(idx, this._list.argsArr.length - 1);
+        return this._list.IsFixedSize ? this.getScrollOffsetFixed(idx, itemAnchor, viewAnchor) : this.getScrollOffsetUnfixed(idx, itemAnchor, viewAnchor);
     }
 
     private getScrollOffsetFixed(idx: number, itemAnchor: cc.Vec2, viewAnchor: cc.Vec2): cc.Vec2 {
@@ -708,7 +708,7 @@ export default class VirtualLayout<T extends VirtualArgs> extends cc.Component {
         this._items.forEach((item) => {
             let vi = item.getComponent(VirtualItem);
             vi.onRefresh(vi.args);
-            if (this.list.Others.length > 0) {
+            if (this._list.Others.length > 0) {
                 vi.onRefreshOthers(...vi.others);
             }
         });

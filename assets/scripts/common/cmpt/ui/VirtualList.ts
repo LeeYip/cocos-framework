@@ -160,13 +160,27 @@ export default class VirtualList<T extends VirtualArgs> extends cc.Component {
     public IsFixedSize: boolean = true;
 
     private _scrollView: cc.ScrollView = null;
+    public get scrollView(): cc.ScrollView {
+        if (!this._scrollView) {
+            this._scrollView = this.getComponent(cc.ScrollView);
+        }
+        return this._scrollView;
+    }
+
     private _layout: VirtualLayout<T> = null;
+    public get layout(): VirtualLayout<T> {
+        if (!this._layout) {
+            this._layout = this.scrollView.content.getComponent(VirtualLayout);
+        }
+        return this._layout;
+    }
+
     private _argsArr: T[] = [];
     /** 列表缓存的所有数据 */
     public get argsArr(): T[] { return this._argsArr; }
     public set argsArr(v: T[]) {
         this._argsArr = v;
-        this._layout.rearrange();
+        this.layout.rearrange();
     }
 
     protected onLoad(): void {
@@ -175,11 +189,8 @@ export default class VirtualList<T extends VirtualArgs> extends cc.Component {
             return;
         }
 
-        this._scrollView = this.getComponent(cc.ScrollView);
-        this._layout = this._scrollView.content.getComponent(VirtualLayout);
-        if (this._layout) {
-            this._layout.list = this;
-            this._layout.onInit();
+        if (this.layout) {
+            this.layout.onInit(this);
         }
     }
 
@@ -233,14 +244,14 @@ export default class VirtualList<T extends VirtualArgs> extends cc.Component {
      * @param a 加速度是否衰减，为true且滚动距离大时滚动会不准确
      */
     public scrollItemToView(idx: number, itemAnchor: cc.Vec2 = cc.v2(), viewAnchor: cc.Vec2 = cc.v2(), t: number = 0, a: boolean = true): void {
-        this._scrollView.scrollToOffset(this._layout.getScrollOffset(idx, itemAnchor, viewAnchor), t, a);
+        this.scrollView.scrollToOffset(this.layout.getScrollOffset(idx, itemAnchor, viewAnchor), t, a);
     }
 
     /**
      * 刷新所有激活的item
      */
     public refreshAllItems(): void {
-        this._layout.refreshAllItems();
+        this.layout.refreshAllItems();
     }
 
     /**
@@ -251,7 +262,7 @@ export default class VirtualList<T extends VirtualArgs> extends cc.Component {
     public reset(index: number, args: T): void {
         if (Tool.inRange(0, this._argsArr.length - 1, index)) {
             this._argsArr[index] = args;
-            this._layout.rearrange();
+            this.layout.rearrange();
         }
     }
 
@@ -261,7 +272,7 @@ export default class VirtualList<T extends VirtualArgs> extends cc.Component {
      */
     public push(args: T): number {
         let result = this._argsArr.push(args);
-        this._layout.rearrange(false);
+        this.layout.rearrange(false);
         return result;
     }
 
@@ -270,7 +281,7 @@ export default class VirtualList<T extends VirtualArgs> extends cc.Component {
      */
     public pop(): T {
         let result = this._argsArr.pop();
-        this._layout.rearrange();
+        this.layout.rearrange();
         return result;
     }
 
@@ -280,7 +291,7 @@ export default class VirtualList<T extends VirtualArgs> extends cc.Component {
      */
     public unshift(args: T): number {
         let result = this._argsArr.unshift(args);
-        this._layout.rearrange();
+        this.layout.rearrange();
         return result;
     }
 
@@ -289,7 +300,7 @@ export default class VirtualList<T extends VirtualArgs> extends cc.Component {
      */
     public shift(): T {
         let result = this._argsArr.shift();
-        this._layout.rearrange();
+        this.layout.rearrange();
         return result;
     }
 
@@ -308,7 +319,7 @@ export default class VirtualList<T extends VirtualArgs> extends cc.Component {
             }
         }
 
-        this._layout.rearrange();
+        this.layout.rearrange();
         return result;
     }
 
@@ -318,7 +329,7 @@ export default class VirtualList<T extends VirtualArgs> extends cc.Component {
      */
     public sort(call: (a: T, b: T) => number): T[] {
         let result = this._argsArr.sort(call);
-        this._layout.rearrange();
+        this.layout.rearrange();
         return result;
     }
 
@@ -327,7 +338,7 @@ export default class VirtualList<T extends VirtualArgs> extends cc.Component {
      */
     public filter(call: (value: T, index: number, array: T[]) => boolean): T[] {
         this._argsArr = this._argsArr.filter(call);
-        this._layout.rearrange();
+        this.layout.rearrange();
         return this._argsArr;
     }
 }
