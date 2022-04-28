@@ -301,10 +301,12 @@ export default class VirtualLayout<T extends VirtualArgs> extends cc.Component {
                 let rowIndex: number = 0;
                 let columnIndex: number = 0;
                 if (this.StartAxis === AxisDirection.HORIZONTAL) {
+                    // 起始轴为横向
                     let num = Math.floor((this.node.width - this.Left - this.Right + this.SpacingX) / (this._fixedSize.width + this.SpacingX));
                     num = Math.max(num, 1);
                     rowIndex = Math.floor(i / num);
                     columnIndex = i % num;
+                    // 计算纵向
                     if (this.VerticalDirection === VerticalDirection.TOP_TO_BOTTOM) {
                         yMax = contentEdge.yMax - (this.Top + rowIndex * this.SpacingY + this._fixedSize.height * rowIndex);
                         yMin = yMax - this._fixedSize.height;
@@ -324,30 +326,24 @@ export default class VirtualLayout<T extends VirtualArgs> extends cc.Component {
                             continue;
                         }
                     }
+                    // 计算横向
                     if (this.HorizontalDirection === HorizontalDirection.RIGHT_TO_LEFT) {
                         xMax = contentEdge.xMax - (this.Right + columnIndex * this.SpacingX + this._fixedSize.width * columnIndex);
                         xMin = xMax - this._fixedSize.width;
-                        if (xMax + this.node.x < this._viewEdge.xMin) {
-                            continue;
-                        }
-                        if (xMin + this.node.x > this._viewEdge.xMax) {
-                            continue;
-                        }
                     } else {
                         xMin = contentEdge.xMin + this.Left + columnIndex * this.SpacingX + this._fixedSize.width * columnIndex;
                         xMax = xMin + this._fixedSize.width;
-                        if (xMin + this.node.x > this._viewEdge.xMax) {
-                            continue;
-                        }
-                        if (xMax + this.node.x < this._viewEdge.xMin) {
-                            continue;
-                        }
+                    }
+                    if (xMax + this.node.x < this._viewEdge.xMin || xMin + this.node.x > this._viewEdge.xMax) {
+                        continue;
                     }
                 } else {
+                    // 起始轴为纵向
                     let num = Math.floor((this.node.height - this.Top - this.Bottom + this.SpacingY) / (this._fixedSize.height + this.SpacingY));
                     num = Math.max(num, 1);
                     rowIndex = i % num;
                     columnIndex = Math.floor(i / num);
+                    // 计算横向
                     if (this.HorizontalDirection === HorizontalDirection.RIGHT_TO_LEFT) {
                         xMax = contentEdge.xMax - (this.Right + columnIndex * this.SpacingX + this._fixedSize.width * columnIndex);
                         xMin = xMax - this._fixedSize.width;
@@ -367,24 +363,16 @@ export default class VirtualLayout<T extends VirtualArgs> extends cc.Component {
                             continue;
                         }
                     }
+                    // 计算纵向
                     if (this.VerticalDirection === VerticalDirection.TOP_TO_BOTTOM) {
                         yMax = contentEdge.yMax - (this.Top + rowIndex * this.SpacingY + this._fixedSize.height * rowIndex);
                         yMin = yMax - this._fixedSize.height;
-                        if (yMax + this.node.y < this._viewEdge.yMin) {
-                            continue;
-                        }
-                        if (yMin + this.node.y > this._viewEdge.yMax) {
-                            continue;
-                        }
                     } else {
                         yMin = contentEdge.yMin + this.Bottom + rowIndex * this.SpacingY + this._fixedSize.height * rowIndex;
                         yMax = yMin + this._fixedSize.height;
-                        if (yMin + this.node.y > this._viewEdge.yMax) {
-                            continue;
-                        }
-                        if (yMax + this.node.y < this._viewEdge.yMin) {
-                            continue;
-                        }
+                    }
+                    if (yMax + this.node.y < this._viewEdge.yMin || yMin + this.node.y > this._viewEdge.yMax) {
+                        continue;
                     }
                 }
 
@@ -517,7 +505,6 @@ export default class VirtualLayout<T extends VirtualArgs> extends cc.Component {
                 node.opacity = 255;
                 this._items.push(node);
             } else {
-                node.opacity = 0;
                 this.putItemNode(node);
             }
 
@@ -549,7 +536,6 @@ export default class VirtualLayout<T extends VirtualArgs> extends cc.Component {
                     otherNode.opacity = 255;
                     this._otherItemsArr[i].push(otherNode);
                 } else {
-                    otherNode.opacity = 0;
                     this.putItemNode(otherNode, true, i);
                 }
             });
@@ -686,7 +672,7 @@ export default class VirtualLayout<T extends VirtualArgs> extends cc.Component {
 
     /**
      * 重新排列
-     * @param clear 是否清空节点
+     * @param clear 是否清空节点，默认true(仅当不会影响已有元素节点排列时才可传入false)
      */
     public rearrange(clear: boolean = true): void {
         this._sizeDirty = true;
