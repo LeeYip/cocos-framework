@@ -552,6 +552,8 @@ export default class VirtualLayout<T extends VirtualArgs> extends cc.Component {
      */
     private putItemNode(node: cc.Node, isOther: boolean = false, otherIdx: number = 0): void {
         node.opacity = 0;
+        // 防止已回收的节点触发点击事件
+        node.setPosition(Number.MAX_SAFE_INTEGER, Number.MAX_SAFE_INTEGER);
         if (isOther) {
             this._otherItemPoolArr[otherIdx].push(node);
         } else {
@@ -586,8 +588,14 @@ export default class VirtualLayout<T extends VirtualArgs> extends cc.Component {
      * content位移监听回调
      */
     private onPositionChanged(): void {
+        // ScrollView源码的bug处理
+        // 1.超出边界的差值会记录在_outOfBoundaryAmount里，但是这个_outOfBoundaryAmount不是每次检测边界时都更新的，它需要_outOfBoundaryAmountDirty为true才会更新
+        // 2.在content size改变的时候，ScrollView会检测content有没有超出边界，此时会更新_outOfBoundaryAmount并直接修改content坐标。但是修改完content坐标之后_outOfBoundaryAmount记录的仍旧是旧值，此时_outOfBoundaryAmountDirty为false。
+        // 3.ScrollView在touchend的时候会触发检测当前有没有超出边界，有的话自动回弹滚动。由于_outOfBoundaryAmountDirty为false，所以并未更新_outOfBoundaryAmount，而是直接取错误的_outOfBoundaryAmount作为超出边界的值，然后进行错误的自动回弹。
+        this._list.scrollView["_outOfBoundaryAmountDirty"] = true;
+        // 更新view区域数据显示
         this._viewDirty = true;
-
+        // 同步others
         this._list.Others.forEach((e) => {
             e.Content.position = this.node.position;
         });
