@@ -1,5 +1,5 @@
 {
-  "last-module-event-record-time": 1642857429619,
+  "last-module-event-record-time": 1647439037826,
   "group-list": [
     "default"
   ],
@@ -40,5 +40,6 @@
   },
   "migrate-history": [
     "cloud-function"
-  ]
+  ],
+  "start-scene": "fafab544-3253-4695-b807-f3616f90183b"
 }

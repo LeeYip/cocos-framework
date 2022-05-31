@@ -74,4 +74,46 @@ export default class Random {
         }
         return this.random(seed) * (max - min) + min;
     }
+
+    /**
+     * 根据权重数组进行随机，返回结果下标
+     * @param weightArr 权重数组
+     * @returns 随机到的权重数组下标
+     */
+    public static randWeightIdx(seed: string | number, weightArr: number[]) {
+        let sum = 0;
+        for (let i = 0; i < weightArr.length; i++) {
+            sum += weightArr[i];
+        }
+        let randNum = this.float(seed, 0, sum);
+        let curValue = 0
+        for (let i = 0; i < weightArr.length; i++) {
+            curValue += weightArr[i];
+            if (randNum < curValue) {
+                return i;
+            }
+        }
+        return weightArr.length - 1;
+    }
+
+    /**
+     * Fisher–Yates shuffle 数组随机乱序
+     */
+    public static shuffle<T>(seed: string | number, arr: Array<T>): Array<T> {
+        for (let i = arr.length - 1; i >= 0; i--) {
+            let randomIndex = Math.floor(this.random(seed) * (i + 1));
+            [arr[randomIndex], arr[i]] = [arr[i], arr[randomIndex]];
+        }
+        return arr;
+    }
+
+    /**
+     * 随机返回数组中的一个元素
+     */
+    public static arrayRand<T>(seed: string | number, arr: Array<T>): T {
+        if (arr.length <= 0) {
+            return null;
+        }
+        return arr[this.int(seed, 0, arr.length)];
+    }
 }
