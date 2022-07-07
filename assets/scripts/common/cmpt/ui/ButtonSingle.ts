@@ -27,7 +27,7 @@ enum ButtonGroup {
 @menu('Framework/UI组件/ButtonSingle')
 export default class ButtonSingle extends cc.Component {
     @property({ type: cc.Enum(ButtonGroup), tooltip: CC_DEV && '按钮分组，同组按钮同一时刻只会有一个生效' })
-    public ButtonGroup: ButtonGroup = ButtonGroup.DEFAULT;
+    public buttonGroup: ButtonGroup = ButtonGroup.DEFAULT;
 
     /** 记录所有绑定该组件的按钮数据 */
     private static _groupMap: Map<ButtonGroup, GroupData> = null;
@@ -42,13 +42,13 @@ export default class ButtonSingle extends cc.Component {
 
     protected onLoad(): void {
         this._button = this.getComponent(cc.Button);
-        let groupData: GroupData = ButtonSingle.groupMap.get(this.ButtonGroup);
+        let groupData: GroupData = ButtonSingle.groupMap.get(this.buttonGroup);
         if (groupData === undefined) {
             groupData = {
                 lock: false,
                 buttonSet: new Set()
             };
-            ButtonSingle.groupMap.set(this.ButtonGroup, groupData);
+            ButtonSingle.groupMap.set(this.buttonGroup, groupData);
         }
         groupData.buttonSet.add(this._button);
 
@@ -59,9 +59,9 @@ export default class ButtonSingle extends cc.Component {
     }
 
     protected onDestroy(): void {
-        let groupData: GroupData = ButtonSingle.groupMap.get(this.ButtonGroup);
+        let groupData: GroupData = ButtonSingle.groupMap.get(this.buttonGroup);
         if (groupData === undefined) {
-            cc.error(`[ButtonSingle.onDestroy] 数据异常 ButtonGroup: ${this.ButtonGroup}`);
+            cc.error(`[ButtonSingle.onDestroy] 数据异常 ButtonGroup: ${this.buttonGroup}`);
             return;
         }
         groupData.buttonSet.delete(this._button);
@@ -69,9 +69,9 @@ export default class ButtonSingle extends cc.Component {
     }
 
     private onTouchStart(event: cc.Event.EventTouch): void {
-        let groupData: GroupData = ButtonSingle.groupMap.get(this.ButtonGroup);
+        let groupData: GroupData = ButtonSingle.groupMap.get(this.buttonGroup);
         if (groupData === undefined) {
-            cc.error(`[ButtonSingle.onTouchStart] 数据异常 ButtonGroup: ${this.ButtonGroup}`);
+            cc.error(`[ButtonSingle.onTouchStart] 数据异常 ButtonGroup: ${this.buttonGroup}`);
             return;
         }
 
@@ -85,9 +85,9 @@ export default class ButtonSingle extends cc.Component {
     }
 
     private onTouchEnd(event: cc.Event.EventTouch): void {
-        let groupData: GroupData = ButtonSingle.groupMap.get(this.ButtonGroup);
+        let groupData: GroupData = ButtonSingle.groupMap.get(this.buttonGroup);
         if (groupData === undefined) {
-            cc.error(`[ButtonSingle.onTouchEnd] 数据异常 ButtonGroup: ${this.ButtonGroup}`);
+            cc.error(`[ButtonSingle.onTouchEnd] 数据异常 ButtonGroup: ${this.buttonGroup}`);
             return;
         }
 

@@ -29,7 +29,7 @@ export class MainLayoutData {
         tooltip: CC_DEV && '列表容器节点',
         visible() { return false; }
     })
-    public Content: cc.Node = null;
+    public content: cc.Node = null;
 
     @property({ type: cc.Enum(MainTemplateType) })
     private _templateType: MainTemplateType = MainTemplateType.PREFAB;
@@ -37,8 +37,8 @@ export class MainLayoutData {
         type: cc.Enum(MainTemplateType),
         tooltip: CC_DEV && '列表元素模板类型'
     })
-    public get TemplateType(): MainTemplateType { return this._templateType; }
-    public set TemplateType(v: MainTemplateType) {
+    public get templateType(): MainTemplateType { return this._templateType; }
+    public set templateType(v: MainTemplateType) {
         if (this._templateType === v) {
             return;
         }
@@ -51,10 +51,10 @@ export class MainLayoutData {
     @property({
         type: cc.Prefab,
         tooltip: CC_DEV && '列表元素模板预制体',
-        visible() { return this.TemplateType === MainTemplateType.PREFAB; }
+        visible() { return this.templateType === MainTemplateType.PREFAB; }
     })
-    public get TemplatePrefab(): cc.Prefab { return this._templatePrefab; }
-    public set TemplatePrefab(v: cc.Prefab) {
+    public get templatePrefab(): cc.Prefab { return this._templatePrefab; }
+    public set templatePrefab(v: cc.Prefab) {
         if (this._templatePrefab === v) {
             return;
         }
@@ -67,10 +67,10 @@ export class MainLayoutData {
     @property({
         type: cc.Node,
         tooltip: CC_DEV && '列表元素模板节点',
-        visible() { return this.TemplateType === MainTemplateType.NODE; }
+        visible() { return this.templateType === MainTemplateType.NODE; }
     })
-    public get TemplateNode(): cc.Node { return this._templateNode; }
-    public set TemplateNode(v: cc.Node) {
+    public get templateNode(): cc.Node { return this._templateNode; }
+    public set templateNode(v: cc.Node) {
         if (this._templateNode === v) {
             return;
         }
@@ -90,10 +90,10 @@ export class MainLayoutData {
             return;
         }
         let mainItemChild = {};
-        if (this.TemplateType === MainTemplateType.NODE && this.TemplateNode) {
-            this.TemplateNode.children.forEach((c, i) => { mainItemChild[c.name] = i; });
-        } else if (this.TemplateType === MainTemplateType.PREFAB && this.TemplatePrefab) {
-            this.TemplatePrefab.data.children.forEach((c, i) => { mainItemChild[c.name] = i; });
+        if (this.templateType === MainTemplateType.NODE && this.templateNode) {
+            this.templateNode.children.forEach((c, i) => { mainItemChild[c.name] = i; });
+        } else if (this.templateType === MainTemplateType.PREFAB && this.templatePrefab) {
+            this.templatePrefab.data.children.forEach((c, i) => { mainItemChild[c.name] = i; });
         }
         this.editorCall?.(mainItemChild, refresh);
     }
@@ -108,34 +108,34 @@ export class OtherLayoutData {
         type: cc.Node,
         tooltip: CC_DEV && '列表容器节点',
     })
-    public Content: cc.Node = null;
+    public content: cc.Node = null;
 
     @property({
         type: cc.Enum(OtherTemplateType),
         tooltip: CC_DEV && '列表元素模板类型'
     })
-    public TemplateType: OtherTemplateType = OtherTemplateType.PREFAB;
+    public templateType: OtherTemplateType = OtherTemplateType.PREFAB;
 
     @property({
         type: cc.Prefab,
         tooltip: CC_DEV && '列表元素模板预制体',
-        visible() { return this.TemplateType === OtherTemplateType.PREFAB; }
+        visible() { return this.templateType === OtherTemplateType.PREFAB; }
     })
-    public TemplatePrefab: cc.Prefab = null;
+    public templatePrefab: cc.Prefab = null;
 
     @property({
         type: cc.Node,
         tooltip: CC_DEV && '列表元素模板节点',
-        visible() { return this.TemplateType === OtherTemplateType.NODE; }
+        visible() { return this.templateType === OtherTemplateType.NODE; }
     })
-    public TemplateNode: cc.Node = null;
+    public templateNode: cc.Node = null;
 
     @property({
         type: cc.Enum({}),
         tooltip: CC_DEV && '以列表主元素的子节点作为模板节点',
-        visible() { return this.TemplateType === OtherTemplateType.MAIN_ITEM_CHILD; }
+        visible() { return this.templateType === OtherTemplateType.MAIN_ITEM_CHILD; }
     })
-    public TemplateChild: number = -1;
+    public templateChild: number = -1;
 }
 
 /**
@@ -148,16 +148,16 @@ export class OtherLayoutData {
 @menu('Framework/UI组件/VirtualList')
 export default class VirtualList<T extends VirtualArgs> extends cc.Component {
     @property({ type: MainLayoutData, tooltip: CC_DEV && '列表主容器' })
-    public Main: MainLayoutData = new MainLayoutData();
+    public main: MainLayoutData = new MainLayoutData();
 
     @property({ type: OtherLayoutData, tooltip: CC_DEV && '列表副容器\n需要分层显示时使用，一般用于降低draw call' })
-    public Others: OtherLayoutData[] = [];
+    public others: OtherLayoutData[] = [];
 
     @property({
         visible: false,
         tooltip: CC_DEV && '元素节点大小是否一致且固定不变，大小不定时更耗性能（目前不支持此选项，必须为true）'
     })
-    public IsFixedSize: boolean = true;
+    public isFixedSize: boolean = true;
 
     private _scrollView: cc.ScrollView = null;
     public get scrollView(): cc.ScrollView {
@@ -199,7 +199,7 @@ export default class VirtualList<T extends VirtualArgs> extends cc.Component {
     }
 
     protected onFocusInEditor(): void {
-        this.Main.resetMainItemChild();
+        this.main.resetMainItemChild();
     }
 
     /**
@@ -211,28 +211,28 @@ export default class VirtualList<T extends VirtualArgs> extends cc.Component {
         }
         let scrollView = this.getComponent(cc.ScrollView);
         let layout = scrollView.content.getComponent(VirtualLayout);
-        if (!this.Main.Content) {
-            this.Main.Content = scrollView.content;
+        if (!this.main.content) {
+            this.main.content = scrollView.content;
         }
         if (!layout) {
             scrollView.content.addComponent(VirtualLayout);
         }
-        this.Main.editorCall = (mainItemChild: unknown, refresh: boolean): void => {
+        this.main.editorCall = (mainItemChild: unknown, refresh: boolean): void => {
             let hasChildType = false;
-            for (let i = 0; i < this.Others.length; i++) {
-                if (this.Others[i].TemplateType === OtherTemplateType.MAIN_ITEM_CHILD) {
+            for (let i = 0; i < this.others.length; i++) {
+                if (this.others[i].templateType === OtherTemplateType.MAIN_ITEM_CHILD) {
                     hasChildType = true;
                     break;
                 }
             }
             if (hasChildType) {
-                cc.Class['Attr'].setClassAttr(OtherLayoutData, 'TemplateChild', 'enumList', cc.Enum['getList'](mainItemChild));
+                cc.Class['Attr'].setClassAttr(OtherLayoutData, 'templateChild', 'enumList', cc.Enum['getList'](mainItemChild));
                 if (refresh) {
                     Editor.Utils.refreshSelectedInspector('node', this.node.uuid);
                 }
             }
         };
-        this.Main.resetMainItemChild();
+        this.main.resetMainItemChild();
     }
 
     /**

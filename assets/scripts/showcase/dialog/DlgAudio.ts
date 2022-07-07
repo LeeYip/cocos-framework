@@ -9,7 +9,7 @@ const { ccclass, property } = cc._decorator;
 export default class DlgAudio extends DialogBase {
     public static pUrl: string = 'DlgAudio';
 
-    @property(cc.Slider) public VolumeSlider: cc.Slider = null;
+    @property(cc.Slider) public volumeSlider: cc.Slider = null;
 
     protected onDestroy() {
         AudioManager.stopAll();
@@ -23,8 +23,8 @@ export default class DlgAudio extends DialogBase {
     }
 
     private onSlide() {
-        AudioManager.bgmVolume = this.VolumeSlider.progress;
-        AudioManager.sfxVolume = this.VolumeSlider.progress;
+        AudioManager.bgmVolume = this.volumeSlider.progress;
+        AudioManager.sfxVolume = this.volumeSlider.progress;
     }
 
     private onClickBgm1FadeIn() {

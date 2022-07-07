@@ -35,8 +35,8 @@ export default class AnimValue extends cc.Component {
     @property({
         tooltip: CC_DEV && '初始值'
     })
-    private get InitValue(): number { return this._endValue; }
-    private set InitValue(v: number) {
+    private get initValue(): number { return this._endValue; }
+    private set initValue(v: number) {
         this._curValue = v;
         this._endValue = v;
         this.setValueImmediately(this._endValue);
@@ -46,30 +46,30 @@ export default class AnimValue extends cc.Component {
         type: cc.Enum(AnimType),
         tooltip: CC_DEV && '数值变化类型\nSPEED：以速度计算变化时长\nDURATION：固定时长'
     })
-    public AnimType: AnimType = AnimType.SPEED;
+    public animType: AnimType = AnimType.SPEED;
 
     @property({
         tooltip: CC_DEV && '每秒数值变化速度',
-        visible() { return this.AnimType === AnimType.SPEED; }
+        visible() { return this.animType === AnimType.SPEED; }
     })
-    public Speed: number = 1;
+    public speed: number = 1;
 
     @property({
         tooltip: CC_DEV && '数值变化的总时长',
-        visible() { return this.AnimType === AnimType.DURATION; }
+        visible() { return this.animType === AnimType.DURATION; }
     })
-    public Duration: number = 1;
+    public duration: number = 1;
 
     @property({
         type: cc.Enum(EasingType),
         tooltip: CC_DEV && '变化的缓动类型'
     })
-    public EasingType: EasingType = EasingType.NONE;
+    public easingType: EasingType = EasingType.NONE;
 
     @property({
         tooltip: CC_DEV && '变化速度是否受到timeScale的影响'
     })
-    public TimeScale: boolean = false;
+    public timeScale: boolean = false;
 
     /** 缓存动画的resolve */
     private _animResolve: (value: void | PromiseLike<void>) => void;
@@ -139,9 +139,9 @@ export default class AnimValue extends cc.Component {
             this._endValue = end;
             this._isAdd = this._endValue - this._curValue > 0;
             this._tween?.stop();
-            this._tween = this.TimeScale ? new Tween(this, SCALE_TWEEN) : new Tween(this);
-            let duration = this.AnimType === AnimType.DURATION ? this.Duration : Math.abs(this._endValue - this._curValue) / this.Speed;
-            switch (this.EasingType) {
+            this._tween = this.timeScale ? new Tween(this, SCALE_TWEEN) : new Tween(this);
+            let duration = this.animType === AnimType.DURATION ? this.duration : Math.abs(this._endValue - this._curValue) / this.speed;
+            switch (this.easingType) {
                 case EasingType.IN:
                     this._tween.easing(Easing.Quadratic.In);
                     break;

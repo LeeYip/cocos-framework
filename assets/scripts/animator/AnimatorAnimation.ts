@@ -19,7 +19,7 @@ export default class AnimatorAnimation extends AnimatorBase {
     private _wrapModeMap: Map<cc.AnimationState, cc.WrapMode> = new Map();
 
     protected start() {
-        if (!this.PlayOnStart || this._hasInit) {
+        if (!this.playOnStart || this._hasInit) {
             return;
         }
         this._hasInit = true;
@@ -28,8 +28,8 @@ export default class AnimatorAnimation extends AnimatorBase {
         this._animation.on(cc.Animation.EventType.FINISHED, this.onAnimFinished, this);
         this._animation.on(cc.Animation.EventType.LASTFRAME, this.onAnimFinished, this);
 
-        if (this.AssetRawUrl !== null) {
-            this.initJson(this.AssetRawUrl.json);
+        if (this.assetRawUrl !== null) {
+            this.initJson(this.assetRawUrl.json);
         }
     }
 
@@ -41,7 +41,7 @@ export default class AnimatorAnimation extends AnimatorBase {
      * @override
      */
     public onInit(...args: Array<Map<string, AnimatorStateLogic> | ((fromState: string, toState: string) => void) | AnimationPlayer>) {
-        if (this.PlayOnStart || this._hasInit) {
+        if (this.playOnStart || this._hasInit) {
             return;
         }
         this._hasInit = true;
@@ -52,8 +52,8 @@ export default class AnimatorAnimation extends AnimatorBase {
         this._animation.on(cc.Animation.EventType.FINISHED, this.onAnimFinished, this);
         this._animation.on(cc.Animation.EventType.LASTFRAME, this.onAnimFinished, this);
 
-        if (this.AssetRawUrl !== null) {
-            this.initJson(this.AssetRawUrl.json);
+        if (this.assetRawUrl !== null) {
+            this.initJson(this.assetRawUrl.json);
         }
     }
 

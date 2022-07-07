@@ -20,7 +20,7 @@ export default class AnimatorSpine extends AnimatorBase {
     private _secondaryListenerMap: Map<(entry?: any) => void, AnimatorSpineSecondary> = new Map();
 
     protected start() {
-        if (!this.PlayOnStart || this._hasInit) {
+        if (!this.playOnStart || this._hasInit) {
             return;
         }
         this._hasInit = true;
@@ -28,8 +28,8 @@ export default class AnimatorSpine extends AnimatorBase {
         this._spine = this.getComponent(sp.Skeleton);
         this._spine.setCompleteListener(this.onSpineComplete.bind(this));
 
-        if (this.AssetRawUrl !== null) {
-            this.initJson(this.AssetRawUrl.json);
+        if (this.assetRawUrl !== null) {
+            this.initJson(this.assetRawUrl.json);
         }
     }
 
@@ -41,7 +41,7 @@ export default class AnimatorSpine extends AnimatorBase {
      * @override
      */
     public onInit(...args: Array<Map<string, AnimatorStateLogic> | ((fromState: string, toState: string) => void) | AnimationPlayer>) {
-        if (this.PlayOnStart || this._hasInit) {
+        if (this.playOnStart || this._hasInit) {
             return;
         }
         this._hasInit = true;
@@ -51,15 +51,15 @@ export default class AnimatorSpine extends AnimatorBase {
         this._spine = this.getComponent(sp.Skeleton);
         this._spine.setCompleteListener(this.onSpineComplete.bind(this));
 
-        if (this.AssetRawUrl !== null) {
-            this.initJson(this.AssetRawUrl.json);
+        if (this.assetRawUrl !== null) {
+            this.initJson(this.assetRawUrl.json);
         }
     }
 
     private onSpineComplete(entry: any) {
         entry.trackIndex === 0 && this.onAnimFinished();
         this._completeListenerMap.forEach((target, cb) => { target ? cb.call(target, entry) : cb(entry); });
-        this._secondaryListenerMap.forEach((target, cb) => { entry.trackIndex === target.TrackIndex && cb.call(target, entry); });
+        this._secondaryListenerMap.forEach((target, cb) => { entry.trackIndex === target.trackIndex && cb.call(target, entry); });
     }
 
     /**

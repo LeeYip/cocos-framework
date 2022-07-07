@@ -12,8 +12,8 @@ export default class LocalizedLabel extends cc.Component {
     @property(cc.String) private _textKey: string = '';
 
     @property({ type: cc.String, tooltip: 'i18n key' })
-    public get TextKey(): string { return this._textKey; }
-    public set TextKey(key: string) {
+    public get textKey(): string { return this._textKey; }
+    public set textKey(key: string) {
         this._textKey = key;
         this.updateLabel();
     }
@@ -49,7 +49,7 @@ export default class LocalizedLabel extends cc.Component {
             if (this.label.string) {
                 let key = I18n.getKeyByValue(this.label.string);
                 if (key) {
-                    this.TextKey = key;
+                    this.textKey = key;
                 }
             }
         }
@@ -94,6 +94,6 @@ export default class LocalizedLabel extends cc.Component {
      */
     public clear(): void {
         this.label.string = '';
-        this.TextKey = '';
+        this.textKey = '';
     }
 }

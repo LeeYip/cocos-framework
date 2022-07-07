@@ -1336,7 +1336,7 @@
       "__id__": 22
     },
     "_enabled": true,
-    "Lab": {
+    "lab": {
       "__id__": 32
     },
     "_id": ""
@@ -1975,16 +1975,16 @@
       "__id__": 43
     },
     "_enabled": true,
-    "Type": 2,
-    "StartAxis": 0,
-    "Left": 0,
-    "Right": 0,
-    "Top": 0,
-    "Bottom": 0,
-    "SpacingX": 0,
-    "SpacingY": 0,
-    "VerticalDirection": 0,
-    "HorizontalDirection": 0,
+    "type": 2,
+    "startAxis": 0,
+    "left": 0,
+    "right": 0,
+    "top": 0,
+    "bottom": 0,
+    "spacingX": 10,
+    "spacingY": 10,
+    "verticalDirection": 0,
+    "horizontalDirection": 0,
     "_id": ""
   },
   {
@@ -2076,10 +2076,10 @@
       "__id__": 36
     },
     "_enabled": true,
-    "Main": {
+    "main": {
       "__id__": 57
     },
-    "Others": [
+    "others": [
       {
         "__id__": 58
       },
@@ -2087,12 +2087,12 @@
         "__id__": 59
       }
     ],
-    "IsFixedSize": true,
+    "isFixedSize": true,
     "_id": ""
   },
   {
     "__type__": "MainLayoutData",
-    "Content": {
+    "content": {
       "__id__": 43
     },
     "_templateType": 0,
@@ -2103,23 +2103,23 @@
   },
   {
     "__type__": "OtherLayoutData",
-    "Content": {
+    "content": {
       "__id__": 45
     },
-    "TemplateType": 2,
-    "TemplatePrefab": null,
-    "TemplateNode": null,
-    "TemplateChild": 1
+    "templateType": 2,
+    "templatePrefab": null,
+    "templateNode": null,
+    "templateChild": 1
   },
   {
     "__type__": "OtherLayoutData",
-    "Content": {
+    "content": {
       "__id__": 47
     },
-    "TemplateType": 2,
-    "TemplatePrefab": null,
-    "TemplateNode": null,
-    "TemplateChild": 2
+    "templateType": 2,
+    "templatePrefab": null,
+    "templateNode": null,
+    "templateChild": 2
   },
   {
     "__type__": "cc.PrefabInfo",
@@ -3603,19 +3603,19 @@
       "__id__": 1
     },
     "_enabled": true,
-    "DlgAnim": {
+    "dlgAnim": {
       "__id__": 98
     },
-    "OpenClip": {
+    "openClip": {
       "__uuid__": "cf157bac-dfd6-4a5d-a483-5d2eecf8ff34"
     },
-    "CloseClip": {
+    "closeClip": {
       "__uuid__": "85fcefc8-972b-4176-9d53-8f21017425a5"
     },
-    "List": {
+    "list": {
       "__id__": 56
     },
-    "RndLab": {
+    "rndLab": {
       "__id__": 95
     },
     "_id": ""

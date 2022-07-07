@@ -4,18 +4,18 @@ import { VirtualArgs } from "../../common/cmpt/ui/VirtualList";
 const { ccclass, property } = cc._decorator;
 
 export interface ItemArgs extends VirtualArgs {
-    num: number
+    num: number;
 }
 
 @ccclass
 export default class ListItem extends VirtualItem<ItemArgs> {
-    @property(cc.Label) Lab: cc.Label = null;
+    @property(cc.Label) lab: cc.Label = null;
 
     /**
      * @override
      */
     public onRefresh(args: ItemArgs) {
-        this.Lab.string = `idx: ${this.dataIdx}`;
+        this.lab.string = `idx: ${this.dataIdx}`;
         cc.log(`[ListItem.onRefresh] idx: ${this.dataIdx}, args.num: ${args.num}`);
     }
 

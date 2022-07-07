@@ -7,13 +7,13 @@ const { ccclass, property } = cc._decorator;
 export default class DlgCircleList extends DialogBase {
     public static pUrl: string = 'DlgCircleList';
 
-    @property(CircleList) List: CircleList = null;
+    @property(CircleList) list: CircleList = null;
 
     /**
      * @override
      */
     public open() {
-        this.List.onInit(10, 5, this.refreshItem, this);
+        this.list.onInit(10, 5, this.refreshItem, this);
     }
 
     private refreshItem(item: cc.Node, idx: number, isCur: boolean) {

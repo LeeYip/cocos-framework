@@ -11,7 +11,7 @@ const { ccclass, property, requireComponent, menu } = cc._decorator;
 @requireComponent(sp.Skeleton)
 @menu('Framework/Animator/AnimatorSpineSecondary')
 export default class AnimatorSpineSecondary extends AnimatorBase {
-    @property({ tooltip: CC_DEV && '动画播放的trackIndex，必须大于0' }) TrackIndex: number = 1;
+    @property({ tooltip: CC_DEV && '动画播放的trackIndex，必须大于0' }) trackIndex: number = 1;
 
     /** 主状态机 */
     private _main: AnimatorSpine = null;
@@ -19,7 +19,7 @@ export default class AnimatorSpineSecondary extends AnimatorBase {
     private _spine: sp.Skeleton = null;
 
     protected start() {
-        if (!this.PlayOnStart || this._hasInit) {
+        if (!this.playOnStart || this._hasInit) {
             return;
         }
         this._hasInit = true;
@@ -28,8 +28,8 @@ export default class AnimatorSpineSecondary extends AnimatorBase {
         this._main = this.getComponent(AnimatorSpine);
         this._main.addSecondaryListener(this.onAnimFinished, this);
 
-        if (this.AssetRawUrl !== null) {
-            this.initJson(this.AssetRawUrl.json);
+        if (this.assetRawUrl !== null) {
+            this.initJson(this.assetRawUrl.json);
         }
     }
 
@@ -41,7 +41,7 @@ export default class AnimatorSpineSecondary extends AnimatorBase {
      * @override
      */
     public onInit(...args: Array<Map<string, AnimatorStateLogic> | ((fromState: string, toState: string) => void) | AnimationPlayer>) {
-        if (this.PlayOnStart || this._hasInit) {
+        if (this.playOnStart || this._hasInit) {
             return;
         }
         this._hasInit = true;
@@ -52,8 +52,8 @@ export default class AnimatorSpineSecondary extends AnimatorBase {
         this._main = this.getComponent(AnimatorSpine);
         this._main.addSecondaryListener(this.onAnimFinished, this);
 
-        if (this.AssetRawUrl !== null) {
-            this.initJson(this.AssetRawUrl.json);
+        if (this.assetRawUrl !== null) {
+            this.initJson(this.assetRawUrl.json);
         }
     }
 
@@ -65,9 +65,9 @@ export default class AnimatorSpineSecondary extends AnimatorBase {
      */
     protected playAnimation(animName: string, loop: boolean) {
         if (animName) {
-            this._spine.setAnimation(this.TrackIndex, animName, loop);
+            this._spine.setAnimation(this.trackIndex, animName, loop);
         } else {
-            this._spine.clearTrack(this.TrackIndex);
+            this._spine.clearTrack(this.trackIndex);
         }
     }
 }

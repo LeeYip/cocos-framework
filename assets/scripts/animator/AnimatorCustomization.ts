@@ -12,7 +12,7 @@ const { ccclass, property, requireComponent, disallowMultiple, menu } = cc._deco
 export default class AnimatorCustomization extends AnimatorBase {
     /** 此组件必须主动调用onInit初始化 */
     @property({ override: true, visible: false })
-    protected PlayOnStart: boolean = false;
+    protected playOnStart: boolean = false;
 
     /**
      * 手动初始化状态机，可传入0-3个参数，类型如下
@@ -29,8 +29,8 @@ export default class AnimatorCustomization extends AnimatorBase {
 
         this.initArgs(...args);
 
-        if (this.AssetRawUrl !== null) {
-            this.initJson(this.AssetRawUrl.json);
+        if (this.assetRawUrl !== null) {
+            this.initJson(this.assetRawUrl.json);
         }
     }
 

@@ -7,9 +7,9 @@ const { ccclass, property } = cc._decorator;
 export default class DlgShake extends DialogBase {
     public static pUrl: string = 'DlgShake';
 
-    @property(ShakeNode) Shake: ShakeNode = null;
+    @property(ShakeNode) shake: ShakeNode = null;
 
     private onClickShake() {
-        this.Shake.shake(1);
+        this.shake.shake(1);
     }
 }

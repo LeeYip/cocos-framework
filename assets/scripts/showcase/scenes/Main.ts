@@ -6,7 +6,7 @@ const { ccclass, property } = cc._decorator;
 @ccclass
 export default class Main extends cc.Component {
 
-    @property(cc.Label) public DcLab: cc.Label = null;
+    @property(cc.Label) public dcLab: cc.Label = null;
 
     protected start() {
         Layer.inst.enterHome();
@@ -17,6 +17,6 @@ export default class Main extends cc.Component {
     }
 
     protected lateUpdate() {
-        this.DcLab.string = `DrawCall: ${cc.renderer.drawCalls}`;
+        this.dcLab.string = `DrawCall: ${cc.renderer.drawCalls}`;
     }
 }

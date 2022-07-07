@@ -2184,19 +2184,19 @@
       "__id__": 1
     },
     "_enabled": true,
-    "DlgAnim": {
+    "dlgAnim": {
       "__id__": 59
     },
-    "OpenClip": {
+    "openClip": {
       "__uuid__": "cf157bac-dfd6-4a5d-a483-5d2eecf8ff34"
     },
-    "CloseClip": {
+    "closeClip": {
       "__uuid__": "85fcefc8-972b-4176-9d53-8f21017425a5"
     },
-    "Text1": {
+    "text1": {
       "__id__": 25
     },
-    "Text2": {
+    "text2": {
       "__id__": 29
     },
     "_id": ""

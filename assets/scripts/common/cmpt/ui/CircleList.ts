@@ -23,21 +23,21 @@ export default class CircleList extends cc.Component {
         type: cc.Enum(TemplateType),
         tooltip: CC_DEV && '列表元素模板类型'
     })
-    public TemplateType: TemplateType = TemplateType.PREFAB;
+    public templateType: TemplateType = TemplateType.PREFAB;
 
     @property({
         type: cc.Prefab,
         tooltip: CC_DEV && '列表元素模板预制体',
-        visible() { return this.TemplateType === TemplateType.PREFAB; }
+        visible() { return this.templateType === TemplateType.PREFAB; }
     })
-    public TemplatePrefab: cc.Prefab = null;
+    public templatePrefab: cc.Prefab = null;
 
     @property({
         type: cc.Node,
         tooltip: CC_DEV && '列表元素模板节点',
-        visible() { return this.TemplateType === TemplateType.NODE; }
+        visible() { return this.templateType === TemplateType.NODE; }
     })
-    public TemplateNode: cc.Node = null;
+    public templateNode: cc.Node = null;
 
     private _firstDirty: boolean = false;
     private _refreshDirty: boolean = false;
@@ -97,7 +97,7 @@ export default class CircleList extends cc.Component {
 
         // 生成节点
         if (this.pageView.getPages().length === 0) {
-            let tmp: any = this.TemplateType === TemplateType.PREFAB ? this.TemplatePrefab : this.TemplateNode;
+            let tmp: any = this.templateType === TemplateType.PREFAB ? this.templatePrefab : this.templateNode;
             for (let i = 0; i < 5; i++) {
                 let node = Res.instantiate(tmp, this.node);
                 node.active = true;

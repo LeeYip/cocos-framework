@@ -9,31 +9,31 @@ const { ccclass, property } = cc._decorator;
 export default class DlgAnimValue extends DialogBase {
     public static pUrl: string = 'DlgAnimValue';
 
-    @property(AnimValueLabel) public AnimLab: AnimValueLabel = null;
-    @property(AnimValueProgress) public AnimProgress: AnimValueProgress = null;
-    @property(AnimValueProgressHP) public AnimHP: AnimValueProgressHP = null;
+    @property(AnimValueLabel) public animLab: AnimValueLabel = null;
+    @property(AnimValueProgress) public animProgress: AnimValueProgress = null;
+    @property(AnimValueProgressHP) public animHP: AnimValueProgressHP = null;
 
     private onClickLabAdd() {
-        this.AnimLab.setValue(this.AnimLab.endValue + 10);
+        this.animLab.setValue(this.animLab.endValue + 10);
     }
 
     private onClickLabSub() {
-        this.AnimLab.setValue(this.AnimLab.endValue - 10);
+        this.animLab.setValue(this.animLab.endValue - 10);
     }
 
     private onClickProgressAdd() {
-        this.AnimProgress.setValue(Math.min(1, this.AnimProgress.endValue + 0.2));
+        this.animProgress.setValue(Math.min(1, this.animProgress.endValue + 0.2));
     }
 
     private onClickProgressSub() {
-        this.AnimProgress.setValue(Math.max(0, this.AnimProgress.endValue - 0.2));
+        this.animProgress.setValue(Math.max(0, this.animProgress.endValue - 0.2));
     }
 
     private onClickHPAdd() {
-        this.AnimHP.setValue(Math.min(1, this.AnimHP.endValue + 0.2));
+        this.animHP.setValue(Math.min(1, this.animHP.endValue + 0.2));
     }
 
     private onClickHPSub() {
-        this.AnimHP.setValue(Math.max(0, this.AnimHP.endValue - 0.2));
+        this.animHP.setValue(Math.max(0, this.animHP.endValue - 0.2));
     }
 }

@@ -1272,9 +1272,9 @@
       "__id__": 22
     },
     "_enabled": true,
-    "TemplateType": 0,
-    "TemplatePrefab": null,
-    "TemplateNode": {
+    "templateType": 0,
+    "templatePrefab": null,
+    "templateNode": {
       "__id__": 34
     },
     "_id": ""
@@ -1600,16 +1600,16 @@
       "__id__": 1
     },
     "_enabled": true,
-    "DlgAnim": {
+    "dlgAnim": {
       "__id__": 42
     },
-    "OpenClip": {
+    "openClip": {
       "__uuid__": "cf157bac-dfd6-4a5d-a483-5d2eecf8ff34"
     },
-    "CloseClip": {
+    "closeClip": {
       "__uuid__": "85fcefc8-972b-4176-9d53-8f21017425a5"
     },
-    "List": {
+    "list": {
       "__id__": 33
     },
     "_id": ""

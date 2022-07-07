@@ -15,7 +15,7 @@ export default class AnimatorDragonBones extends AnimatorBase {
     private _dragonBones: dragonBones.ArmatureDisplay = null;
 
     protected start() {
-        if (!this.PlayOnStart || this._hasInit) {
+        if (!this.playOnStart || this._hasInit) {
             return;
         }
         this._hasInit = true;
@@ -23,8 +23,8 @@ export default class AnimatorDragonBones extends AnimatorBase {
         this._dragonBones = this.getComponent(dragonBones.ArmatureDisplay);
         this._dragonBones.addEventListener(dragonBones.EventObject.COMPLETE, this.onAnimFinished, this);
 
-        if (this.AssetRawUrl !== null) {
-            this.initJson(this.AssetRawUrl.json);
+        if (this.assetRawUrl !== null) {
+            this.initJson(this.assetRawUrl.json);
         }
     }
 
@@ -36,7 +36,7 @@ export default class AnimatorDragonBones extends AnimatorBase {
      * @override
      */
     public onInit(...args: Array<Map<string, AnimatorStateLogic> | ((fromState: string, toState: string) => void) | AnimationPlayer>) {
-        if (this.PlayOnStart || this._hasInit) {
+        if (this.playOnStart || this._hasInit) {
             return;
         }
         this._hasInit = true;
@@ -46,8 +46,8 @@ export default class AnimatorDragonBones extends AnimatorBase {
         this._dragonBones = this.getComponent(dragonBones.ArmatureDisplay);
         this._dragonBones.addEventListener(dragonBones.EventObject.COMPLETE, this.onAnimFinished, this);
 
-        if (this.AssetRawUrl !== null) {
-            this.initJson(this.AssetRawUrl.json);
+        if (this.assetRawUrl !== null) {
+            this.initJson(this.assetRawUrl.json);
         }
     }
 

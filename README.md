@@ -74,7 +74,7 @@ comp.destory();
 ```
 
 - **属性**
-    - **`timeScale: number`**  dt缩放倍数，1为正常速度，0为暂停
+    - **`timeScale: number`**  dt缩放倍数，1为正常速度，0为暂停。修改时触发时间缩放值修改事件
     - **`realDt: number`**  距上一帧间隔的真实时间
     - **`scaleDt: number`**  距上一帧间隔经过timeScale缩放的时间
 - **方法**
@@ -333,7 +333,7 @@ I18n.getText('test', 'somthing', 2); // => 'test somthing 2 !!!'
 - 文件夹使用小驼峰 files
 - 文件名使用大驼峰 File.ts
 - 类名使用大驼峰 FileClass
-- 属性名、函数名使用小驼峰 func（个人习惯property装饰的属性使用大驼峰）
+- 属性名、函数名使用小驼峰 func
 - 枚举
 ```
 enum LangType {

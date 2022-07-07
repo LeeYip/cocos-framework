@@ -23,13 +23,13 @@ export interface AnimationPlayer {
 @executionOrder(-1000)
 export default class AnimatorBase extends cc.Component {
     @property({ type: cc.JsonAsset, tooltip: CC_DEV && '状态机json文件' })
-    protected AssetRawUrl: cc.JsonAsset = null;
+    protected assetRawUrl: cc.JsonAsset = null;
 
     @property({ tooltip: CC_DEV && '是否在start中自动启动状态机' })
-    protected PlayOnStart: boolean = true;
+    protected playOnStart: boolean = true;
 
     @property({ tooltip: CC_DEV && '是否在update中自动触发状态机逻辑更新' })
-    protected AutoUpdate: boolean = true;
+    protected autoUpdate: boolean = true;
 
     /** 是否初始化 */
     protected _hasInit: boolean = false;
@@ -119,7 +119,7 @@ export default class AnimatorBase extends cc.Component {
     }
 
     protected update() {
-        if (this._hasInit && this.AutoUpdate) {
+        if (this._hasInit && this.autoUpdate) {
             this.updateAnimator();
         }
     }
@@ -128,7 +128,7 @@ export default class AnimatorBase extends cc.Component {
      * 手动调用更新
      */
     public manualUpdate() {
-        if (this._hasInit && !this.AutoUpdate) {
+        if (this._hasInit && !this.autoUpdate) {
             this.updateAnimator();
         }
     }

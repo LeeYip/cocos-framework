@@ -33,10 +33,10 @@ export interface TipData {
 export default class Layer extends cc.Component {
     public static inst: Layer = null;
 
-    @property(cc.Node) public MainLayer: cc.Node = null;
-    @property(cc.Node) public DialogLayer: cc.Node = null;
-    @property(cc.Node) public LoadingLayer: cc.Node = null;
-    @property(cc.Node) public TipLayer: cc.Node = null;
+    @property(cc.Node) private mainLayer: cc.Node = null;
+    @property(cc.Node) private dialogLayer: cc.Node = null;
+    @property(cc.Node) private loadingLayer: cc.Node = null;
+    @property(cc.Node) private tipLayer: cc.Node = null;
 
     /** 打开Loading层计数，为0时关闭，防止某些情况同时触发打开关闭Loading */
     private _loadingCount: number = 0;
@@ -73,12 +73,12 @@ export default class Layer extends cc.Component {
             return;
         }
 
-        this.MainLayer.destroyAllChildren();
+        this.mainLayer.destroyAllChildren();
         this.closeDialogs();
         this.clearTips();
         let node: cc.Node = Res.instantiate(prefab);
         node.setPosition(0, 0);
-        this.MainLayer.addChild(node);
+        this.mainLayer.addChild(node);
         return node;
     }
 
@@ -94,12 +94,12 @@ export default class Layer extends cc.Component {
             return;
         }
 
-        this.MainLayer.destroyAllChildren();
+        this.mainLayer.destroyAllChildren();
         this.closeDialogs();
         this.clearTips();
         let node: cc.Node = Res.instantiate(prefab);
         node.setPosition(0, 0);
-        this.MainLayer.addChild(node);
+        this.mainLayer.addChild(node);
         return node;
     }
 
@@ -108,8 +108,8 @@ export default class Layer extends cc.Component {
      * @param url prefab在resources/prefab/dialog/下的路径
      */
     public getDialog(url: string): DialogBase {
-        for (let i = 0; i < this.DialogLayer.childrenCount; i++) {
-            let node = this.DialogLayer.children[i];
+        for (let i = 0; i < this.dialogLayer.childrenCount; i++) {
+            let node = this.dialogLayer.children[i];
             let cmpt = node.getComponent(DialogBase);
             if (!cmpt) {
                 continue;
@@ -134,7 +134,7 @@ export default class Layer extends cc.Component {
         }
 
         let node = Res.instantiate(prefab);
-        this.DialogLayer.addChild(node);
+        this.dialogLayer.addChild(node);
         node.setPosition(0, 0);
         let cmpt = node.getComponent(DialogBase);
         if (cmpt) {
@@ -174,7 +174,7 @@ export default class Layer extends cc.Component {
         }
 
         let node = Res.instantiate(prefab);
-        this.DialogLayer.addChild(node);
+        this.dialogLayer.addChild(node);
         node.setPosition(0, 0);
         let cmpt = node.getComponent(DialogBase);
         if (cmpt) {
@@ -218,8 +218,8 @@ export default class Layer extends cc.Component {
      * @param play true：调用playClose播放弹窗关闭动画；false：直接调用close关闭弹窗
      */
     public closeDialogs(url: string = '', play: boolean = false): void {
-        for (let i = this.DialogLayer.childrenCount - 1; i >= 0; i--) {
-            let node = this.DialogLayer.children[i];
+        for (let i = this.dialogLayer.childrenCount - 1; i >= 0; i--) {
+            let node = this.dialogLayer.children[i];
             let cmpt = node.getComponent(DialogBase);
             if (!cmpt) {
                 continue;
@@ -250,8 +250,8 @@ export default class Layer extends cc.Component {
      */
     public async waitCloseDialogs(url: string): Promise<void[]> {
         let arr: Array<Promise<void>> = [];
-        for (let i = 0; i < this.DialogLayer.childrenCount; i++) {
-            let node = this.DialogLayer.children[i];
+        for (let i = 0; i < this.dialogLayer.childrenCount; i++) {
+            let node = this.dialogLayer.children[i];
             let cmpt = node.getComponent(DialogBase);
             if (!cmpt) {
                 continue;
@@ -312,7 +312,7 @@ export default class Layer extends cc.Component {
                 return;
             }
             tipNode = Res.instantiate(prefab);
-            this.TipLayer.addChild(tipNode);
+            this.tipLayer.addChild(tipNode);
         }
 
         // 动画
@@ -327,7 +327,7 @@ export default class Layer extends cc.Component {
         tipNode.active = true;
         tipNode.opacity = 255;
         tipNode.setPosition(tipData.start);
-        tipNode.setSiblingIndex(this.TipLayer.childrenCount - 1);
+        tipNode.setSiblingIndex(this.tipLayer.childrenCount - 1);
         tipNode.runAction(cc.sequence(delay, cc.spawn(fade, moveTo), call));
 
         // 数据
@@ -340,7 +340,7 @@ export default class Layer extends cc.Component {
     public clearTips(): void {
         this._tipPool.length = 0;
         this._tipTexts.length = 0;
-        this.TipLayer.destroyAllChildren();
+        this.tipLayer.destroyAllChildren();
     }
 
     /**
@@ -348,10 +348,10 @@ export default class Layer extends cc.Component {
      */
     public showLoading(): void {
         this._loadingCount++;
-        if (!this.LoadingLayer.active) {
-            this.LoadingLayer.active = true;
+        if (!this.loadingLayer.active) {
+            this.loadingLayer.active = true;
             // 默认0.5s后才显示loading内容
-            let content = this.LoadingLayer.getChildByName('content');
+            let content = this.loadingLayer.getChildByName('content');
             if (content) {
                 content.active = false;
                 this.unscheduleAllCallbacks();
@@ -369,7 +369,7 @@ export default class Layer extends cc.Component {
         this._loadingCount--;
         if (this._loadingCount <= 0) {
             this._loadingCount = 0;
-            this.LoadingLayer.active = false;
+            this.loadingLayer.active = false;
             this.unscheduleAllCallbacks();
         }
     }

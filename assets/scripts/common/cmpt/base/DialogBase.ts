@@ -14,21 +14,21 @@ export default class DialogBase extends cc.Component {
     public static pUrl: string = '';
 
     @property(cc.Animation)
-    public DlgAnim: cc.Animation = null;
+    private dlgAnim: cc.Animation = null;
 
     @property({
         type: cc.AnimationClip,
         tooltip: CC_DEV && '打开弹窗的动画',
-        visible() { return !!this.DlgAnim; }
+        visible() { return !!this.dlgAnim; }
     })
-    public OpenClip: cc.AnimationClip = null;
+    private openClip: cc.AnimationClip = null;
 
     @property({
         type: cc.AnimationClip,
         tooltip: CC_DEV && '关闭弹窗的动画',
-        visible() { return !!this.DlgAnim; }
+        visible() { return !!this.dlgAnim; }
     })
-    public CloseClip: cc.AnimationClip = null;
+    private closeClip: cc.AnimationClip = null;
 
     /** 外部的resolve函数，在弹窗close时调用 */
     private _resolveList: Array<(value?: any) => void> = [];
@@ -38,10 +38,10 @@ export default class DialogBase extends cc.Component {
     public get prefabUrl(): string { return this._prefabUrl; }
 
     protected onLoad(): void {
-        if (this.DlgAnim) {
-            this.OpenClip && this.DlgAnim.addClip(this.OpenClip);
-            this.CloseClip && this.DlgAnim.addClip(this.CloseClip);
-            this.DlgAnim.on(cc.Animation.EventType.FINISHED, this.onAnimFinished, this);
+        if (this.dlgAnim) {
+            this.openClip && this.dlgAnim.addClip(this.openClip);
+            this.closeClip && this.dlgAnim.addClip(this.closeClip);
+            this.dlgAnim.on(cc.Animation.EventType.FINISHED, this.onAnimFinished, this);
         }
     }
 
@@ -50,9 +50,9 @@ export default class DialogBase extends cc.Component {
             for (let i = 0; i < this.node.childrenCount; i++) {
                 let anim: cc.Animation = this.node.children[i].getComponent(cc.Animation);
                 if (anim) {
-                    this.DlgAnim = anim;
-                    EditorTool.load<cc.AnimationClip>('res/animation/dialog/open.anim').then((v) => { this.OpenClip = v; });
-                    EditorTool.load<cc.AnimationClip>('res/animation/dialog/close.anim').then((v) => { this.CloseClip = v; });
+                    this.dlgAnim = anim;
+                    EditorTool.load<cc.AnimationClip>('res/animation/dialog/open.anim').then((v) => { this.openClip = v; });
+                    EditorTool.load<cc.AnimationClip>('res/animation/dialog/close.anim').then((v) => { this.closeClip = v; });
                     break;
                 }
             }
@@ -60,7 +60,7 @@ export default class DialogBase extends cc.Component {
     }
 
     protected onAnimFinished(): void {
-        if (this.DlgAnim.currentClip === this.CloseClip) {
+        if (this.dlgAnim.currentClip === this.closeClip) {
             this.close();
         }
     }
@@ -69,8 +69,8 @@ export default class DialogBase extends cc.Component {
      * 打开动画
      */
     public playOpen(): void {
-        if (this.DlgAnim && this.OpenClip) {
-            this.DlgAnim.play(this.OpenClip.name);
+        if (this.dlgAnim && this.openClip) {
+            this.dlgAnim.play(this.openClip.name);
         }
     }
 
@@ -78,11 +78,11 @@ export default class DialogBase extends cc.Component {
      * 关闭动画，动画结束回调中会调用close销毁
      */
     public playClose(): void {
-        if (this.DlgAnim && this.CloseClip) {
-            if (this.DlgAnim.getAnimationState(this.CloseClip.name).isPlaying) {
+        if (this.dlgAnim && this.closeClip) {
+            if (this.dlgAnim.getAnimationState(this.closeClip.name).isPlaying) {
                 return;
             }
-            this.DlgAnim.play(this.CloseClip.name);
+            this.dlgAnim.play(this.closeClip.name);
         } else {
             this.close();
         }
