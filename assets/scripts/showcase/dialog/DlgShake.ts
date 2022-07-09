@@ -5,7 +5,7 @@ const { ccclass, property } = cc._decorator;
 
 @ccclass
 export default class DlgShake extends DialogBase {
-    public static pUrl: string = 'DlgShake';
+    public static pUrl: string = "DlgShake";
 
     @property(ShakeNode) shake: ShakeNode = null;
 

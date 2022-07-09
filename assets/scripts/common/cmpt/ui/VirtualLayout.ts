@@ -47,12 +47,12 @@ enum HorizontalDirection {
 @ccclass
 @disallowMultiple
 export default class VirtualLayout<T extends VirtualArgs> extends cc.Component {
-    @property({ type: cc.Enum(LayoutType), tooltip: CC_DEV && '布局模式' })
+    @property({ type: cc.Enum(LayoutType), tooltip: CC_DEV && "布局模式" })
     public type: LayoutType = LayoutType.VERTICAL;
 
     @property({
         type: cc.Enum(AxisDirection),
-        tooltip: CC_DEV && 'GRID布局的起始轴方向\nHORIZONTAL：固定宽度，动态改变高度\nVERTICAL：固定高度，动态改变宽度',
+        tooltip: CC_DEV && "GRID布局的起始轴方向\nHORIZONTAL：固定宽度，动态改变高度\nVERTICAL：固定高度，动态改变宽度",
         visible() { return this.type === LayoutType.GRID; }
     })
     public startAxis: AxisDirection = AxisDirection.HORIZONTAL;
@@ -592,7 +592,7 @@ export default class VirtualLayout<T extends VirtualArgs> extends cc.Component {
         // 1.超出边界的差值会记录在_outOfBoundaryAmount里，但是这个_outOfBoundaryAmount不是每次检测边界时都更新的，它需要_outOfBoundaryAmountDirty为true才会更新
         // 2.在content size改变的时候，ScrollView会检测content有没有超出边界，此时会更新_outOfBoundaryAmount并直接修改content坐标。但是修改完content坐标之后_outOfBoundaryAmount记录的仍旧是旧值，此时_outOfBoundaryAmountDirty为false。
         // 3.ScrollView在touchend的时候会触发检测当前有没有超出边界，有的话自动回弹滚动。由于_outOfBoundaryAmountDirty为false，所以并未更新_outOfBoundaryAmount，而是直接取错误的_outOfBoundaryAmount作为超出边界的值，然后进行错误的自动回弹。
-        this._list.scrollView['_outOfBoundaryAmountDirty'] = true;
+        this._list.scrollView["_outOfBoundaryAmountDirty"] = true;
         // 更新view区域数据显示
         this._viewDirty = true;
         // 同步others

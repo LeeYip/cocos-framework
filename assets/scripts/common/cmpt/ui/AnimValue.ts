@@ -27,13 +27,13 @@ enum EasingType {
  */
 @ccclass
 @executeInEditMode
-@menu('Framework/UI组件/AnimValue')
+@menu("Framework/UI组件/AnimValue")
 export default class AnimValue extends cc.Component {
     @property private _endValue: number = 0;
     @property private _curValue: number = 0;
 
     @property({
-        tooltip: CC_DEV && '初始值'
+        tooltip: CC_DEV && "初始值"
     })
     private get initValue(): number { return this._endValue; }
     private set initValue(v: number) {
@@ -44,30 +44,30 @@ export default class AnimValue extends cc.Component {
 
     @property({
         type: cc.Enum(AnimType),
-        tooltip: CC_DEV && '数值变化类型\nSPEED：以速度计算变化时长\nDURATION：固定时长'
+        tooltip: CC_DEV && "数值变化类型\nSPEED：以速度计算变化时长\nDURATION：固定时长"
     })
     public animType: AnimType = AnimType.SPEED;
 
     @property({
-        tooltip: CC_DEV && '每秒数值变化速度',
+        tooltip: CC_DEV && "每秒数值变化速度",
         visible() { return this.animType === AnimType.SPEED; }
     })
     public speed: number = 1;
 
     @property({
-        tooltip: CC_DEV && '数值变化的总时长',
+        tooltip: CC_DEV && "数值变化的总时长",
         visible() { return this.animType === AnimType.DURATION; }
     })
     public duration: number = 1;
 
     @property({
         type: cc.Enum(EasingType),
-        tooltip: CC_DEV && '变化的缓动类型'
+        tooltip: CC_DEV && "变化的缓动类型"
     })
     public easingType: EasingType = EasingType.NONE;
 
     @property({
-        tooltip: CC_DEV && '变化速度是否受到timeScale的影响'
+        tooltip: CC_DEV && "变化速度是否受到timeScale的影响"
     })
     public timeScale: boolean = false;
 

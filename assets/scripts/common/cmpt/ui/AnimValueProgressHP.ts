@@ -8,11 +8,11 @@ const { ccclass, property, menu, requireComponent, executeInEditMode } = cc._dec
 @ccclass
 @executeInEditMode
 @requireComponent(cc.ProgressBar)
-@menu('Framework/UI组件/AnimValueProgressHP')
+@menu("Framework/UI组件/AnimValueProgressHP")
 export default class AnimValueProgressHP extends AnimValueProgress {
     @property({
         type: cc.Sprite,
-        tooltip: CC_DEV && '血条阴影，如果barSprite渲染模式为filled模式，此sprite也要对应修改，保持一致'
+        tooltip: CC_DEV && "血条阴影，如果barSprite渲染模式为filled模式，此sprite也要对应修改，保持一致"
     })
     public barShadow: cc.Sprite = null;
 

@@ -3,18 +3,18 @@
  */
 export const ResUrl = {
     PREFAB: {
-        TIP: 'prefab/tip/Tip',
-        HOME: 'prefab/home/Home',
-        GAME: 'prefab/game/Game',
+        TIP: "prefab/tip/Tip",
+        HOME: "prefab/home/Home",
+        GAME: "prefab/game/Game",
     },
 
     AUDIO: {
-        BGM1: 'audio/bgm1',
-        BGM2: 'audio/bgm2',
+        BGM1: "audio/bgm1",
+        BGM2: "audio/bgm2",
 
-        SFX1: 'audio/sfx1',
-        SFX2: 'audio/sfx2',
-        SFX_UI: 'audio/sfxUi',
+        SFX1: "audio/sfx1",
+        SFX2: "audio/sfx2",
+        SFX_UI: "audio/sfxUi",
     }
 }
 
@@ -22,12 +22,12 @@ export const ResUrl = {
  * resources目录下文件夹路径
  */
 export const DirUrl = {
-    PREFAB: 'prefab/',
-    PREFAB_DIALOG: 'prefab/dialog/',
+    PREFAB: "prefab/",
+    PREFAB_DIALOG: "prefab/dialog/",
 
-    ATLAS: 'atlas/',
+    ATLAS: "atlas/",
 
-    TEXTURE: 'textures/',
+    TEXTURE: "textures/",
 
-    AUDIO: 'audio/',
+    AUDIO: "audio/",
 }

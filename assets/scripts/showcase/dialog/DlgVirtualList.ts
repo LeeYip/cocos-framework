@@ -7,7 +7,7 @@ const { ccclass, property } = cc._decorator;
 
 @ccclass
 export default class DlgVirtualList extends DialogBase {
-    public static pUrl: string = 'DlgVirtualList';
+    public static pUrl: string = "DlgVirtualList";
 
     @property(VirtualList) list: VirtualList<ItemArgs> = null;
     @property(cc.Label) rndLab: cc.Label = null;

@@ -3,11 +3,11 @@ const { ccclass, property, menu, disallowMultiple, executeInEditMode } = cc._dec
 @ccclass
 @disallowMultiple
 @executeInEditMode
-@menu('Framework/Shader/ShaderFill')
+@menu("Framework/Shader/ShaderFill")
 export default class ShaderFill extends cc.Component {
-    @property({ tooltip: CC_DEV && '填充颜色' })
+    @property({ tooltip: CC_DEV && "填充颜色" })
     public fillColor: cc.Color = new cc.Color();
-    @property({ tooltip: CC_DEV && '填充率', range: [0, 1] })
+    @property({ tooltip: CC_DEV && "填充率", range: [0, 1] })
     public fillPhase: number = 0;
 
     private _mat: cc.Material = null;
@@ -29,7 +29,7 @@ export default class ShaderFill extends cc.Component {
     }
 
     public updateShader(): void {
-        this.mat.setProperty('fillColor', this.fillColor);
-        this.mat.setProperty('fillPhase', this.fillPhase);
+        this.mat.setProperty("fillColor", this.fillColor);
+        this.mat.setProperty("fillPhase", this.fillPhase);
     }
 }

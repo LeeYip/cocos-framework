@@ -5,7 +5,7 @@ const { ccclass, property } = cc._decorator;
 
 @ccclass
 export default class DlgCircleList extends DialogBase {
-    public static pUrl: string = 'DlgCircleList';
+    public static pUrl: string = "DlgCircleList";
 
     @property(CircleList) list: CircleList = null;
 
@@ -30,6 +30,6 @@ export default class DlgCircleList extends DialogBase {
             9: cc.color(105, 100, 100)
         }
         item.color = color[idx];
-        item.getChildByName('lab').getComponent(cc.Label).string = `${idx}${isCur?'-cur':''}`;
+        item.getChildByName("lab").getComponent(cc.Label).string = `${idx}${isCur?"-cur":""}`;
     }
 }

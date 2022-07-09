@@ -8,7 +8,7 @@ const { ccclass, property, menu, requireComponent, executeInEditMode } = cc._dec
 @ccclass
 @executeInEditMode
 @requireComponent(cc.ProgressBar)
-@menu('Framework/UI组件/AnimValueProgress')
+@menu("Framework/UI组件/AnimValueProgress")
 export default class AnimValueProgress extends AnimValue {
 
     private _progressBar: cc.ProgressBar = null;

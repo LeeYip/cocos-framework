@@ -29,7 +29,7 @@ export interface TipData {
  */
 @ccclass
 @disallowMultiple
-@menu('Framework/基础组件/Layer')
+@menu("Framework/基础组件/Layer")
 export default class Layer extends cc.Component {
     public static inst: Layer = null;
 
@@ -58,7 +58,7 @@ export default class Layer extends cc.Component {
      * 获取文件名（截取url最后一个斜杠后的内容）
      */
     public getNameByUrl(url: string): string {
-        return url.substring(url.lastIndexOf('/') + 1, url.length);
+        return url.substring(url.lastIndexOf("/") + 1, url.length);
     }
 
     /**
@@ -217,7 +217,7 @@ export default class Layer extends cc.Component {
      * @param url prefab在resources/prefab/dialog/下的路径
      * @param play true：调用playClose播放弹窗关闭动画；false：直接调用close关闭弹窗
      */
-    public closeDialogs(url: string = '', play: boolean = false): void {
+    public closeDialogs(url: string = "", play: boolean = false): void {
         for (let i = this.dialogLayer.childrenCount - 1; i >= 0; i--) {
             let node = this.dialogLayer.children[i];
             let cmpt = node.getComponent(DialogBase);
@@ -272,26 +272,26 @@ export default class Layer extends cc.Component {
     public async showTip(data: TipData | string): Promise<void> {
         // 处理tipData默认值
         let tipData: TipData = null;
-        if (typeof data === 'string') {
+        if (typeof data === "string") {
             tipData = {
                 text: data
             };
         } else {
             tipData = data;
         }
-        if (!tipData.hasOwnProperty('unique')) {
+        if (!tipData.hasOwnProperty("unique")) {
             tipData.unique = false;
         }
-        if (!tipData.hasOwnProperty('duration')) {
+        if (!tipData.hasOwnProperty("duration")) {
             tipData.duration = 1;
         }
-        if (!tipData.hasOwnProperty('fade')) {
+        if (!tipData.hasOwnProperty("fade")) {
             tipData.fade = 0.5;
         }
-        if (!tipData.hasOwnProperty('start')) {
+        if (!tipData.hasOwnProperty("start")) {
             tipData.start = cc.v2(0, 0);
         }
-        if (!tipData.hasOwnProperty('end')) {
+        if (!tipData.hasOwnProperty("end")) {
             tipData.end = cc.v2(0, 0);
         }
 
@@ -351,7 +351,7 @@ export default class Layer extends cc.Component {
         if (!this.loadingLayer.active) {
             this.loadingLayer.active = true;
             // 默认0.5s后才显示loading内容
-            let content = this.loadingLayer.getChildByName('content');
+            let content = this.loadingLayer.getChildByName("content");
             if (content) {
                 content.active = false;
                 this.unscheduleAllCallbacks();

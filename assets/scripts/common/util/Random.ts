@@ -1,9 +1,9 @@
 import Tool from "./Tool";
 
 const CHARS: string[] = [
-    '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
-    'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
-    'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'
+    "0", "1", "2", "3", "4", "5", "6", "7", "8", "9",
+    "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z",
+    "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"
 ];
 
 const BASE = 131;
@@ -36,7 +36,7 @@ export default class Random {
      * @param length 编码字节长度
      */
     public static getSeed(length: number = 8): string {
-        let seed = '';
+        let seed = "";
         for (let i = 0; i < length; i++) {
             seed += Tool.arrayRand(CHARS);
         }
@@ -47,7 +47,7 @@ export default class Random {
      * 获取区间[0, 1)的浮点数
      */
     public static random(seed: string | number): number {
-        let seedCode: number = typeof seed === 'string' ? this.hashCode(seed) : seed;
+        let seedCode: number = typeof seed === "string" ? this.hashCode(seed) : seed;
         return (seedCode * 9301 + 49297) % 233280 / 233280;
     }
 

@@ -7,9 +7,9 @@ import Zh from "./config/Zh";
  * 语言类型
  */
 export enum LangType {
-    NONE = '',
-    ZH = 'zh',
-    EN = 'en'
+    NONE = "",
+    ZH = "zh",
+    EN = "en"
 }
 
 /**
@@ -78,14 +78,14 @@ export default class I18n {
     public static getKeyByValue(value: string): string {
         if (!this._phrases) {
             cc.error(`[I18n.getKeyByValue] 未正确初始化`);
-            return '';
+            return "";
         }
         for (let key in this._phrases) {
             if (this._phrases[key] === value) {
                 return key;
             }
         }
-        return '';
+        return "";
     }
 
     /**
@@ -94,24 +94,24 @@ export default class I18n {
      * @param option 用于替换的数据，可以传键值对，也可以按顺序传参
      * @example
      * // 语言表 {"test": "test %{arg1} %{arg2} !!!"}
-     * I18n.getText('test', {arg1: 'somthing', arg2: 2}); => 'test somthing 2 !!!'
-     * I18n.getText('test', 'somthing', 2); => 'test somthing 2 !!!'
+     * I18n.getText("test", {arg1: "somthing", arg2: 2}); => "test somthing 2 !!!"
+     * I18n.getText("test", "somthing", 2); => "test somthing 2 !!!"
      */
     public static getText(key: string, ...option: [{ [k: string]: string | number }] | Array<string | number>): string {
         if (!this._phrases) {
             cc.error(`[I18n.getText] 未正确初始化`);
-            return '';
+            return "";
         }
         if (!key) {
-            return '';
+            return "";
         }
 
         let text: string = this._phrases.hasOwnProperty(key) ? this._phrases[key] : key;
-        if (option.length === 1 && Object.prototype.toString.call(option[0]) === '[object Object]') {
+        if (option.length === 1 && Object.prototype.toString.call(option[0]) === "[object Object]") {
             // 参数为键值对
             for (let arg in (option[0] as { [k: string]: string | number })) {
                 if (option[0].hasOwnProperty(arg)) {
-                    let reg = new RegExp(`%{${arg}}`, 'g');
+                    let reg = new RegExp(`%{${arg}}`, "g");
                     text = text.replace(reg, `${option[0][arg]}`);
                 }
             }

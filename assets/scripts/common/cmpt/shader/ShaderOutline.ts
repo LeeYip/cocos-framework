@@ -11,15 +11,15 @@ enum OutlineType {
 @ccclass
 @disallowMultiple
 @executeInEditMode
-@menu('Framework/Shader/ShaderOutline')
+@menu("Framework/Shader/ShaderOutline")
 export default class ShaderOutline extends cc.Component {
-    @property({ tooltip: CC_DEV && '描边颜色' })
+    @property({ tooltip: CC_DEV && "描边颜色" })
     public outlineColor: cc.Color = new cc.Color();
-    @property({ tooltip: CC_DEV && '描边宽度' })
+    @property({ tooltip: CC_DEV && "描边宽度" })
     public outLineWidth: number = 0;
-    @property({ type: cc.Enum(OutlineType), tooltip: CC_DEV && '描边类型' })
+    @property({ type: cc.Enum(OutlineType), tooltip: CC_DEV && "描边类型" })
     public outlineType: OutlineType = OutlineType.NONE;
-    @property({ tooltip: CC_DEV && '纹理大小' })
+    @property({ tooltip: CC_DEV && "纹理大小" })
     public textureSize: cc.Size = new cc.Size(1, 1);
 
     private _mat: cc.Material = null;
@@ -41,7 +41,7 @@ export default class ShaderOutline extends cc.Component {
     }
 
     public updateShader(): void {
-        this.mat.setProperty('outlineColor', this.outlineColor);
-        this.mat.setProperty('outlineInfo', new cc.Vec4(this.textureSize.width, this.textureSize.height, this.outLineWidth, this.outlineType));
+        this.mat.setProperty("outlineColor", this.outlineColor);
+        this.mat.setProperty("outlineInfo", new cc.Vec4(this.textureSize.width, this.textureSize.height, this.outLineWidth, this.outlineType));
     }
 }

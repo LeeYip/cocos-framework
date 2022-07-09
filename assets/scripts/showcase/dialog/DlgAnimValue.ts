@@ -7,7 +7,7 @@ const { ccclass, property } = cc._decorator;
 
 @ccclass
 export default class DlgAnimValue extends DialogBase {
-    public static pUrl: string = 'DlgAnimValue';
+    public static pUrl: string = "DlgAnimValue";
 
     @property(AnimValueLabel) public animLab: AnimValueLabel = null;
     @property(AnimValueProgress) public animProgress: AnimValueProgress = null;

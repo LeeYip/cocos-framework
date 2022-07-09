@@ -19,7 +19,7 @@ export default class EditorTool {
                     return;
                 }
                 //@ts-ignore
-                cc.resources.load({ type: 'uuid', uuid: uuid }, (error: any, result: T) => {
+                cc.resources.load({ type: "uuid", uuid: uuid }, (error: any, result: T) => {
                     if (error || !result) {
                         resolve(null);
                         cc.warn(`[EditorTool.load] 资源加载失败 url: ${url}`);

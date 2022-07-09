@@ -8,7 +8,7 @@ const { ccclass, menu, disallowMultiple, requireComponent } = cc._decorator;
 @ccclass
 @disallowMultiple
 @requireComponent(cc.Sprite)
-@menu('Framework/UI组件/ResSprite')
+@menu("Framework/UI组件/ResSprite")
 export default class ResSprite extends cc.Component {
     // 动态加载的资源
     private _asset: cc.SpriteFrame | cc.SpriteAtlas = null;
@@ -34,7 +34,7 @@ export default class ResSprite extends cc.Component {
      * @param url 
      * @param key 如果需要加载的url为图集时，需传入图集的key
      */
-    public async setSpriteFrame(url: string, key: string = ''): Promise<void> {
+    public async setSpriteFrame(url: string, key: string = ""): Promise<void> {
         let type = key ? cc.SpriteAtlas : cc.SpriteFrame;
         let result = Res.get(url, type) || await Res.load(url, type);
         if (result instanceof type) {

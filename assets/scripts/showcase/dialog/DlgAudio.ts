@@ -7,7 +7,7 @@ const { ccclass, property } = cc._decorator;
 
 @ccclass
 export default class DlgAudio extends DialogBase {
-    public static pUrl: string = 'DlgAudio';
+    public static pUrl: string = "DlgAudio";
 
     @property(cc.Slider) public volumeSlider: cc.Slider = null;
 

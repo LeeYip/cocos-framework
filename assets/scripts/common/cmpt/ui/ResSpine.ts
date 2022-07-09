@@ -8,7 +8,7 @@ const { ccclass, menu, disallowMultiple, requireComponent } = cc._decorator;
 @ccclass
 @disallowMultiple
 @requireComponent(sp.Skeleton)
-@menu('Framework/UI组件/ResSpine')
+@menu("Framework/UI组件/ResSpine")
 export default class ResSpine extends cc.Component {
     // 动态加载的资源
     private _asset: sp.SkeletonData = null;

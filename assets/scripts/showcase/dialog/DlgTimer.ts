@@ -8,7 +8,7 @@ const { ccclass, property } = cc._decorator;
 
 @ccclass
 export default class DlgTimer extends DialogBase {
-    public static pUrl: string = 'DlgTimer';
+    public static pUrl: string = "DlgTimer";
 
     @property(cc.Slider) public slider: cc.Slider = null;
     @property(cc.Node) move1: cc.Node = null;
@@ -42,7 +42,7 @@ export default class DlgTimer extends DialogBase {
      */
     public open() {
         this.slider.progress = Timer.timeScale;
-        this.slider.node.getChildByName('lab').getComponent(cc.Label).string = `timescale: ${Math.floor(this.slider.progress * 100) / 100}`;
+        this.slider.node.getChildByName("lab").getComponent(cc.Label).string = `timescale: ${Math.floor(this.slider.progress * 100) / 100}`;
         this.eventTimeScale();
 
         this._tween = new Tween(this.move3, SCALE_TWEEN)
@@ -52,12 +52,12 @@ export default class DlgTimer extends DialogBase {
     }
 
     private onSlide() {
-        this.slider.node.getChildByName('lab').getComponent(cc.Label).string = `timescale: ${Math.floor(this.slider.progress * 100) / 100}`;
+        this.slider.node.getChildByName("lab").getComponent(cc.Label).string = `timescale: ${Math.floor(this.slider.progress * 100) / 100}`;
         Timer.timeScale = this.slider.progress;
     }
 
     @preloadEvent(EventName.TIME_SCALE)
     private eventTimeScale() {
-        this.move1.getComponent(cc.Animation).getAnimationState('move').speed = Timer.timeScale;
+        this.move1.getComponent(cc.Animation).getAnimationState("move").speed = Timer.timeScale;
     }
 }

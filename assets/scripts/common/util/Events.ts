@@ -50,7 +50,7 @@ function rewrite(constructor: any, onKey: string, offKey: string, onSuper: boole
  */
 export function eventsOnLoad(onSuper: boolean = true): (constructor: any) => void {
     return function (constructor: any) {
-        rewrite(constructor, 'onLoad', 'onDestroy', onSuper);
+        rewrite(constructor, "onLoad", "onDestroy", onSuper);
     };
 }
 
@@ -60,7 +60,7 @@ export function eventsOnLoad(onSuper: boolean = true): (constructor: any) => voi
  */
 export function eventsOnEnable(onSuper: boolean = true): (constructor: any) => void {
     return function (constructor: any) {
-        rewrite(constructor, 'onEnable', 'onDisable', onSuper);
+        rewrite(constructor, "onEnable", "onDisable", onSuper);
     };
 }
 

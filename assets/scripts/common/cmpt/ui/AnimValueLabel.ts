@@ -8,7 +8,7 @@ const { ccclass, property, menu, requireComponent, executeInEditMode } = cc._dec
 @ccclass
 @executeInEditMode
 @requireComponent(cc.Label)
-@menu('Framework/UI组件/AnimValueLabel')
+@menu("Framework/UI组件/AnimValueLabel")
 export default class AnimValueLabel extends AnimValue {
 
     private _label: cc.Label = null;

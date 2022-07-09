@@ -195,7 +195,7 @@ var now;
 // In node.js, use process.hrtime.
 // eslint-disable-next-line
 // @ts-ignore
-// if (typeof self === 'undefined' && typeof process !== 'undefined' && process.hrtime) {
+// if (typeof self === "undefined" && typeof process !== "undefined" && process.hrtime) {
 //     now = function () {
 //         // eslint-disable-next-line
 //         // @ts-ignore
@@ -206,7 +206,7 @@ var now;
 // }
 // // In a browser, use self.performance.now if it is available.
 // else 
-if (typeof self !== 'undefined' && self.performance !== undefined && self.performance.now !== undefined) {
+if (typeof self !== "undefined" && self.performance !== undefined && self.performance.now !== undefined) {
     // This must be bound, because directly assigning this function
     // leads to an invocation exception in Chrome.
     now = self.performance.now.bind(self.performance);
@@ -215,7 +215,7 @@ if (typeof self !== 'undefined' && self.performance !== undefined && self.perfor
 else if (Date.now !== undefined) {
     now = Date.now;
 }
-// Otherwise, use 'new Date().getTime()'.
+// Otherwise, use "new Date().getTime()".
 else {
     now = function () {
         return new Date().getTime();
@@ -392,7 +392,7 @@ var scaleGroup = new Group();
  * ----------------------------------------------
  *
  * See https://github.com/tweenjs/tween.js/graphs/contributors for the full list of contributors.
- * Thank you all, you're awesome!
+ * Thank you all, you"re awesome!
  */
 export class Tween<T extends UnknownProps> {
     /** 绑定的cc.Object */
@@ -490,7 +490,7 @@ export class Tween<T extends UnknownProps> {
      */
     to(properties: UnknownProps, duration?: number): this {
         // TODO? restore this, then update the 07_dynamic_to example to set fox
-        // tween's to on each update. That way the behavior is opt-in (there's
+        // tween"s to on each update. That way the behavior is opt-in (there"s
         // currently no opt-out).
         // for (const prop in properties) this._valuesEnd[prop] = properties[prop]
         this._valuesEnd = Object.create(properties);
@@ -536,7 +536,7 @@ export class Tween<T extends UnknownProps> {
         this._isPaused = false;
         this._onStartCallbackFired = false;
         this._isChainStopped = false;
-        this._startTime = time !== undefined ? (typeof time === 'string' ? now$1() + parseFloat(time) : time) : now$1();
+        this._startTime = time !== undefined ? (typeof time === "string" ? now$1() + parseFloat(time) : time) : now$1();
         this._startTime += this._delayTime;
         this._setupProperties(this._object, this._valuesStart, this._valuesEnd, this._valuesStartRepeat);
         return this;
@@ -545,11 +545,11 @@ export class Tween<T extends UnknownProps> {
         for (var property in _valuesEnd) {
             var startValue = _object[property];
             var startValueIsArray = Array.isArray(startValue);
-            var propType = startValueIsArray ? 'array' : typeof startValue;
+            var propType = startValueIsArray ? "array" : typeof startValue;
             var isInterpolationList = !startValueIsArray && Array.isArray(_valuesEnd[property]);
-            // If `to()` specifies a property that doesn't exist in the source object,
+            // If `to()` specifies a property that doesn"t exist in the source object,
             // we should not set that property in the object
-            if (propType === 'undefined' || propType === 'function') {
+            if (propType === "undefined" || propType === "function") {
                 continue;
             }
             // Check if an Array was provided as property value
@@ -564,7 +564,7 @@ export class Tween<T extends UnknownProps> {
                 _valuesEnd[property] = [startValue].concat(endValues);
             }
             // handle the deepness of the values
-            if ((propType === 'object' || startValueIsArray) && startValue && !isInterpolationList) {
+            if ((propType === "object" || startValueIsArray) && startValue && !isInterpolationList) {
                 _valuesStart[property] = startValueIsArray ? [] : {};
                 // eslint-disable-next-line
                 for (var prop in startValue) {
@@ -579,13 +579,13 @@ export class Tween<T extends UnknownProps> {
             }
             else {
                 // Save the starting value, but only once.
-                if (typeof _valuesStart[property] === 'undefined') {
+                if (typeof _valuesStart[property] === "undefined") {
                     _valuesStart[property] = startValue;
                 }
                 if (!startValueIsArray) {
                     // eslint-disable-next-line
                     // @ts-ignore FIXME?
-                    _valuesStart[property] *= 1.0; // Ensures we're using numbers, not strings
+                    _valuesStart[property] *= 1.0; // Ensures we"re using numbers, not strings
                 }
                 if (isInterpolationList) {
                     // eslint-disable-next-line
@@ -754,7 +754,7 @@ export class Tween<T extends UnknownProps> {
                 }
                 // Reassign starting values, restart by making startTime = now
                 for (property in this._valuesStartRepeat) {
-                    if (!this._yoyo && typeof this._valuesEnd[property] === 'string') {
+                    if (!this._yoyo && typeof this._valuesEnd[property] === "string") {
                         this._valuesStartRepeat[property] =
                             // eslint-disable-next-line
                             // @ts-ignore FIXME?
@@ -796,7 +796,7 @@ export class Tween<T extends UnknownProps> {
     }
     _updateProperties(_object, _valuesStart, _valuesEnd, value) {
         for (var property in _valuesEnd) {
-            // Don't update properties that do not exist in the source object
+            // Don"t update properties that do not exist in the source object
             if (_valuesStart[property] === undefined) {
                 continue;
             }
@@ -808,7 +808,7 @@ export class Tween<T extends UnknownProps> {
             if (isInterpolationList) {
                 _object[property] = this._interpolationFunction(end, value);
             }
-            else if (typeof end === 'object' && end) {
+            else if (typeof end === "object" && end) {
                 // eslint-disable-next-line
                 // @ts-ignore FIXME?
                 this._updateProperties(_object[property], start, end, value);
@@ -817,7 +817,7 @@ export class Tween<T extends UnknownProps> {
                 // Parses relative end values with start as base (e.g.: +10, -3)
                 end = this._handleRelativeValue(start, end);
                 // Protect against non numeric properties.
-                if (typeof end === 'number') {
+                if (typeof end === "number") {
                     // eslint-disable-next-line
                     // @ts-ignore FIXME?
                     _object[property] = start + (end - start) * value;
@@ -826,10 +826,10 @@ export class Tween<T extends UnknownProps> {
         }
     }
     _handleRelativeValue(start, end) {
-        if (typeof end !== 'string') {
+        if (typeof end !== "string") {
             return end;
         }
-        if (end.charAt(0) === '+' || end.charAt(0) === '-') {
+        if (end.charAt(0) === "+" || end.charAt(0) === "-") {
             return start + parseFloat(end);
         }
         else {
@@ -839,7 +839,7 @@ export class Tween<T extends UnknownProps> {
     _swapEndStartRepeatValues(property) {
         var tmp = this._valuesStartRepeat[property];
         var endValue = this._valuesEnd[property];
-        if (typeof endValue === 'string') {
+        if (typeof endValue === "string") {
             this._valuesStartRepeat[property] = this._valuesStartRepeat[property] + parseFloat(endValue);
         }
         else {
@@ -849,7 +849,7 @@ export class Tween<T extends UnknownProps> {
     }
 }
 
-export var VERSION = '18.6.4';
+export var VERSION = "18.6.4";
 
 var nextId = Sequence.nextId;
 /**

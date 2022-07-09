@@ -2,7 +2,7 @@
 
 export enum ButtonHackEvent {
     /** 按钮状态变更 */
-    STATE_CHANGE = 'ButtonHackEvent-STATE_CHANGE',
+    STATE_CHANGE = "ButtonHackEvent-STATE_CHANGE",
 }
 
 export enum ButtonState {

@@ -14,7 +14,7 @@ cc.view.setResizeCallback(() => {
 @ccclass
 @eventsOnLoad()
 @disallowMultiple
-@menu('Framework/UI组件/AdaptCanvas')
+@menu("Framework/UI组件/AdaptCanvas")
 export default class AdaptCanvas extends cc.Component {
     protected onLoad(): void {
         this.adapt();

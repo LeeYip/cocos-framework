@@ -22,11 +22,11 @@ export interface VirtualArgs { }
 /**
  * 虚拟列表主容器
  */
-@ccclass('MainLayoutData')
+@ccclass("MainLayoutData")
 export class MainLayoutData {
     @property({
         type: cc.Node,
-        tooltip: CC_DEV && '列表容器节点',
+        tooltip: CC_DEV && "列表容器节点",
         visible() { return false; }
     })
     public content: cc.Node = null;
@@ -35,7 +35,7 @@ export class MainLayoutData {
     private _templateType: MainTemplateType = MainTemplateType.PREFAB;
     @property({
         type: cc.Enum(MainTemplateType),
-        tooltip: CC_DEV && '列表元素模板类型'
+        tooltip: CC_DEV && "列表元素模板类型"
     })
     public get templateType(): MainTemplateType { return this._templateType; }
     public set templateType(v: MainTemplateType) {
@@ -50,7 +50,7 @@ export class MainLayoutData {
     private _templatePrefab: cc.Prefab = null;
     @property({
         type: cc.Prefab,
-        tooltip: CC_DEV && '列表元素模板预制体',
+        tooltip: CC_DEV && "列表元素模板预制体",
         visible() { return this.templateType === MainTemplateType.PREFAB; }
     })
     public get templatePrefab(): cc.Prefab { return this._templatePrefab; }
@@ -66,7 +66,7 @@ export class MainLayoutData {
     private _templateNode: cc.Node = null;
     @property({
         type: cc.Node,
-        tooltip: CC_DEV && '列表元素模板节点',
+        tooltip: CC_DEV && "列表元素模板节点",
         visible() { return this.templateType === MainTemplateType.NODE; }
     })
     public get templateNode(): cc.Node { return this._templateNode; }
@@ -102,37 +102,37 @@ export class MainLayoutData {
 /**
  * 虚拟列表副容器
  */
-@ccclass('OtherLayoutData')
+@ccclass("OtherLayoutData")
 export class OtherLayoutData {
     @property({
         type: cc.Node,
-        tooltip: CC_DEV && '列表容器节点',
+        tooltip: CC_DEV && "列表容器节点",
     })
     public content: cc.Node = null;
 
     @property({
         type: cc.Enum(OtherTemplateType),
-        tooltip: CC_DEV && '列表元素模板类型'
+        tooltip: CC_DEV && "列表元素模板类型"
     })
     public templateType: OtherTemplateType = OtherTemplateType.PREFAB;
 
     @property({
         type: cc.Prefab,
-        tooltip: CC_DEV && '列表元素模板预制体',
+        tooltip: CC_DEV && "列表元素模板预制体",
         visible() { return this.templateType === OtherTemplateType.PREFAB; }
     })
     public templatePrefab: cc.Prefab = null;
 
     @property({
         type: cc.Node,
-        tooltip: CC_DEV && '列表元素模板节点',
+        tooltip: CC_DEV && "列表元素模板节点",
         visible() { return this.templateType === OtherTemplateType.NODE; }
     })
     public templateNode: cc.Node = null;
 
     @property({
         type: cc.Enum({}),
-        tooltip: CC_DEV && '以列表主元素的子节点作为模板节点',
+        tooltip: CC_DEV && "以列表主元素的子节点作为模板节点",
         visible() { return this.templateType === OtherTemplateType.MAIN_ITEM_CHILD; }
     })
     public templateChild: number = -1;
@@ -145,17 +145,17 @@ export class OtherLayoutData {
 @disallowMultiple
 @executeInEditMode
 @requireComponent(cc.ScrollView)
-@menu('Framework/UI组件/VirtualList')
+@menu("Framework/UI组件/VirtualList")
 export default class VirtualList<T extends VirtualArgs> extends cc.Component {
-    @property({ type: MainLayoutData, tooltip: CC_DEV && '列表主容器' })
+    @property({ type: MainLayoutData, tooltip: CC_DEV && "列表主容器" })
     public main: MainLayoutData = new MainLayoutData();
 
-    @property({ type: OtherLayoutData, tooltip: CC_DEV && '列表副容器\n需要分层显示时使用，一般用于降低draw call' })
+    @property({ type: OtherLayoutData, tooltip: CC_DEV && "列表副容器\n需要分层显示时使用，一般用于降低draw call" })
     public others: OtherLayoutData[] = [];
 
     @property({
         visible: false,
-        tooltip: CC_DEV && '元素节点大小是否一致且固定不变，大小不定时更耗性能（目前不支持此选项，必须为true）'
+        tooltip: CC_DEV && "元素节点大小是否一致且固定不变，大小不定时更耗性能（目前不支持此选项，必须为true）"
     })
     public isFixedSize: boolean = true;
 
@@ -226,9 +226,9 @@ export default class VirtualList<T extends VirtualArgs> extends cc.Component {
                 }
             }
             if (hasChildType) {
-                cc.Class['Attr'].setClassAttr(OtherLayoutData, 'templateChild', 'enumList', cc.Enum['getList'](mainItemChild));
+                cc.Class["Attr"].setClassAttr(OtherLayoutData, "templateChild", "enumList", cc.Enum["getList"](mainItemChild));
                 if (refresh) {
-                    Editor.Utils.refreshSelectedInspector('node', this.node.uuid);
+                    Editor.Utils.refreshSelectedInspector("node", this.node.uuid);
                 }
             }
         };

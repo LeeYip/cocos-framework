@@ -10,7 +10,7 @@ const { ccclass, property, menu, executeInEditMode } = cc._decorator;
 @ccclass
 @eventsOnLoad()
 @executeInEditMode
-@menu('Framework/UI组件/AdaptSize')
+@menu("Framework/UI组件/AdaptSize")
 export default class AdaptSize extends cc.Component {
     protected onLoad(): void {
         this.adapt();
@@ -19,8 +19,8 @@ export default class AdaptSize extends cc.Component {
     @preloadEvent(EventName.RESIZE)
     private adapt(): void {
         if (CC_EDITOR) {
-            this.node.width = cc['engine'].getDesignResolutionSize().width;
-            this.node.height = cc['engine'].getDesignResolutionSize().height;
+            this.node.width = cc["engine"].getDesignResolutionSize().width;
+            this.node.height = cc["engine"].getDesignResolutionSize().height;
         } else {
             this.node.width = cc.winSize.width;
             this.node.height = cc.winSize.height;

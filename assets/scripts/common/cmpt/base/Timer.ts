@@ -11,7 +11,7 @@ const { ccclass, executionOrder, menu, disallowMultiple } = cc._decorator;
 @ccclass
 @disallowMultiple
 @executionOrder(-1000)
-@menu('Framework/基础组件/Timer')
+@menu("Framework/基础组件/Timer")
 export default class Timer extends cc.Component {
     //#region 静态成员
 

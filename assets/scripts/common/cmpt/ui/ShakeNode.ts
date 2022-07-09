@@ -7,16 +7,16 @@ const { ccclass, property, menu, disallowMultiple } = cc._decorator;
  */
 @ccclass
 @disallowMultiple
-@menu('Framework/UI组件/ShakeNode')
+@menu("Framework/UI组件/ShakeNode")
 export default class ShakeNode extends cc.Component {
-    @property({ tooltip: CC_DEV && '振动幅度' })
+    @property({ tooltip: CC_DEV && "振动幅度" })
     public shakePower: number = 5;
 
-    @property({ tooltip: CC_DEV && '振动周期，单位：秒' })
+    @property({ tooltip: CC_DEV && "振动周期，单位：秒" })
     public shakeTime: number = 0.16;
 
     @property({
-        tooltip: CC_DEV && '变化速度是否受到timeScale的影响'
+        tooltip: CC_DEV && "变化速度是否受到timeScale的影响"
     })
     public timeScale: boolean = false;
 

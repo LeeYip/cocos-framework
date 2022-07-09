@@ -8,13 +8,13 @@ const { ccclass, property } = cc._decorator;
 @ccclass
 @eventsOnEnable()
 export default class DlgEvents extends DialogBase {
-    public static pUrl: string = 'DlgEvents';
+    public static pUrl: string = "DlgEvents";
 
     @property(cc.Label) lab1: cc.Label = null;
 
     private async onClickEmit() {
-        await Events.emitAsync(EventName.EVENT_TEST1, '触发了事件1，请等待事件2');
-        Events.emit(EventName.EVENT_TEST2, '触发了事件2');
+        await Events.emitAsync(EventName.EVENT_TEST1, "触发了事件1，请等待事件2");
+        Events.emit(EventName.EVENT_TEST2, "触发了事件2");
     }
 
     @preloadEvent(EventName.EVENT_TEST1)

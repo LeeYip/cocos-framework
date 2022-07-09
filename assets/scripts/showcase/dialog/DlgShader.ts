@@ -8,17 +8,13 @@ const { ccclass, property } = cc._decorator;
 
 @ccclass
 export default class DlgShader extends DialogBase {
-    public static pUrl: string = 'DlgShader';
+    public static pUrl: string = "DlgShader";
 
     @property(ShaderTile) tile: ShaderTile = null;
     @property(ShaderFill) fill: ShaderFill = null;
 
     private _tween: Tween<any> = null;
     private _sx: number = 2;
-
-    // protected onDestroy() {
-    //     this._tween?.stop();
-    // }
 
     /**
      * @override

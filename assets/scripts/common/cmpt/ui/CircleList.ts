@@ -14,27 +14,27 @@ enum TemplateType {
 @ccclass
 @disallowMultiple
 @requireComponent(cc.PageView)
-@menu('Framework/UI组件/CircleList')
+@menu("Framework/UI组件/CircleList")
 export default class CircleList extends cc.Component {
     /** item刷新事件 */
-    public static ITEM_REFRESH: string = 'circleList-itemRefresh';
+    public static ITEM_REFRESH: string = "circleList-itemRefresh";
 
     @property({
         type: cc.Enum(TemplateType),
-        tooltip: CC_DEV && '列表元素模板类型'
+        tooltip: CC_DEV && "列表元素模板类型"
     })
     public templateType: TemplateType = TemplateType.PREFAB;
 
     @property({
         type: cc.Prefab,
-        tooltip: CC_DEV && '列表元素模板预制体',
+        tooltip: CC_DEV && "列表元素模板预制体",
         visible() { return this.templateType === TemplateType.PREFAB; }
     })
     public templatePrefab: cc.Prefab = null;
 
     @property({
         type: cc.Node,
-        tooltip: CC_DEV && '列表元素模板节点',
+        tooltip: CC_DEV && "列表元素模板节点",
         visible() { return this.templateType === TemplateType.NODE; }
     })
     public templateNode: cc.Node = null;
@@ -62,7 +62,7 @@ export default class CircleList extends cc.Component {
 
     protected start(): void {
         // 注册事件
-        this.node.on('scroll-ended', this.onScrollEnd, this);
+        this.node.on("scroll-ended", this.onScrollEnd, this);
     }
 
     protected lateUpdate(): void {

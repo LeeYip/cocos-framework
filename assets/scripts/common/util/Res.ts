@@ -40,14 +40,14 @@ export default class Res {
      * @param node 
      */
     private static getCachePrefabUrl(node: cc.Node | cc.Prefab): string {
-        let url = '';
+        let url = "";
         if (node instanceof cc.Prefab) {
-            url = node['_resCacheUrl'] || '';
+            url = node["_resCacheUrl"] || "";
         } else if (node instanceof cc.Node) {
             let cur = node;
             while (cur) {
-                if (cur['_prefab'] && cur['_prefab']['root']) {
-                    url = this._nodePath.get(cur['_prefab']['root']) || '';
+                if (cur["_prefab"] && cur["_prefab"]["root"]) {
+                    url = this._nodePath.get(cur["_prefab"]["root"]) || "";
                     if (url) {
                         break;
                     }
@@ -71,7 +71,7 @@ export default class Res {
             }
             asset.addRef();
             if (asset instanceof cc.Prefab) {
-                asset['_resCacheUrl'] = url;
+                asset["_resCacheUrl"] = url;
             }
             let cacheData: CacheData = {
                 asset: asset,
@@ -192,7 +192,7 @@ export default class Res {
      */
     public static instantiate(original: cc.Node | cc.Prefab, related?: cc.Node | cc.Prefab): cc.Node {
         if (!original) {
-            cc.error('[Res.instantiate] original is null');
+            cc.error("[Res.instantiate] original is null");
             return null;
         }
 

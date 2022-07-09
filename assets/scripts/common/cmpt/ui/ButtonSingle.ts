@@ -24,9 +24,9 @@ enum ButtonGroup {
  */
 @ccclass
 @requireComponent(cc.Button)
-@menu('Framework/UI组件/ButtonSingle')
+@menu("Framework/UI组件/ButtonSingle")
 export default class ButtonSingle extends cc.Component {
-    @property({ type: cc.Enum(ButtonGroup), tooltip: CC_DEV && '按钮分组，同组按钮同一时刻只会有一个生效' })
+    @property({ type: cc.Enum(ButtonGroup), tooltip: CC_DEV && "按钮分组，同组按钮同一时刻只会有一个生效" })
     public buttonGroup: ButtonGroup = ButtonGroup.DEFAULT;
 
     /** 记录所有绑定该组件的按钮数据 */

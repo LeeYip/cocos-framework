@@ -7,11 +7,11 @@ const { ccclass, property, executeInEditMode, menu } = cc._decorator;
 @ccclass
 @eventsOnLoad()
 @executeInEditMode
-@menu('Framework/I18N/LocalizedLabel')
+@menu("Framework/I18N/LocalizedLabel")
 export default class LocalizedLabel extends cc.Component {
-    @property(cc.String) private _textKey: string = '';
+    @property(cc.String) private _textKey: string = "";
 
-    @property({ type: cc.String, tooltip: 'i18n key' })
+    @property({ type: cc.String, tooltip: "i18n key" })
     public get textKey(): string { return this._textKey; }
     public set textKey(key: string) {
         this._textKey = key;
@@ -28,7 +28,7 @@ export default class LocalizedLabel extends cc.Component {
         if (!this._label) {
             this._label = this.node.getComponent(cc.Label) || this.node.getComponent(cc.RichText);
             if (!this._label) {
-                cc.error('Failed to update localized label, label component is invalid!');
+                cc.error("Failed to update localized label, label component is invalid!");
                 return null;
             }
         }
@@ -81,7 +81,7 @@ export default class LocalizedLabel extends cc.Component {
      * @param option
      */
     public setOption(...option: [{ [k: string]: string | number }] | Array<string | number>): void {
-        if (option.length === 1 && Object.prototype.toString.call(option[0]) === '[object Object]') {
+        if (option.length === 1 && Object.prototype.toString.call(option[0]) === "[object Object]") {
             this._option = option[0] as { [k: string]: string | number };
         } else {
             this._option = option as Array<string | number>;
@@ -93,7 +93,7 @@ export default class LocalizedLabel extends cc.Component {
      * 清除key
      */
     public clear(): void {
-        this.label.string = '';
-        this.textKey = '';
+        this.label.string = "";
+        this.textKey = "";
     }
 }

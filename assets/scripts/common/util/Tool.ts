@@ -9,7 +9,7 @@ export default class Tool {
      * @param source 源数据
      */
     public static deepCopy<T>(source: T): T {
-        if (typeof source !== 'object' || source === null || source instanceof RegExp) {
+        if (typeof source !== "object" || source === null || source instanceof RegExp) {
             return source;
         }
 
@@ -173,7 +173,7 @@ export default class Tool {
             arr.push(str[i]);
         }
         arr = this.shuffle(arr);
-        str = '';
+        str = "";
         arr.forEach((v) => {
             str += v;
         });

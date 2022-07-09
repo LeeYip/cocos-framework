@@ -224,13 +224,13 @@ export default class AudioManager {
      */
     private static play(args: cc.AudioClip | AudioPlayArgs, volume: number, audioData: AudioData = null): AudioData {
         let data: AudioPlayArgs = args instanceof cc.AudioClip ? { clip: args } : args;
-        if (!data.hasOwnProperty('loop')) {
+        if (!data.hasOwnProperty("loop")) {
             data.loop = false;
         }
-        if (!data.hasOwnProperty('fadeDuration')) {
+        if (!data.hasOwnProperty("fadeDuration")) {
             data.fadeDuration = 0;
         }
-        if (!data.hasOwnProperty('finishCall')) {
+        if (!data.hasOwnProperty("finishCall")) {
             data.finishCall = null;
         }
 

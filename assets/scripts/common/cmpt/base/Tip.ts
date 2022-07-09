@@ -2,7 +2,7 @@ const { ccclass, property, disallowMultiple, menu } = cc._decorator;
 
 @ccclass
 @disallowMultiple
-@menu('Framework/基础组件/Tip')
+@menu("Framework/基础组件/Tip")
 export default class Tip extends cc.Component {
 
     @property(cc.Layout) private layout: cc.Layout = null;
@@ -10,7 +10,7 @@ export default class Tip extends cc.Component {
 
     public init(text: string): void {
         this.textLab.string = text;
-        this.textLab['_forceUpdateRenderData']();
+        this.textLab["_forceUpdateRenderData"]();
         this.layout.updateLayout();
     }
 }

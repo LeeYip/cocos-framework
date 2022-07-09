@@ -8,10 +8,10 @@ const { ccclass, menu, requireComponent } = cc._decorator;
 @ccclass
 @eventsOnLoad()
 @requireComponent(ResSprite)
-@menu('Framework/I18N/LocalizedSprite')
+@menu("Framework/I18N/LocalizedSprite")
 export default class LocalizedSprite extends cc.Component {
     private _sprite: ResSprite = null;
-    private _imageKey: string = '';
+    private _imageKey: string = "";
     /** 图片名 */
     public get imageKey(): string { return this._imageKey; }
     public set imageKey(v: string) {
@@ -41,13 +41,13 @@ export default class LocalizedSprite extends cc.Component {
             return;
         }
 
-        let url = '';
+        let url = "";
         switch (I18n.curLang) {
             case LangType.ZH:
-                url = 'textures/localizedImage/zh/';
+                url = "textures/localizedImage/zh/";
                 break;
             case LangType.EN:
-                url = 'textures/localizedImage/en/';
+                url = "textures/localizedImage/en/";
                 break;
             default:
                 return;

@@ -8,24 +8,24 @@ const { ccclass, property, disallowMultiple, menu } = cc._decorator;
  */
 @ccclass
 @disallowMultiple
-@menu('Framework/基础组件/DialogBase')
+@menu("Framework/基础组件/DialogBase")
 export default class DialogBase extends cc.Component {
     /** 弹窗prefab在resources/prefab/dialog/下的路径 */
-    public static pUrl: string = '';
+    public static pUrl: string = "";
 
     @property(cc.Animation)
     private dlgAnim: cc.Animation = null;
 
     @property({
         type: cc.AnimationClip,
-        tooltip: CC_DEV && '打开弹窗的动画',
+        tooltip: CC_DEV && "打开弹窗的动画",
         visible() { return !!this.dlgAnim; }
     })
     private openClip: cc.AnimationClip = null;
 
     @property({
         type: cc.AnimationClip,
-        tooltip: CC_DEV && '关闭弹窗的动画',
+        tooltip: CC_DEV && "关闭弹窗的动画",
         visible() { return !!this.dlgAnim; }
     })
     private closeClip: cc.AnimationClip = null;
@@ -33,7 +33,7 @@ export default class DialogBase extends cc.Component {
     /** 外部的resolve函数，在弹窗close时调用 */
     private _resolveList: Array<(value?: any) => void> = [];
 
-    private _prefabUrl: string = '';
+    private _prefabUrl: string = "";
     /** 弹窗prefab在resources/prefab/dialog/下的路径 */
     public get prefabUrl(): string { return this._prefabUrl; }
 
@@ -51,8 +51,8 @@ export default class DialogBase extends cc.Component {
                 let anim: cc.Animation = this.node.children[i].getComponent(cc.Animation);
                 if (anim) {
                     this.dlgAnim = anim;
-                    EditorTool.load<cc.AnimationClip>('res/animation/dialog/open.anim').then((v) => { this.openClip = v; });
-                    EditorTool.load<cc.AnimationClip>('res/animation/dialog/close.anim').then((v) => { this.closeClip = v; });
+                    EditorTool.load<cc.AnimationClip>("res/animation/dialog/open.anim").then((v) => { this.openClip = v; });
+                    EditorTool.load<cc.AnimationClip>("res/animation/dialog/close.anim").then((v) => { this.closeClip = v; });
                     break;
                 }
             }
