@@ -91,7 +91,7 @@ comp.destory();
 ```typescript
 // 弹窗组件需要继承DialogBase，并重写open方法和close方法，用来处理弹窗打开和关闭时的逻辑
 export default class DlgExample extends DialogBase {
-    public static pUrl: string = 'example/DlgExample';
+    public static pUrl: string = "example/DlgExample";
 
     /**
      * @override
@@ -115,7 +115,7 @@ export default class DlgExample extends DialogBase {
 // 建议在弹窗组件类上加一个静态属性pUrl用以标明路径，这样在代码里便于查找和跳转引用
 Layer.inst.openUniDialog(DlgExample.pUrl, 1, 2);
 // 如果不喜欢上面的方式，也可直接填写路径
-Layer.inst.openUniDialog('example/DlgExample', 1, 2);
+Layer.inst.openUniDialog("example/DlgExample", 1, 2);
 ```
 
 可异步等待某个弹窗关闭
@@ -134,7 +134,7 @@ await Layer.inst.waitCloseDialog(DlgExample.pUrl);
     - **`openDialogAsync(url: string, ...args: any[]): Promise<void>`**  （异步方法）打开弹窗
     - **`openUniDialogAsync(url: string, ...args: any[]): Promise<void>`**  （异步方法）打开唯一弹窗，同一弹窗节点只能同时存在一个
     - **`closeDialog(url: string, play: boolean = false)`**  关闭遍历到的第一个弹窗
-    - **`closeDialogs(url: string = '', play: boolean = false)`**  关闭所有同路径弹窗，不传参则关闭所有弹窗
+    - **`closeDialogs(url: string = "", play: boolean = false)`**  关闭所有同路径弹窗，不传参则关闭所有弹窗
     - **`waitCloseDialog(url: string): Promise<void>`**  异步等待弹窗关闭（只等待遍历到的第一个）
     - **`waitCloseDialogs(url: string): Promise<void>`**  异步等待所有同路径弹窗关闭
     - **`showTip(data: TipData | string)`**  弹出一条文字提示
@@ -206,7 +206,7 @@ export default class Test extends cc.Component {
 当在某处触发事件，对应的监听函数便会被调用，可以给监听函数传参。如果是异步监听函数，也可用await等待所有监听函数执行完毕
 ```typescript
     // 发送EventName.GAME_PAUSE事件，并传参
-    Events.emit(EventName.GAME_PAUSE, 1, ['2']);
+    Events.emit(EventName.GAME_PAUSE, 1, ["2"]);
     // 也可以await等待所有监听函数执行完毕
     await Events.emitAsync(EventName.GAME_PAUSE);
 ```
@@ -281,8 +281,8 @@ export default class Test extends cc.Component {
 如果需要替换字符串中的占位符（形如"**%{xxx}**"的字符串为占位符），支持以下两种不同的传参形式来获取替换后的字符串
 ```typescript
 // 语言表 {"test": "test %{arg1} %{arg2} !!!"}
-I18n.getText('test', {arg1: 'somthing', arg2: 2}); // => 'test somthing 2 !!!'
-I18n.getText('test', 'somthing', 2); // => 'test somthing 2 !!!'
+I18n.getText("test", {arg1: "somthing", arg2: 2}); // => "test somthing 2 !!!"
+I18n.getText("test", "somthing", 2); // => "test somthing 2 !!!"
 ```
 
 - **属性**
@@ -316,6 +316,8 @@ I18n.getText('test', 'somthing', 2); // => 'test somthing 2 !!!'
     - **ResSpine**
     - **ResSprite**
 
+- **MultiSprite** 基于Multi-Texture实现的渲染组件，支持多图集合批，需通过**MultiTextureManager**管理合批的纹理
+
 - ......
 
 #### <a id="framework-tool"></a>常用工具类
@@ -337,8 +339,9 @@ I18n.getText('test', 'somthing', 2); // => 'test somthing 2 !!!'
 - 枚举
 ```
 enum LangType {
-    NONE = '',
-    ZH = 'zh',
-    EN = 'en'
+    NONE = "",
+    ZH = "zh",
+    EN = "en"
 }
 ```
+- 字符串尽量使用双引号

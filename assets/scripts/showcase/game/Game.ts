@@ -8,6 +8,7 @@ import DlgCircleList from "../dialog/DlgCircleList";
 import DlgEvents from "../dialog/DlgEvents";
 import DlgI18N from "../dialog/DlgI18N";
 import DlgLayer from "../dialog/DlgLayer";
+import DlgMultiTexture from "../dialog/DlgMultiTexture";
 import DlgShader from "../dialog/DlgShader";
 import DlgShake from "../dialog/DlgShake";
 import DlgTimer from "../dialog/DlgTimer";
@@ -68,5 +69,9 @@ export default class Game extends cc.Component {
 
     private onClickEvent() {
         Layer.inst.openUniDialogAsync(DlgEvents.pUrl);
+    }
+
+    private onClickMultiTexture() {
+        Layer.inst.openUniDialogAsync(DlgMultiTexture.pUrl);
     }
 }

@@ -8,6 +8,11 @@ export const ResUrl = {
         GAME: "prefab/game/Game",
     },
 
+    ATLAS: {
+        EN: "textures/localizedImage/en/AutoAtlas",
+        ZH: "textures/localizedImage/zh/AutoAtlas"
+    },
+
     AUDIO: {
         BGM1: "audio/bgm1",
         BGM2: "audio/bgm2",

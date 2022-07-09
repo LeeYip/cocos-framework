@@ -19753,6 +19753,10 @@ declare namespace cc {
 		}	
 	}
 	
+	export class Assembler {
+		static register(renderCompCtor, assembler);
+		static init(renderComp);
+	}
 }
 
 /** !#en

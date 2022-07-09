@@ -14,7 +14,7 @@
   "quality": 80,
   "contourBleed": true,
   "paddingBleed": true,
-  "filterUnused": true,
+  "filterUnused": false,
   "packable": false,
   "premultiplyAlpha": false,
   "filterMode": "bilinear",

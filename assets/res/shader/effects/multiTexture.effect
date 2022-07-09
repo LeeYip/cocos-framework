@@ -1,0 +1,112 @@
+// Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+
+CCEffect %{
+  techniques:
+  - passes:
+    - vert: vs
+      frag: fs
+      blendState:
+        targets:
+        - blend: true
+      rasterizerState:
+        cullMode: none
+      properties:
+        texture0: { value: white }
+        texture1: { value: white }
+        texture2: { value: white }
+        texture3: { value: white }
+        texture4: { value: white }
+        texture5: { value: white }
+        texture6: { value: white }
+        texture7: { value: white }
+
+        alphaThreshold: { value: 0.5 }
+}%
+
+
+CCProgram vs %{
+  precision highp float;
+
+  #include <cc-global>
+  #include <cc-local>
+
+  in vec3 a_position;
+  in vec4 a_color;
+  out vec4 v_color;
+
+  in vec2 a_uv0;
+  out vec2 v_uv0;
+
+  in float a_texture_idx;
+  out float texture_idx;
+
+  void main () {
+    vec4 pos = vec4(a_position, 1);
+
+    #if CC_USE_MODEL
+    pos = cc_matViewProj * cc_matWorld * pos;
+    #else
+    pos = cc_matViewProj * pos;
+    #endif
+
+    v_uv0 = a_uv0;
+    texture_idx = a_texture_idx;
+
+    v_color = a_color;
+
+    gl_Position = pos;
+  }
+}%
+
+
+CCProgram fs %{
+  precision highp float;
+
+  #include <alpha-test>
+  #include <texture>
+
+  in vec4 v_color;
+
+  in vec2 v_uv0;
+  in float texture_idx;
+  uniform sampler2D texture0;
+  uniform sampler2D texture1;
+  uniform sampler2D texture2;
+  uniform sampler2D texture3;
+  uniform sampler2D texture4;
+  uniform sampler2D texture5;
+  uniform sampler2D texture6;
+  uniform sampler2D texture7;
+
+  void main () {
+    vec4 o = vec4(1, 1, 1, 1);
+
+    if (texture_idx <= 0.0) {
+      CCTexture(texture0, v_uv0, o);
+    } else if (texture_idx <= 1.0) {
+      CCTexture(texture1, v_uv0, o);
+    } else if (texture_idx <= 2.0) {
+      CCTexture(texture2, v_uv0, o);
+    } else if (texture_idx <= 3.0) {
+      CCTexture(texture3, v_uv0, o);
+    } else if (texture_idx <= 4.0) {
+      CCTexture(texture4, v_uv0, o);
+    } else if (texture_idx <= 5.0) {
+      CCTexture(texture5, v_uv0, o);
+    } else if (texture_idx <= 6.0) {
+      CCTexture(texture6, v_uv0, o);
+    } else if (texture_idx <= 7.0) {
+      CCTexture(texture7, v_uv0, o);
+    }
+
+    o *= v_color;
+
+    ALPHA_TEST(o);
+
+    #if USE_BGRA
+      gl_FragColor = o.bgra;
+    #else
+      gl_FragColor = o.rgba;
+    #endif
+  }
+}%
