@@ -27,14 +27,14 @@
     "_active": true,
     "_components": [
       {
-        "__id__": 49
+        "__id__": 37
       },
       {
-        "__id__": 50
+        "__id__": 38
       }
     ],
     "_prefab": {
-      "__id__": 51
+      "__id__": 39
     },
     "_opacity": 255,
     "_color": {
@@ -255,28 +255,19 @@
       },
       {
         "__id__": 30
-      },
-      {
-        "__id__": 34
-      },
-      {
-        "__id__": 38
-      },
-      {
-        "__id__": 42
       }
     ],
     "_active": true,
     "_components": [
       {
-        "__id__": 46
+        "__id__": 34
       },
       {
-        "__id__": 47
+        "__id__": 35
       }
     ],
     "_prefab": {
-      "__id__": 48
+      "__id__": 36
     },
     "_opacity": 255,
     "_color": {
@@ -777,7 +768,7 @@
     "_contentSize": {
       "__type__": "cc.Size",
       "width": 1000,
-      "height": 130.39999999999998
+      "height": 170.39999999999998
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
@@ -789,7 +780,7 @@
       "ctor": "Float64Array",
       "array": [
         0,
-        230,
+        200,
         0,
         0,
         0,
@@ -828,8 +819,8 @@
     ],
     "_srcBlendFactor": 770,
     "_dstBlendFactor": 771,
-    "_string": "基于Multi-Texture的方式实现合批，如下所示，分别来自两个不同的图集的纹理交替显示（由于此例子使用Cocos的自动图集，需打包后才能获取图集纹理合批）",
-    "_N$string": "基于Multi-Texture的方式实现合批，如下所示，分别来自两个不同的图集的纹理交替显示（由于此例子使用Cocos的自动图集，需打包后才能获取图集纹理合批）",
+    "_string": "基于Multi-Texture的方式实现合批，如下所示，分别来自两个不同的自动图集以及一个动态合图的纹理交替显示（由于此例子使用Cocos的自动图集，需打包后才能获取图集纹理合批）",
+    "_N$string": "基于Multi-Texture的方式实现合批，如下所示，分别来自两个不同的自动图集以及一个动态合图的纹理交替显示（由于此例子使用Cocos的自动图集，需打包后才能获取图集纹理合批）",
     "_fontSize": 40,
     "_lineHeight": 40,
     "_enableWrapText": true,
@@ -859,7 +850,7 @@
   },
   {
     "__type__": "cc.Node",
-    "_name": "MultiSprite",
+    "_name": "MultiSprite1",
     "_objFlags": 0,
     "_parent": {
       "__id__": 7
@@ -899,8 +890,8 @@
       "__type__": "TypedArray",
       "ctor": "Float64Array",
       "array": [
-        -263.998,
-        -19.13,
+        -339.749,
+        23.796,
         0,
         0,
         0,
@@ -980,7 +971,7 @@
   },
   {
     "__type__": "cc.Node",
-    "_name": "MultiSprite copy",
+    "_name": "MultiSprite2",
     "_objFlags": 0,
     "_parent": {
       "__id__": 7
@@ -1020,8 +1011,8 @@
       "__type__": "TypedArray",
       "ctor": "Float64Array",
       "array": [
-        202.781,
-        0,
+        -342.627,
+        -80.801,
         0,
         0,
         0,
@@ -1101,7 +1092,7 @@
   },
   {
     "__type__": "cc.Node",
-    "_name": "MultiSprite copy",
+    "_name": "MultiSprite3",
     "_objFlags": 0,
     "_parent": {
       "__id__": 7
@@ -1129,8 +1120,8 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 300,
-      "height": 179
+      "width": 150,
+      "height": 150
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
@@ -1141,8 +1132,8 @@
       "__type__": "TypedArray",
       "ctor": "Float64Array",
       "array": [
-        -263.998,
-        -112.527,
+        -340.102,
+        -196.952,
         0,
         0,
         0,
@@ -1193,7 +1184,7 @@
     "_srcBlendFactor": 770,
     "_dstBlendFactor": 771,
     "_spriteFrame": {
-      "__uuid__": "889375ef-6d50-47d0-9231-2b1021f85798"
+      "__uuid__": "40d5d2c5-5bd9-49ce-be62-8e3b813bad40"
     },
     "_type": 0,
     "_sizeMode": 1,
@@ -1217,370 +1208,7 @@
     "asset": {
       "__id__": 0
     },
-    "fileId": "3d4In4fztLppBRzjIxHeaZ",
-    "sync": false
-  },
-  {
-    "__type__": "cc.Node",
-    "_name": "MultiSprite copy",
-    "_objFlags": 0,
-    "_parent": {
-      "__id__": 7
-    },
-    "_children": [],
-    "_active": true,
-    "_components": [
-      {
-        "__id__": 35
-      },
-      {
-        "__id__": 36
-      }
-    ],
-    "_prefab": {
-      "__id__": 37
-    },
-    "_opacity": 255,
-    "_color": {
-      "__type__": "cc.Color",
-      "r": 255,
-      "g": 255,
-      "b": 255,
-      "a": 255
-    },
-    "_contentSize": {
-      "__type__": "cc.Size",
-      "width": 300,
-      "height": 239
-    },
-    "_anchorPoint": {
-      "__type__": "cc.Vec2",
-      "x": 0.5,
-      "y": 0.5
-    },
-    "_trs": {
-      "__type__": "TypedArray",
-      "ctor": "Float64Array",
-      "array": [
-        202.781,
-        -93.397,
-        0,
-        0,
-        0,
-        0,
-        1,
-        1,
-        1,
-        1
-      ]
-    },
-    "_eulerAngles": {
-      "__type__": "cc.Vec3",
-      "x": 0,
-      "y": 0,
-      "z": 0
-    },
-    "_skewX": 0,
-    "_skewY": 0,
-    "_is3DNode": false,
-    "_groupIndex": 0,
-    "groupIndex": 0,
-    "_id": ""
-  },
-  {
-    "__type__": "46c9aT+vftMEJqWINApHQZC",
-    "_name": "",
-    "_objFlags": 0,
-    "node": {
-      "__id__": 34
-    },
-    "_enabled": true,
-    "_textureIdx": 0,
-    "_id": ""
-  },
-  {
-    "__type__": "c922bwmEw5OV4VVCBcsN/cG",
-    "_name": "",
-    "_objFlags": 0,
-    "node": {
-      "__id__": 34
-    },
-    "_enabled": true,
-    "_materials": [
-      {
-        "__uuid__": "f0d586d0-242a-46a1-a0ad-14a356015f90"
-      }
-    ],
-    "_srcBlendFactor": 770,
-    "_dstBlendFactor": 771,
-    "_spriteFrame": {
-      "__uuid__": "a113662e-6624-4164-b66c-a6cda5e294d6"
-    },
-    "_type": 0,
-    "_sizeMode": 1,
-    "_fillType": 0,
-    "_fillCenter": {
-      "__type__": "cc.Vec2",
-      "x": 0,
-      "y": 0
-    },
-    "_fillStart": 0,
-    "_fillRange": 0,
-    "_isTrimmedMode": true,
-    "_atlas": null,
-    "_id": ""
-  },
-  {
-    "__type__": "cc.PrefabInfo",
-    "root": {
-      "__id__": 1
-    },
-    "asset": {
-      "__id__": 0
-    },
-    "fileId": "43jirGCldM1bZUYXrZZvZZ",
-    "sync": false
-  },
-  {
-    "__type__": "cc.Node",
-    "_name": "MultiSprite copy",
-    "_objFlags": 0,
-    "_parent": {
-      "__id__": 7
-    },
-    "_children": [],
-    "_active": true,
-    "_components": [
-      {
-        "__id__": 39
-      },
-      {
-        "__id__": 40
-      }
-    ],
-    "_prefab": {
-      "__id__": 41
-    },
-    "_opacity": 255,
-    "_color": {
-      "__type__": "cc.Color",
-      "r": 255,
-      "g": 255,
-      "b": 255,
-      "a": 255
-    },
-    "_contentSize": {
-      "__type__": "cc.Size",
-      "width": 300,
-      "height": 179
-    },
-    "_anchorPoint": {
-      "__type__": "cc.Vec2",
-      "x": 0.5,
-      "y": 0.5
-    },
-    "_trs": {
-      "__type__": "TypedArray",
-      "ctor": "Float64Array",
-      "array": [
-        -263.998,
-        46.501,
-        0,
-        0,
-        0,
-        0,
-        1,
-        1,
-        1,
-        1
-      ]
-    },
-    "_eulerAngles": {
-      "__type__": "cc.Vec3",
-      "x": 0,
-      "y": 0,
-      "z": 0
-    },
-    "_skewX": 0,
-    "_skewY": 0,
-    "_is3DNode": false,
-    "_groupIndex": 0,
-    "groupIndex": 0,
-    "_id": ""
-  },
-  {
-    "__type__": "46c9aT+vftMEJqWINApHQZC",
-    "_name": "",
-    "_objFlags": 0,
-    "node": {
-      "__id__": 38
-    },
-    "_enabled": true,
-    "_textureIdx": 0,
-    "_id": ""
-  },
-  {
-    "__type__": "c922bwmEw5OV4VVCBcsN/cG",
-    "_name": "",
-    "_objFlags": 0,
-    "node": {
-      "__id__": 38
-    },
-    "_enabled": true,
-    "_materials": [
-      {
-        "__uuid__": "f0d586d0-242a-46a1-a0ad-14a356015f90"
-      }
-    ],
-    "_srcBlendFactor": 770,
-    "_dstBlendFactor": 771,
-    "_spriteFrame": {
-      "__uuid__": "889375ef-6d50-47d0-9231-2b1021f85798"
-    },
-    "_type": 0,
-    "_sizeMode": 1,
-    "_fillType": 0,
-    "_fillCenter": {
-      "__type__": "cc.Vec2",
-      "x": 0,
-      "y": 0
-    },
-    "_fillStart": 0,
-    "_fillRange": 0,
-    "_isTrimmedMode": true,
-    "_atlas": null,
-    "_id": ""
-  },
-  {
-    "__type__": "cc.PrefabInfo",
-    "root": {
-      "__id__": 1
-    },
-    "asset": {
-      "__id__": 0
-    },
-    "fileId": "33Jfb0+WRCvJ++V/P/wehz",
-    "sync": false
-  },
-  {
-    "__type__": "cc.Node",
-    "_name": "MultiSprite copy",
-    "_objFlags": 0,
-    "_parent": {
-      "__id__": 7
-    },
-    "_children": [],
-    "_active": true,
-    "_components": [
-      {
-        "__id__": 43
-      },
-      {
-        "__id__": 44
-      }
-    ],
-    "_prefab": {
-      "__id__": 45
-    },
-    "_opacity": 255,
-    "_color": {
-      "__type__": "cc.Color",
-      "r": 255,
-      "g": 255,
-      "b": 255,
-      "a": 255
-    },
-    "_contentSize": {
-      "__type__": "cc.Size",
-      "width": 300,
-      "height": 239
-    },
-    "_anchorPoint": {
-      "__type__": "cc.Vec2",
-      "x": 0.5,
-      "y": 0.5
-    },
-    "_trs": {
-      "__type__": "TypedArray",
-      "ctor": "Float64Array",
-      "array": [
-        202.781,
-        65.631,
-        0,
-        0,
-        0,
-        0,
-        1,
-        1,
-        1,
-        1
-      ]
-    },
-    "_eulerAngles": {
-      "__type__": "cc.Vec3",
-      "x": 0,
-      "y": 0,
-      "z": 0
-    },
-    "_skewX": 0,
-    "_skewY": 0,
-    "_is3DNode": false,
-    "_groupIndex": 0,
-    "groupIndex": 0,
-    "_id": ""
-  },
-  {
-    "__type__": "46c9aT+vftMEJqWINApHQZC",
-    "_name": "",
-    "_objFlags": 0,
-    "node": {
-      "__id__": 42
-    },
-    "_enabled": true,
-    "_textureIdx": 0,
-    "_id": ""
-  },
-  {
-    "__type__": "c922bwmEw5OV4VVCBcsN/cG",
-    "_name": "",
-    "_objFlags": 0,
-    "node": {
-      "__id__": 42
-    },
-    "_enabled": true,
-    "_materials": [
-      {
-        "__uuid__": "f0d586d0-242a-46a1-a0ad-14a356015f90"
-      }
-    ],
-    "_srcBlendFactor": 770,
-    "_dstBlendFactor": 771,
-    "_spriteFrame": {
-      "__uuid__": "a113662e-6624-4164-b66c-a6cda5e294d6"
-    },
-    "_type": 0,
-    "_sizeMode": 1,
-    "_fillType": 0,
-    "_fillCenter": {
-      "__type__": "cc.Vec2",
-      "x": 0,
-      "y": 0
-    },
-    "_fillStart": 0,
-    "_fillRange": 0,
-    "_isTrimmedMode": true,
-    "_atlas": null,
-    "_id": ""
-  },
-  {
-    "__type__": "cc.PrefabInfo",
-    "root": {
-      "__id__": 1
-    },
-    "asset": {
-      "__id__": 0
-    },
-    "fileId": "ccyqkp6IVLHJg7Ro8drx9i",
+    "fileId": "d2b91/aTNOkK4BDeUqEjn/",
     "sync": false
   },
   {
@@ -1675,7 +1303,7 @@
     },
     "_enabled": true,
     "dlgAnim": {
-      "__id__": 47
+      "__id__": 35
     },
     "openClip": {
       "__uuid__": "cf157bac-dfd6-4a5d-a483-5d2eecf8ff34"
@@ -1688,6 +1316,9 @@
     },
     "item2": {
       "__id__": 26
+    },
+    "item3": {
+      "__id__": 30
     },
     "_id": ""
   },
