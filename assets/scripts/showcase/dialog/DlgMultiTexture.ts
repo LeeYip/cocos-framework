@@ -31,19 +31,19 @@ export default class DlgMultiTexture extends DialogBase {
     public async open() {
         let arr = [ResUrl.ATLAS.EN, ResUrl.ATLAS.ZH];
 
-        // Cocos自动图集纹理
+        // idx为0的纹理：Cocos自动图集纹理
         let atlas = await Res.load<cc.SpriteAtlas>(arr[0], cc.SpriteAtlas);
         MultiTextureManager.setTexture(0, atlas.getTexture());
 
         this.createNodes();
 
-        // Cocos自动图集纹理
+        // idx为1的纹理：Cocos自动图集纹理
         atlas = await Res.load<cc.SpriteAtlas>(arr[1], cc.SpriteAtlas);
         MultiTextureManager.setTexture(1, atlas.getTexture());
 
         this.createNodes();
 
-        // 动态合图纹理
+        // idx为2的纹理：动态合图纹理
         let lastNode = this.node.getChildByName("bg").children[this.node.getChildByName("bg").childrenCount - 1];
         let sf = lastNode.getComponent(MultiSprite).spriteFrame;
         if (sf["_original"]) {

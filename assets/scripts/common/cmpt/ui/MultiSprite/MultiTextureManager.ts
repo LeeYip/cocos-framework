@@ -70,9 +70,8 @@ export class MultiTextureManager {
         this._sprites.forEach((v) => {
             /**
              * @bug
-             * 2.4.6材质hash计算在utils.js中serializeUniforms有bug, 里面for-in遍历材质属性顺序受k-v对插入顺序影响(即setProperty顺序), 即使属性完全一致, hash却不一定一致
+             * 2.4.5之前材质hash计算在utils.js中serializeUniforms有bug, 里面for-in遍历材质属性顺序受k-v对插入顺序影响(即setProperty顺序), 即使属性完全一致, hash却不一定一致
              * 因此在此直接创建新的材质
-             * ** 此bug在2.4.9中已修复 **
              */
             // v.setMaterial(0, this._mat);
 
