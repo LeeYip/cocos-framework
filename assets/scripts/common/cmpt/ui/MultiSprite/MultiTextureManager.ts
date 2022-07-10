@@ -8,6 +8,7 @@ export class MultiTextureManager {
     public static readonly MAX_TEXTURE_NUM = 8;
 
     private static _init: boolean = false;
+    /** 共享材质 */
     private static _mat: cc.Material = null;
     private static _texMap: Map<number, cc.Texture2D> = new Map();
     private static _sprites: Set<MultiSprite> = new Set();
@@ -63,6 +64,7 @@ export class MultiTextureManager {
         tex.addRef();
 
         this._texMap.set(idx, tex);
+        // 修改共享材质属性
         this._mat.setProperty(`texture${idx}`, tex);
 
         this._sprites.forEach((v) => {
@@ -86,10 +88,7 @@ export class MultiTextureManager {
                     material.setProperty(`texture${i}`, texture);
                 }
             }
-            /**
-             * @bug
-             * 调用setProperty后在getHash中不会重新计算hash值, 需要手动设置_dirty
-             */
+            // 修改共享材质属性后，必须手动设置材质变体的_effect._dirty，不然不会重新计算材质变体的hash值
             material["_effect"]._dirty = true;
             
             // 更新textureIdx与材质属性

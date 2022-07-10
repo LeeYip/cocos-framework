@@ -318,6 +318,10 @@ I18n.getText("test", "somthing", 2); // => "test somthing 2 !!!"
     - **ResSprite**
 
 - **MultiSprite** 基于Multi-Texture<sup>[1](#reference1)</sup>实现的渲染组件，支持多图集合批，需通过**MultiTextureManager**管理合批的纹理
+    - 兼容web与native
+    - 支持Sprite的simple、sliced、tiled、filled渲染类型
+    - 支持Cocos自动图集与动态合图的纹理
+    - 支持动态修改合批的纹理--**MultiTextureManager.setTexture(idx: number, tex: cc.Texture2D)**
 
 - ......
 
