@@ -50,12 +50,19 @@ export default class MultiSprite extends cc.Sprite {
         MultiTextureManager.removeSprite(this);
     }
 
-    protected _updateMaterial() {
+    /**
+     * 设置spriteFrame和material时引擎内部会调用，更新textureIdx，更新材质属性
+     * @override
+     */
+    public _updateMaterial(): void {
         let texture = null;
         if (this.spriteFrame) {
             texture = this.spriteFrame.getTexture();
             // 更新textureIdx
-            this.updateTextuerIdx();
+            let idx = MultiTextureManager.getIdx(texture);
+            if (idx >= 0) {
+                this.textureIdx = idx;
+            }
         }
 
         // make sure material is belong to self.
@@ -75,19 +82,6 @@ export default class MultiSprite extends cc.Sprite {
         }
 
         cc.BlendFunc.prototype["_updateMaterial"].call(this);
-    }
-
-    /**
-     * 根据MultiTextureManager缓存的纹理更新textureIdx
-     */
-    public updateTextuerIdx() {
-        if (this.spriteFrame) {
-            let texture = this.spriteFrame.getTexture();
-            let idx = MultiTextureManager.getIdx(texture);
-            if (idx >= 0) {
-                this.textureIdx = idx;
-            }
-        }
     }
 }
 

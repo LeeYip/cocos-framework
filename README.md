@@ -17,6 +17,7 @@
     - [引擎源码hack](#framework-hack)
     - [几个shader](#framework-shader)
 - [命名规范](#name)
+- [参考资料](#reference)
 
 ## <a id="preface"></a>前言
 这套框架是我个人开发过程中的积累，已应用于我个人的几个小项目中。单scene多prefab形式，轻量，各个功能基本都可单独拆解开使用。
@@ -316,7 +317,7 @@ I18n.getText("test", "somthing", 2); // => "test somthing 2 !!!"
     - **ResSpine**
     - **ResSprite**
 
-- **MultiSprite** 基于Multi-Texture实现的渲染组件，支持多图集合批，需通过**MultiTextureManager**管理合批的纹理
+- **MultiSprite** 基于Multi-Texture<sup>[1](#reference1)</sup>实现的渲染组件，支持多图集合批，需通过**MultiTextureManager**管理合批的纹理
 
 - ......
 
@@ -345,3 +346,6 @@ enum LangType {
 }
 ```
 - 字符串尽量使用双引号
+
+## <a id="reference"></a>参考资料
+1. <a id="reference1"></a>https://forum.cocos.org/t/topic/121618

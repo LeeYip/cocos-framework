@@ -15,7 +15,7 @@ export class MultiTextureManager {
     /**
      * 初始化纹理管理器
      */
-    public static init(mat: cc.Material) {
+    public static init(mat: cc.Material): void {
         if (this._init || !(mat instanceof cc.Material) || mat instanceof cc.MaterialVariant) {
             return;
         }
@@ -25,11 +25,11 @@ export class MultiTextureManager {
         this._mat.addRef();
     }
 
-    public static addSprite(sp: MultiSprite) {
+    public static addSprite(sp: MultiSprite): void {
         this._sprites.add(sp);
     }
 
-    public static removeSprite(sp: MultiSprite) {
+    public static removeSprite(sp: MultiSprite): void {
         this._sprites.delete(sp);
     }
 
@@ -39,7 +39,7 @@ export class MultiTextureManager {
      * @param tex 纹理对象
      * @returns 
      */
-    public static setTexture(idx: number, tex: cc.Texture2D) {
+    public static setTexture(idx: number, tex: cc.Texture2D): void {
         if (!this._init) {
             cc.error("[MultiSpriteManager.setTexture] 未初始化MultiSpriteManager");
             return;
@@ -55,7 +55,7 @@ export class MultiTextureManager {
         if (oldTex === tex) {
             return;
         }
-        
+
         // 处理引用计数
         if (oldTex) {
             oldTex.decRef();
@@ -91,17 +91,18 @@ export class MultiTextureManager {
              * 调用setProperty后在getHash中不会重新计算hash值, 需要手动设置_dirty
              */
             material["_effect"]._dirty = true;
-            // 更新textureIdx
-            v.updateTextuerIdx();
+            
+            // 更新textureIdx与材质属性
+            v._updateMaterial();
         });
     }
 
-    public static getTexture(idx: number) {
+    public static getTexture(idx: number): cc.Texture2D {
         idx = cc.misc.clampf(idx, 0, MultiTextureManager.MAX_TEXTURE_NUM - 1);
         return this._texMap.get(idx);
     }
 
-    public static getIdx(tex: cc.Texture2D) {
+    public static getIdx(tex: cc.Texture2D): number {
         for (let i = 0; i < MultiTextureManager.MAX_TEXTURE_NUM; i++) {
             if (this._texMap.get(i) === tex) {
                 return i;
