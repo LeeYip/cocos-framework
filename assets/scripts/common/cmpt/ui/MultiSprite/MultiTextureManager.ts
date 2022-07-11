@@ -66,7 +66,7 @@ export class MultiTextureManager {
         this._texMap.set(idx, tex);
         // 修改共享材质属性
         this._mat.setProperty(`texture${idx}`, tex);
-
+        // 修改已存在的渲染组件上材质变体的属性，同时更新渲染组件textureIdx
         this._sprites.forEach((v) => {
             /**
              * @bug
@@ -89,20 +89,25 @@ export class MultiTextureManager {
             }
             // 修改共享材质属性后，必须手动设置材质变体的_effect._dirty，不然不会重新计算材质变体的hash值
             material["_effect"]._dirty = true;
-            
+
             // 更新textureIdx与材质属性
             v._updateMaterial();
         });
     }
 
-    public static getTexture(idx: number): cc.Texture2D {
-        idx = cc.misc.clampf(idx, 0, MultiTextureManager.MAX_TEXTURE_NUM - 1);
-        return this._texMap.get(idx);
-    }
-
+    /**
+     * 根据纹理获取对应的textureIdx
+     * @param tex 
+     * @returns 
+     */
     public static getIdx(tex: cc.Texture2D): number {
+        if (!this._init) {
+            cc.error("[MultiSpriteManager.getIdx] 未初始化MultiSpriteManager");
+            return;
+        }
+        
         for (let i = 0; i < MultiTextureManager.MAX_TEXTURE_NUM; i++) {
-            if (this._texMap.get(i) === tex) {
+            if (this._texMap.get(i) === tex || this._mat.getProperty(`texture${i}`, 0) === tex.getImpl()) {
                 return i;
             }
         }

@@ -1,10 +1,9 @@
 import EditorTool from "../../../util/EditorTool";
-import MultiAssembleBarFilled from "./assemble/MultiAssembleBarFilled";
-import MultiAssembleRadialFilled from "./assemble/MultiAssembleRadialFilled";
-import MultiAssembleSimple from "./assemble/MultiAssembleSimple";
-import MultiAssembleSliced from "./assemble/MultiAssembleSliced";
-import MultiAssembleTiled from "./assemble/MultiAssembleTiled";
-import MultiTextureIdx from "./MultiTextureIdx";
+import MultiAssemblerBarFilled from "./assembler/MultiAssemblerBarFilled";
+import MultiAssemblerRadialFilled from "./assembler/MultiAssemblerRadialFilled";
+import MultiAssemblerSimple from "./assembler/MultiAssemblerSimple";
+import MultiAssemblerSliced from "./assembler/MultiAssemblerSliced";
+import MultiAssemblerTiled from "./assembler/MultiAssemblerTiled";
 import { MultiTextureManager } from "./MultiTextureManager";
 
 const { ccclass, property, requireComponent, menu, inspector } = cc._decorator;
@@ -13,23 +12,16 @@ const { ccclass, property, requireComponent, menu, inspector } = cc._decorator;
  * Multi-Texture 渲染组件，兼容web与native，支持simple、sliced、tiled、filled
  */
 @ccclass
-@requireComponent(MultiTextureIdx)
 @menu("Framework/UI组件/MultiSprite")
 @inspector("packages://inspector/inspectors/comps/sprite.js")
 export default class MultiSprite extends cc.Sprite {
 
-    private _multiTextureIdx: MultiTextureIdx = null;
-    private get multiTextureIdx(): MultiTextureIdx {
-        if (!this._multiTextureIdx) {
-            this._multiTextureIdx = this.getComponent(MultiTextureIdx);
-        }
-        return this._multiTextureIdx;
-    }
-
-    /** 当前渲染组件使用的纹理ID */
-    public get textureIdx(): number { return this.multiTextureIdx.textureIdx; }
-    public set textureIdx(v: number) {
-        this.multiTextureIdx.textureIdx = v;
+    private _textureIdx: number = 0;
+    /** 当前渲染组件使用的纹理下标，不需要主动调用，该组件内部会自行处理 */
+    private get textureIdx(): number { return this._textureIdx; }
+    private set textureIdx(v: number) {
+        this._textureIdx = cc.misc.clampf(v, 0, MultiTextureManager.MAX_TEXTURE_NUM - 1);
+        this["setVertsDirty"]();
     }
 
     protected resetInEditor(): void {
@@ -55,22 +47,23 @@ export default class MultiSprite extends cc.Sprite {
      * @override
      */
     public _updateMaterial(): void {
-        let texture = null;
-        if (this.spriteFrame) {
-            texture = this.spriteFrame.getTexture();
-            // 更新textureIdx
-            let idx = MultiTextureManager.getIdx(texture);
-            if (idx >= 0) {
-                this.textureIdx = idx;
-            }
-        }
-
         // make sure material is belong to self.
         let material = this.getMaterial(0);
         if (material) {
-            let textureImpl = texture && texture.getImpl();
+            let texture = null;
+            let textureImpl = null;
+            if (this.spriteFrame) {
+                texture = this.spriteFrame.getTexture();
+                textureImpl = texture && texture.getImpl();
+            }
             if (material.name.indexOf("multiTexture") >= 0) {
+                // 初始化纹理管理器
                 MultiTextureManager.init(material["_material"]);
+                // 更新textureIdx
+                let idx = MultiTextureManager.getIdx(texture);
+                if (idx >= 0) {
+                    this.textureIdx = idx;
+                }
                 if (material.getProperty(`texture${this.textureIdx}`, 0) !== textureImpl) {
                     material.setProperty(`texture${this.textureIdx}`, texture);
                 }
@@ -87,19 +80,19 @@ export default class MultiSprite extends cc.Sprite {
 
 cc.Assembler.register(MultiSprite, {
     getConstructor(sprite) {
-        let ctor: any = MultiAssembleSimple;
+        let ctor: any = MultiAssemblerSimple;
         switch (sprite.type) {
             case cc.Sprite.Type.SLICED:
-                ctor = MultiAssembleSliced;
+                ctor = MultiAssemblerSliced;
                 break;
             case cc.Sprite.Type.TILED:
-                ctor = MultiAssembleTiled;
+                ctor = MultiAssemblerTiled;
                 break;
             case cc.Sprite.Type.FILLED:
                 if (sprite._fillType === cc.Sprite.FillType.RADIAL) {
-                    ctor = MultiAssembleRadialFilled;
+                    ctor = MultiAssemblerRadialFilled;
                 } else {
-                    ctor = MultiAssembleBarFilled;
+                    ctor = MultiAssemblerBarFilled;
                 }
                 break;
         }

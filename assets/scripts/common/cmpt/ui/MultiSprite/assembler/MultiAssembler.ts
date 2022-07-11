@@ -6,7 +6,7 @@ const vfmtPosUvColorIndex = new gfx.VertexFormat([
     { name: "a_texture_idx", type: gfx.ATTR_TYPE_FLOAT32, num: 1 },
 ]);
 
-export default class MultiAssemble extends cc.Assembler {
+export default class MultiAssembler extends cc.Assembler {
     /** 每个顶点的数据长度 */
     protected floatsPerVert: number = 6;
     protected verticesCount: number = 4;

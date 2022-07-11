@@ -1,6 +1,6 @@
-import MultiAssemble from "./MultiAssemble";
+import MultiAssembler from "./MultiAssembler";
 
-export default class MultiAssembleSliced extends MultiAssemble {
+export default class MultiAssemblerSliced extends MultiAssembler {
     public initData() {
         this.verticesCount = 16;
         this.indicesCount = 54;
@@ -115,7 +115,7 @@ export default class MultiAssembleSliced extends MultiAssemble {
 }
 
 if (CC_NATIVERENDERER) {
-    let proto = MultiAssembleSliced.prototype;
+    let proto = MultiAssemblerSliced.prototype;
     //@ts-ignore
     let nativeProto = renderer.SlicedSprite2D.prototype;
 

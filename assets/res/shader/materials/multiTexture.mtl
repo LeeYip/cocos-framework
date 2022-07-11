@@ -9,7 +9,15 @@
   "_techniqueIndex": 0,
   "_techniqueData": {
     "0": {
-      "defines": {}
+      "defines": {},
+      "props": {
+        "texture0": {
+          "__uuid__": "532b9ab1-c7b6-49fb-afe4-189332d154ac"
+        },
+        "texture1": {
+          "__uuid__": "0a20c584-0173-46e4-b37b-83f696bf6b0b"
+        }
+      }
     }
   }
 }

@@ -1,6 +1,6 @@
-import MultiAssemble from "./MultiAssemble";
+import MultiAssembler from "./MultiAssembler";
 
-export default class MultiAssembleTiled extends MultiAssemble {
+export default class MultiAssemblerTiled extends MultiAssembler {
     private contentWidth: number = 0;
     private contentHeight: number = 0;
     private rectWidth: number = 0;

@@ -1,6 +1,6 @@
-import MultiAssemble from "./MultiAssemble";
+import MultiAssembler from "./MultiAssembler";
 
-export default class MultiAssembleBarFilled extends MultiAssemble {
+export default class MultiAssemblerBarFilled extends MultiAssembler {
     public updateRenderData(sprite) {
         let frame = sprite._spriteFrame;
         this.packToDynamicAtlas(sprite, frame);

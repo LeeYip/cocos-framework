@@ -1,6 +1,6 @@
-import MultiAssemble from "./MultiAssemble";
+import MultiAssembler from "./MultiAssembler";
 
-export default class MultiAssembleSimple extends MultiAssemble {
+export default class MultiAssemblerSimple extends MultiAssembler {
     public updateRenderData(sprite) {
         this.packToDynamicAtlas(sprite, sprite._spriteFrame);
 
@@ -62,7 +62,7 @@ export default class MultiAssembleSimple extends MultiAssemble {
 }
 
 if (CC_NATIVERENDERER) {
-    let proto = MultiAssembleSimple.prototype;
+    let proto = MultiAssemblerSimple.prototype;
     //@ts-ignore
     let nativeProto = renderer.SimpleSprite2D.prototype;
 

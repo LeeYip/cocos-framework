@@ -1,4 +1,4 @@
-import MultiAssemble from "./MultiAssemble";
+import MultiAssembler from "./MultiAssembler";
 
 const PI_2 = Math.PI * 2;
 
@@ -144,7 +144,7 @@ function _getVertAngle(start, end) {
     }
 }
 
-export default class MultiAssembleRadialFilled extends MultiAssemble {
+export default class MultiAssemblerRadialFilled extends MultiAssembler {
     public initData() {
         this._renderData.createFlexData(0, 4, 6, this.getVfmt());
         this.updateIndices();
