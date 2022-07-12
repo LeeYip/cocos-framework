@@ -4,8 +4,21 @@ import { SCALE_TWEEN, TWEEN } from "../../util/Tween";
 
 const { ccclass, executionOrder, menu, disallowMultiple } = cc._decorator;
 
+if (!CC_EDITOR) {
+    cc.director.on(cc.Director.EVENT_AFTER_SCENE_LAUNCH, (scene: cc.Scene) => {
+        if (Timer.timer) {
+            return;
+        }
+        
+        cc.log("addPersistRootNode: TIMER");
+        let node = new cc.Node("TIMER");
+        cc.game.addPersistRootNode(node);
+        node.addComponent(Timer);
+    });
+}
+
 /**
- * - 全局时间管理器，需绑定常驻节点，保证全局有且只有一个
+ * - 全局时间管理器，场景加载后会自动绑定常驻节点，保证全局有且只有一个
  * - 负责TWEEN和SCALE_TWEEN的管理与更新
  */
 @ccclass
@@ -14,6 +27,12 @@ const { ccclass, executionOrder, menu, disallowMultiple } = cc._decorator;
 @menu("Framework/基础组件/Timer")
 export default class Timer extends cc.Component {
     //#region 静态成员
+
+    /** 全局第一个加载的Timer组件 */
+    private static _timer: Timer = null;
+    public static get timer(): Timer {
+        return this._timer;
+    }
 
     /** 游戏调用暂停的计数 */
     private static _puaseCount: number = 0;
@@ -104,12 +123,28 @@ export default class Timer extends cc.Component {
 
     //#endregion
 
+    protected onLoad(): void {
+        if (Timer._timer) {
+            return;
+        }
+        Timer._timer = this;
+    }
+
     protected onDestroy(): void {
+        if (Timer._timer === this) {
+            Timer._timer = null;
+        }
+
         TWEEN.removeAll();
         SCALE_TWEEN.removeAll();
     }
 
     protected update(dt: number): void {
+        // 只启用第一个加载的组件
+        if (Timer._timer !== this) {
+            return;
+        }
+
         Timer._realDt = dt;
         Timer._gameSec += dt;
         Timer._scaleGameSec += Timer.scaleDt;

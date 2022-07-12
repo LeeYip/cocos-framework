@@ -7,12 +7,12 @@ import Res from "../../common/util/Res";
 const { ccclass, property } = cc._decorator;
 
 // 原生平台默认关闭动态合图，在此为了测试强制开启
-cc.game.once(cc.game.EVENT_ENGINE_INITED, () => {
-    if (CC_NATIVERENDERER) {
+if (CC_NATIVERENDERER) {
+    cc.game.once(cc.game.EVENT_ENGINE_INITED, () => {
         cc.macro.CLEANUP_IMAGE_CACHE = false;
         cc.dynamicAtlasManager.enabled = true;
-    }
-});
+    });
+}
 
 @ccclass
 export default class DlgMultiTexture extends DialogBase {
