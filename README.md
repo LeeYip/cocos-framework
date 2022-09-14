@@ -229,7 +229,7 @@ export default class Test extends cc.Component {
 #### <a id="framework-res"></a>资源管理器
 >文件路径(scripts/common/util/Res.ts)
 
-主要是对prefab、图片等进行资源管理，内部自动进行引用计数的加减,使用时需要注意以下要点：
+主要是对prefab、图片等进行资源管理，内部自动进行引用计数的加减，可保证资源的安全释放，使用时需要注意以下要点：
 1. 尽量使用此类的接口加载所有资源、instantiate节点实例，否则需要自行管理引用计数
 2. Res.instantiate不要对动态生成的节点使用，尽量只instantiate prefab上预设好的节点，否则有可能会导致引用计数的管理出错
 3. 调用load接口时如需传入release参数，则同一资源在全局调用load时release参数尽量保持一致，否则可能不符合预期

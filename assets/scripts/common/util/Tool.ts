@@ -1,5 +1,12 @@
 import { Group, Tween, TWEEN } from "./Tween";
 
+enum TimeUnit {
+    S,
+    M,
+    H,
+    D
+}
+
 /**
  * 工具类
  */
@@ -257,6 +264,95 @@ export default class Tool {
         } else {
             return false;
         }
+    }
+
+    /**
+     * 对单位为秒的时间生成格式化时间字符串
+     * @param sec 时间s
+     * @param format 格式化字符串
+     * @example
+     * // 当format为string时，会以format中的最大时间单位进行格式化
+     * Tool.formatTimeString(3601, "m:s"); // 60:1
+     * Tool.formatTimeString(3601, "mm:ss"); // 60:01
+     * Tool.formatTimeString(3601, "hh:mm:ss"); // 01:00:01
+     * 
+     * // 当format为object时，会以传入的sec计算最大的时间单位，并选择format对应的字符串进行格式化
+     * Tool.formatTimeString(100, {
+     *     S: "s秒",
+     *     M: "m分s秒",
+     *     H: "h时m分s秒",
+     *     D: "d天h时m分s秒"
+     * }); // 1分40秒
+     * Tool.formatTimeString(100000, {
+     *     S: "s秒",
+     *     M: "m分s秒",
+     *     H: "h时m分s秒",
+     *     D: "d天h时m分s秒"
+     * }); // 1天3时46分40秒
+     */
+    public static formatTimeString(sec: number, format: string | { "S": string; "M": string; "H": string; "D": string } = "hh:mm:ss"): string {
+        let seconds: number = Math.floor(sec);
+        let minutes: number = Math.floor(seconds / 60);
+        let hours: number = Math.floor(seconds / 3600);
+        let days: number = Math.floor(seconds / 86400);
+
+        let maxUnit: TimeUnit = TimeUnit.S;
+        let result: string = "";
+
+        if (typeof format === "string") {
+            // 查询格式化字符串中最大的单位
+            result = format;
+            if (/d/i.test(format)) {
+                maxUnit = TimeUnit.D;
+            } else if (/h/i.test(format)) {
+                maxUnit = TimeUnit.H;
+            } else if (/m/i.test(format)) {
+                maxUnit = TimeUnit.M;
+            }
+        } else {
+            // 以传入的数值判断最大单位
+            if (days > 0) {
+                maxUnit = TimeUnit.D;
+                result = format.D;
+            } else if (hours > 0) {
+                maxUnit = TimeUnit.H;
+                result = format.H;
+            } else if (minutes > 0) {
+                maxUnit = TimeUnit.M;
+                result = format.M;
+            } else {
+                maxUnit = TimeUnit.S;
+                result = format.S;
+            }
+        }
+
+        if (maxUnit > TimeUnit.S) {
+            seconds %= 60;
+        }
+        if (maxUnit > TimeUnit.M) {
+            minutes %= 60;
+        }
+        if (maxUnit > TimeUnit.H) {
+            hours %= 24;
+        }
+
+        let data = {
+            d: days,
+            hh: hours < 10 ? `0${hours}` : `${hours}`,
+            h: hours,
+            mm: minutes < 10 ? `0${minutes}` : `${minutes}`,
+            m: minutes,
+            ss: seconds < 10 ? `0${seconds}` : `${seconds}`,
+            s: seconds
+        };
+
+        result = result.toLowerCase();
+        for (const key in data) {
+            const value = data[key];
+            result = result.replace(new RegExp(key, "g"), value);
+        }
+
+        return result;
     }
 
     /**
