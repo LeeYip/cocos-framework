@@ -13,8 +13,15 @@ interface PrefabCacheData extends CacheData {
     nodes?: cc.Node[],
 }
 
+/** asset bundle路径校验 */
+const BUNDLE_CHECK = "ab:";
+
 /**
  * 资源管理类
+ * 
+ * 资源加载:
+ * 1. 如果加载resources内的资源，直接写明resources内的路径即可
+ * 2. 如果加载路径以ab:开头，则会加载对应bundle内的资源。例：ab:bundleA/xxx/a表示bundle名为bundleA，资源路径为xxx/a
  * 
  * 资源释放要点：
  * 1. 尽量使用此类的接口加载所有资源、instantiate节点实例，否则需要自行管理引用计数
@@ -23,8 +30,10 @@ interface PrefabCacheData extends CacheData {
  * 4. 请使用ResSpine、ResSprite组件去动态加载spine、图片资源，否则需要自行管理这些资源的引用计数
  */
 export default class Res {
-    /** 节点与关联prefab路径 */
+    /** 节点与其关联的prefab路径 */
     private static _nodePath: Map<cc.Node, string> = new Map();
+    /** prefab资源与路径 */
+    private static _prefabPath: Map<cc.Prefab, string> = new Map();
 
     private static _prefabCache: Map<string, PrefabCacheData> = new Map();
     private static _spriteFrameCache: Map<string, CacheData> = new Map();
@@ -36,15 +45,29 @@ export default class Res {
     public static releaseSec: number = 0;
 
     /**
-     * 通过节点查找对应的缓存prefab url
-     * @param node 
+     * 资源路径解析
+     * @param url 
      */
-    private static getCachePrefabUrl(node: cc.Node | cc.Prefab): string {
+    private static parseUrl(url: string): { bundle?: string, loadUrl: string } {
+        if (url.startsWith(BUNDLE_CHECK)) {
+            let loadUrl = url.substring(BUNDLE_CHECK.length);
+            let idx = loadUrl.indexOf("/");
+            let bundle = loadUrl.substring(0, idx);
+            loadUrl = loadUrl.substring(idx + 1);
+            return { bundle: bundle, loadUrl: loadUrl };
+        } else {
+            return { loadUrl: url };
+        }
+    }
+
+    /**
+     * 通过节点或预制查找已缓存prefab路径
+     * @param target 
+     */
+    private static getCachePrefabUrl(target: cc.Node | cc.Prefab): string {
         let url = "";
-        if (node instanceof cc.Prefab) {
-            url = node["_resCacheUrl"] || "";
-        } else if (node instanceof cc.Node) {
-            let cur = node;
+        if (target instanceof cc.Node) {
+            let cur = target;
             while (cur) {
                 if (cur["_prefab"] && cur["_prefab"]["root"]) {
                     url = this._nodePath.get(cur["_prefab"]["root"]) || "";
@@ -54,6 +77,8 @@ export default class Res {
                 }
                 cur = cur.parent;
             }
+        } else if (target instanceof cc.Prefab) {
+            url = this._prefabPath.get(target) || "";
         }
         return url;
     }
@@ -65,13 +90,17 @@ export default class Res {
      * @param release 资源是否需要释放
      */
     private static cacheAsset(url: string, asset: cc.Asset, release: boolean = true): void {
+        if (!asset) {
+            return;
+        }
+
         let func = (map: Map<string, CacheData>) => {
             if (map.has(url)) {
                 return;
             }
             asset.addRef();
             if (asset instanceof cc.Prefab) {
-                asset["_resCacheUrl"] = url;
+                this._prefabPath.set(asset, url);
             }
             let cacheData: CacheData = {
                 asset: asset,
@@ -103,7 +132,7 @@ export default class Res {
      * @param url 资源路径
      * @param type 资源类型
      */
-    public static get<T extends cc.Asset>(url: string, type: typeof cc.Asset): T {
+    public static get<T extends cc.Asset>(url: string, type: typeof cc.Asset): T | null {
         let asset: unknown = null;
         let func = (map: Map<string, CacheData>) => {
             let data = map.get(url);
@@ -129,46 +158,86 @@ export default class Res {
     }
 
     /**
-     * 加载resources文件夹下单个资源
+     * 加载bundle
+     * @param nameOrUrl bundle路径
+     */
+    public static loadBundle(nameOrUrl: string): Promise<cc.AssetManager.Bundle> {
+        return new Promise((resolve, reject) => {
+            cc.assetManager.loadBundle(nameOrUrl, (error: Error, bundle: cc.AssetManager.Bundle) => {
+                if (error) {
+                    cc.error(`[Res.loadBundle] error: ${error}`);
+                    resolve(null);
+                } else {
+                    resolve(bundle);
+                }
+            });
+        });
+    }
+
+    /**
+     * 加载单个资源
      * @param url 资源路径
      * @param type 资源类型
      * @param release 资源是否需要释放
      */
-    public static async load<T extends cc.Asset>(url: string, type: typeof cc.Asset, release: boolean = true): Promise<T> {
+    public static async load<T extends cc.Asset>(url: string, type: typeof cc.Asset, release: boolean = true): Promise<T | null> {
         let asset: T = this.get(url, type);
         if (asset) {
             return asset;
         }
 
+        let parseData = this.parseUrl(url);
+        if (parseData.bundle) {
+            await this.loadBundle(parseData.bundle);
+        }
+
         asset = await new Promise((resolve, reject) => {
-            cc.resources.load(url, type, (error: Error, resource: T) => {
+            let bundle: cc.AssetManager.Bundle = parseData.bundle ? cc.assetManager.getBundle(parseData.bundle) : cc.resources;
+            if (!bundle) {
+                cc.error(`[Res.load] cant find bundle: ${url}`);
+                resolve(null);
+                return;
+            }
+
+            bundle.load(parseData.loadUrl, type, (error: Error, resource: T) => {
                 if (error) {
-                    cc.error(`[Res.load] error: ${error}`);
+                    cc.error(`[Res.load] load error: ${error}`);
                     resolve(null);
                 } else {
+                    this.cacheAsset(url, resource, release);
                     resolve(resource);
                 }
             });
         });
-
-        this.cacheAsset(url, asset, release);
         return asset;
     }
 
     /**
-     * 加载resources文件夹下某个文件夹内某类资源
+     * 加载某个文件夹内的某类资源
      * @param url 资源路径
      * @param type 资源类型
      * @param release 资源是否需要释放
      */
-    public static loadDir<T extends cc.Asset>(url: string, type: typeof cc.Asset, release: boolean = true): Promise<T[]> {
+    public static async loadDir<T extends cc.Asset>(url: string, type: typeof cc.Asset, release: boolean = true): Promise<T[]> {
+        let parseData = this.parseUrl(url);
+        if (parseData.bundle) {
+            await this.loadBundle(parseData.bundle);
+        }
+
         return new Promise((resolve, reject) => {
-            cc.resources.loadDir(url, type, (error: Error, resource: T[]) => {
+            let bundle: cc.AssetManager.Bundle = parseData.bundle ? cc.assetManager.getBundle(parseData.bundle) : cc.resources;
+            if (!bundle) {
+                cc.error(`[Res.loadDir] cant find bundle: ${url}`);
+                resolve(null);
+                return;
+            }
+
+            bundle.loadDir(parseData.loadUrl, type, (error: Error, resource: T[]) => {
                 if (error) {
-                    cc.error(`[Res.loadDir] error: ${error}`);
+                    cc.error(`[Res.loadDir] load error: ${error}`);
                     resolve([]);
                 } else {
-                    let infos = cc.resources.getDirWithPath(url, type);
+                    let infos = bundle.getDirWithPath(url, type);
                     resource.forEach((asset, i) => { this.cacheAsset(infos[i].path, asset, release); });
                     resolve(resource);
                 }
@@ -177,17 +246,20 @@ export default class Res {
     }
 
     /**
-     * 获取节点实例，建立节点与缓存prefab的联系
-     * @param original 用于创建节点的prefab或node
-     * @param related 如果original不是动态加载的prefab，则需传入与original相关联的动态加载的prefab或node，便于资源释放的管理
+     * 获取节点实例，并建立新节点与prefab资源的联系
+     * @param original 用于实例化节点的prefab或node
+     * @param related 如果original不是动态加载的prefab，则需传入与original相关联的动态加载的prefab或node，以便资源释放的管理
      * @example 
-     * // A为动态加载的prefab，aNode为A的实例节点（aNode = Res.instantiate(A)），original为被A静态引用的prefab，则调用时需要用如下方式，保证引用关系正确
-     * Res.instantiate(original, A)
+     * // 1.original为动态加载的prefab，无需传related参数
+     * Res.instantiate(original)
+     * 
+     * // 2.aPrefab为动态加载的prefab，aNode为aPrefab的实例节点（aNode = Res.instantiate(aPrefab)），original为被aPrefab静态引用的prefab，则调用时需要用如下方式才能保证引用关系正确
+     * Res.instantiate(original, aPrefab)
      * Res.instantiate(original, aNode)
      * 
-     * // A为动态加载的prefab，aNode为A的实例节点（aNode = Res.instantiate(A)），original为aNode的某个子节点，则如下方式均可保证引用关系正确
+     * // 3.aPrefab为动态加载的prefab，aNode为aPrefab的实例节点（aNode = Res.instantiate(aPrefab)），original为aNode的某个子节点，则如下方式均可保证引用关系正确
      * Res.instantiate(original)
-     * Res.instantiate(original, A)
+     * Res.instantiate(original, aPrefab)
      * Res.instantiate(original, aNode)
      */
     public static instantiate(original: cc.Node | cc.Prefab, related?: cc.Node | cc.Prefab): cc.Node {
@@ -197,10 +269,9 @@ export default class Res {
         }
 
         let node = cc.instantiate(original) as cc.Node;
-        let cacheData: PrefabCacheData = null;
         let url = this.getCachePrefabUrl(related) || this.getCachePrefabUrl(original);
         if (url) {
-            cacheData = this._prefabCache.get(url);
+            let cacheData: PrefabCacheData = this._prefabCache.get(url);
             // release为true才缓存关联节点
             if (cacheData && cacheData.release) {
                 if (!Array.isArray(cacheData.nodes)) {
@@ -240,6 +311,7 @@ export default class Res {
 
             if (!Array.isArray(cacheData.nodes)) {
                 cacheData.asset.decRef();
+                this._prefabPath.delete(cacheData.asset as cc.Prefab);
                 this._prefabCache.delete(url);
             }
         });
