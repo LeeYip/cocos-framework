@@ -1,5 +1,5 @@
 import DialogBase from "../../common/cmpt/base/DialogBase";
-import CircleList from "../../common/cmpt/ui/CircleList";
+import CircleList from "../../common/cmpt/ui/scrollList/CircleList";
 
 const { ccclass, property } = cc._decorator;
 
@@ -30,6 +30,6 @@ export default class DlgCircleList extends DialogBase {
             9: cc.color(105, 100, 100)
         }
         item.color = color[idx];
-        item.getChildByName("lab").getComponent(cc.Label).string = `${idx}${isCur?"-cur":""}`;
+        item.getChildByName("lab").getComponent(cc.Label).string = `${idx}${isCur ? "-cur" : ""}`;
     }
 }

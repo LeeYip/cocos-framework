@@ -1,5 +1,5 @@
-import { EventName } from "../../const/EventName";
-import { eventsOnLoad, preloadEvent } from "../../util/Events";
+import { EventName } from "../../../const/EventName";
+import { eventsOnLoad, preloadEvent } from "../../../util/Events";
 
 const { ccclass, property, menu, executeInEditMode } = cc._decorator;
 

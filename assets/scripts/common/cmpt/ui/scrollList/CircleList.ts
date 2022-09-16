@@ -1,4 +1,4 @@
-import Res from "../../util/Res";
+import Res from "../../../util/Res";
 
 const { ccclass, property, requireComponent, disallowMultiple, menu } = cc._decorator;
 

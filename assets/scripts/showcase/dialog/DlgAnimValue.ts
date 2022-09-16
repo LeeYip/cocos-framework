@@ -1,7 +1,7 @@
 import DialogBase from "../../common/cmpt/base/DialogBase";
-import AnimValueLabel from "../../common/cmpt/ui/AnimValueLabel";
-import AnimValueProgress from "../../common/cmpt/ui/AnimValueProgress";
-import AnimValueProgressHP from "../../common/cmpt/ui/AnimValueProgressHP";
+import AnimValueLabel from "../../common/cmpt/ui/animValue/AnimValueLabel";
+import AnimValueProgress from "../../common/cmpt/ui/animValue/AnimValueProgress";
+import AnimValueProgressHP from "../../common/cmpt/ui/animValue/AnimValueProgressHP";
 
 const { ccclass, property } = cc._decorator;
 

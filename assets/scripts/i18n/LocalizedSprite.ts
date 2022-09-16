@@ -1,4 +1,4 @@
-import ResSprite from "../common/cmpt/ui/ResSprite";
+import ResSprite from "../common/cmpt/ui/res/ResSprite";
 import { EventName } from "../common/const/EventName";
 import { eventsOnLoad, preloadEvent } from "../common/util/Events";
 import I18n, { LangType } from "./I18n";

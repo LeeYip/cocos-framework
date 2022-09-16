@@ -1,4 +1,4 @@
-import Tool from "../../util/Tool";
+import Tool from "../../../util/Tool";
 import VirtualLayout from "./VirtualLayout";
 
 const { ccclass, property, requireComponent, executeInEditMode, disallowMultiple, menu } = cc._decorator;

@@ -1,5 +1,5 @@
-import Res from "../../util/Res";
-import Tool from "../../util/Tool";
+import Res from "../../../util/Res";
+import Tool from "../../../util/Tool";
 import VirtualItem from "./VirtualItem";
 import VirtualList, { MainTemplateType, OtherTemplateType, VirtualArgs } from "./VirtualList";
 

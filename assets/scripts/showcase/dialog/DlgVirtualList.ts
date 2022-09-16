@@ -1,5 +1,5 @@
 import DialogBase from "../../common/cmpt/base/DialogBase";
-import VirtualList from "../../common/cmpt/ui/VirtualList";
+import VirtualList from "../../common/cmpt/ui/scrollList/VirtualList";
 import Tool from "../../common/util/Tool";
 import { ItemArgs } from "./ListItem";
 

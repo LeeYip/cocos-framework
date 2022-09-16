@@ -1,6 +1,6 @@
 import DialogBase from "../../common/cmpt/base/DialogBase";
-import MultiSprite from "../../common/cmpt/ui/MultiSprite/MultiSprite";
-import { MultiTextureManager } from "../../common/cmpt/ui/MultiSprite/MultiTextureManager";
+import MultiSprite from "../../common/cmpt/ui/multiTexture/MultiSprite";
+import { MultiTextureManager } from "../../common/cmpt/ui/multiTexture/MultiTextureManager";
 import { ResUrl } from "../../common/const/Url";
 import Res from "../../common/util/Res";
 

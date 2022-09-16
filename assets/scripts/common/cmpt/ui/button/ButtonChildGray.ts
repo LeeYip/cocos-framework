@@ -1,5 +1,5 @@
-import { ButtonHackEvent, ButtonState } from "../../hack/ButtonHack";
-import Tool from "../../util/Tool";
+import { ButtonHackEvent, ButtonState } from "../../../hack/ButtonHack";
+import Tool from "../../../util/Tool";
 
 const { ccclass, property, menu, requireComponent, executeInEditMode } = cc._decorator;
 

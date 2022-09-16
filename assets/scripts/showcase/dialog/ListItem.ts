@@ -1,5 +1,5 @@
-import VirtualItem from "../../common/cmpt/ui/VirtualItem";
-import { VirtualArgs } from "../../common/cmpt/ui/VirtualList";
+import VirtualItem from "../../common/cmpt/ui/scrollList/VirtualItem";
+import { VirtualArgs } from "../../common/cmpt/ui/scrollList/VirtualList";
 
 const { ccclass, property } = cc._decorator;
 

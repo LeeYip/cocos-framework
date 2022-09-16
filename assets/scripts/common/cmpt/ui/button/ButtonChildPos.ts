@@ -1,4 +1,4 @@
-import { ButtonHackEvent, ButtonState } from "../../hack/ButtonHack";
+import { ButtonHackEvent, ButtonState } from "../../../hack/ButtonHack";
 
 const { ccclass, property, menu, requireComponent } = cc._decorator;
 

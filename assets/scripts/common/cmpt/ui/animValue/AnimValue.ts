@@ -1,4 +1,4 @@
-import { Easing, SCALE_TWEEN, Tween } from "../../util/Tween";
+import { Easing, SCALE_TWEEN, Tween } from "../../../util/Tween";
 
 const { ccclass, property, menu, executeInEditMode } = cc._decorator;
 
@@ -117,9 +117,9 @@ export default class AnimValue extends cc.Component {
         this._isAdd = this._endValue - this._curValue > 0;
         this._endValue = end;
         this._curValue = end;
-		this.onAnimStart();
-		this.onAnimUpdate();
-		this.onAnimComplete();
+        this.onAnimStart();
+        this.onAnimUpdate();
+        this.onAnimComplete();
     }
 
     /**
