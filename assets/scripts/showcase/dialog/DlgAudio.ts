@@ -1,5 +1,5 @@
 import DialogBase from "../../common/cmpt/base/DialogBase";
-import { ResUrl } from "../../common/const/Url";
+import { DirUrl, ResUrl } from "../../common/const/Url";
 import AudioManager, { SfxType } from "../../common/util/AudioManager";
 import Res from "../../common/util/Res";
 
@@ -7,7 +7,7 @@ const { ccclass, property } = cc._decorator;
 
 @ccclass
 export default class DlgAudio extends DialogBase {
-    public static pUrl: string = "DlgAudio";
+    public static pUrl: string = DirUrl.PREFAB_DIALOG + "DlgAudio";
 
     @property(cc.Slider) public volumeSlider: cc.Slider = null;
 

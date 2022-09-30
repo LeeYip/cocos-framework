@@ -25,7 +25,7 @@ export interface TipData {
 }
 
 /**
- * 全局层级管理
+ * 全局弹窗管理器
  */
 @ccclass
 @disallowMultiple
@@ -105,7 +105,7 @@ export default class Layer extends cc.Component {
 
     /**
      * 获取弹窗组件（返回遍历到的第一个）
-     * @param url prefab在resources/prefab/dialog/下的路径
+     * @param url prefab路径，规则同Res加载路径
      */
     public getDialog(url: string): DialogBase {
         for (let i = 0; i < this.dialogLayer.childrenCount; i++) {
@@ -123,13 +123,13 @@ export default class Layer extends cc.Component {
 
     /**
      * （同步方法，需确保事先已加载预制资源）打开弹窗
-     * @param url prefab在resources/prefab/dialog/下的路径
+     * @param url prefab路径，规则同Res加载路径
      * @param args DialogBase.open调用参数
      */
     public openDialog(url: string, ...args: any[]): void {
-        let prefab: cc.Prefab = Res.get(DirUrl.PREFAB_DIALOG + url, cc.Prefab);
+        let prefab: cc.Prefab = Res.get(url, cc.Prefab);
         if (!prefab) {
-            cc.error(`[Layer.openDialog] can not find dialog prefab: ${DirUrl.PREFAB_DIALOG + url}`);
+            cc.error(`[Layer.openDialog] can not find dialog prefab: ${url}`);
             return;
         }
 
@@ -147,7 +147,7 @@ export default class Layer extends cc.Component {
 
     /**
      * （同步方法，需确保事先已加载预制资源）打开唯一弹窗--同一弹窗节点只能同时存在一个
-     * @param url prefab在resources/prefab/dialog/下的路径
+     * @param url prefab路径，规则同Res加载路径
      * @param args DialogBase.open调用参数
      */
     public openUniDialog(url: string, ...args: any[]): void {
@@ -161,15 +161,15 @@ export default class Layer extends cc.Component {
     /**
      * 打开弹窗
      * @async
-     * @param url prefab在resources/prefab/dialog/下的路径
+     * @param url prefab路径，规则同Res加载路径
      * @param args DialogBase.open调用参数
      */
     public async openDialogAsync(url: string, ...args: any[]): Promise<void> {
         this.showLoading();
-        let prefab: cc.Prefab = await Res.load(DirUrl.PREFAB_DIALOG + url, cc.Prefab);
+        let prefab: cc.Prefab = await Res.load(url, cc.Prefab);
         this.hideLoading();
         if (!prefab) {
-            cc.error(`[Layer.openDialogAsync] can not find dialog prefab: ${DirUrl.PREFAB_DIALOG + url}`);
+            cc.error(`[Layer.openDialogAsync] can not find dialog prefab: ${url}`);
             return;
         }
 
@@ -188,7 +188,7 @@ export default class Layer extends cc.Component {
     /**
      * 打开唯一弹窗--同一弹窗节点只能同时存在一个
      * @async
-     * @param url prefab在resources/prefab/dialog/下的路径
+     * @param url prefab路径，规则同Res加载路径
      * @param args DialogBase.open调用参数
      */
     public async openUniDialogAsync(url: string, ...args: any[]): Promise<void> {
@@ -201,7 +201,7 @@ export default class Layer extends cc.Component {
 
     /**
      * 关闭遍历到的第一个弹窗
-     * @param url prefab在resources/prefab/dialog/下的路径
+     * @param url prefab路径，规则同Res加载路径
      * @param play true：调用playClose播放弹窗关闭动画；false：直接调用close关闭弹窗
      */
     public closeDialog(url: string, play: boolean = false): void {
@@ -214,7 +214,7 @@ export default class Layer extends cc.Component {
 
     /**
      * 关闭所有同路径弹窗，不传参则关闭所有弹窗
-     * @param url prefab在resources/prefab/dialog/下的路径
+     * @param url prefab路径，规则同Res加载路径
      * @param play true：调用playClose播放弹窗关闭动画；false：直接调用close关闭弹窗
      */
     public closeDialogs(url: string = "", play: boolean = false): void {
@@ -232,7 +232,7 @@ export default class Layer extends cc.Component {
 
     /**
      * 异步等待弹窗关闭（只等待遍历到的第一个）
-     * @param url prefab在resources/prefab/dialog/下的路径
+     * @param url prefab路径，规则同Res加载路径
      */
     public async waitCloseDialog(url: string): Promise<void> {
         let cmpt = this.getDialog(url);
@@ -246,7 +246,7 @@ export default class Layer extends cc.Component {
 
     /**
      * 异步等待所有同路径弹窗关闭
-     * @param url prefab在resources/prefab/dialog/下的路径
+     * @param url prefab路径，规则同Res加载路径
      */
     public async waitCloseDialogs(url: string): Promise<void[]> {
         let arr: Array<Promise<void>> = [];

@@ -23,7 +23,7 @@ const BUNDLE_CHECK = "ab:";
  * 1. 如果加载resources内的资源，直接写明resources内的路径即可
  * 2. 如果加载路径以ab:开头，则会加载对应bundle内的资源。例：ab:bundleA/xxx/a表示bundle名为bundleA，资源路径为xxx/a
  * 
- * 资源释放要点：
+ * 引用计数管理：
  * 1. 尽量使用此类的接口加载所有资源、instantiate节点实例，否则需要自行管理引用计数
  * 2. Res.instantiate不要对动态生成的节点使用，尽量只instantiate prefab上预设好的节点，否则有可能会导致引用计数的管理出错
  * 3. 调用load接口时如需传入release参数，则同一资源在全局调用load时release参数尽量保持一致，否则可能不符合预期
@@ -187,7 +187,7 @@ export default class Res {
         }
 
         let parseData = this.parseUrl(url);
-        if (parseData.bundle) {
+        if (parseData.bundle && !cc.assetManager.getBundle(parseData.bundle)) {
             await this.loadBundle(parseData.bundle);
         }
 
@@ -220,7 +220,7 @@ export default class Res {
      */
     public static async loadDir<T extends cc.Asset>(url: string, type: typeof cc.Asset, release: boolean = true): Promise<T[]> {
         let parseData = this.parseUrl(url);
-        if (parseData.bundle) {
+        if (parseData.bundle && !cc.assetManager.getBundle(parseData.bundle)) {
             await this.loadBundle(parseData.bundle);
         }
 
@@ -286,6 +286,7 @@ export default class Res {
 
     /**
      * 尝试释放所有缓存资源
+     * - 只要遵守本文件的规则注释，此接口不会导致正在被使用的资源被引擎释放，可放心使用
      */
     public static releaseAll(): void {
         let nowSec = Date.now() / 1000;

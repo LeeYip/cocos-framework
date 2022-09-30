@@ -2,13 +2,14 @@ import DialogBase from "../../common/cmpt/base/DialogBase";
 import Timer from "../../common/cmpt/base/Timer";
 import ShaderFill from "../../common/cmpt/shader/ShaderFill";
 import ShaderTile from "../../common/cmpt/shader/ShaderTile";
+import { DirUrl } from "../../common/const/Url";
 import { Easing, SCALE_TWEEN, Tween } from "../../common/util/Tween";
 
 const { ccclass, property } = cc._decorator;
 
 @ccclass
 export default class DlgShader extends DialogBase {
-    public static pUrl: string = "DlgShader";
+    public static pUrl: string = DirUrl.PREFAB_DIALOG + "DlgShader";
 
     @property(ShaderTile) tile: ShaderTile = null;
     @property(ShaderFill) fill: ShaderFill = null;

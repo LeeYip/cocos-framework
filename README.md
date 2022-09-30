@@ -7,12 +7,12 @@
 - [框架结构](#framework)
     - [动画状态机](#framework-animator)
     - [全局时间管理器](#framework-timer)
-    - [全局层级管理](#framework-layer)
+    - [全局弹窗管理器](#framework-layer)
     - [全局事件管理器](#framework-events)
     - [资源管理器](#framework-res)
     - [音频管理器](#framework-audio)
     - [多语言](#framework-i18n)
-    - [一些ui组件](#framework-ui)
+    - [常用ui组件](#framework-ui)
     - [常用工具类](#framework-tool)
     - [引擎源码hack](#framework-hack)
     - [几个shader](#framework-shader)
@@ -83,7 +83,7 @@ comp.destory();
     - **`gamePause()`**  暂停游戏 timeScale设置为0，触发暂停事件
     - **`gameResume()`**  恢复游戏 timeScale恢复为暂停前的值，触发恢复事件
 
-#### <a id="framework-layer"></a>全局层级管理
+#### <a id="framework-layer"></a>全局弹窗管理器
 
 >文件路径(scripts/common/cmpt/base/Layer.ts)
 
@@ -111,7 +111,7 @@ export default class DlgExample extends DialogBase {
 }
 ```
 
-打开一个弹窗，并传递open方法的参数，弹窗prefab路径填写相对于resources/prefab/dialog/下的路径
+打开一个弹窗，并传递open方法的参数，弹窗prefab路径规则与[资源管理器](#framework-res)加载路径规则相同
 ```typescript
 // 建议在弹窗组件类上加一个静态属性pUrl用以标明路径，这样在代码里便于查找和跳转引用
 Layer.inst.openUniDialog(DlgExample.pUrl, 1, 2);
@@ -229,18 +229,51 @@ export default class Test extends cc.Component {
 #### <a id="framework-res"></a>资源管理器
 >文件路径(scripts/common/util/Res.ts)
 
-主要是对prefab、图片等进行资源管理，内部自动进行引用计数的加减，可保证资源的安全释放，使用时需要注意以下要点：
+主要是对prefab、图片等进行资源管理，内部自动进行引用计数的加减，可保证资源的安全释放。
+
+资源加载：
+1. 如果加载resources内的资源，直接写明resources内的路径即可
+2. 如果加载路径以ab:开头，则会加载对应bundle内的资源。例：ab:bundleA/xxx/a表示bundle名为bundleA，资源路径为xxx/a
+```typescript
+// 加载resources内的资源（项目下完整路径为assets/resources/xxx/a.png）
+let sf = await Res.load<cc.SpriteFrame>("xxx/a", cc.SpriteFrame);
+
+// 加载bundle内的资源（项目下完整路径为assets/bundleA/xxx/a.png，其中bundleA为包名）
+let sf = await Res.load<cc.SpriteFrame>("ab:bundleA/xxx/a", cc.SpriteFrame);
+```
+
+引用计数管理：
 1. 尽量使用此类的接口加载所有资源、instantiate节点实例，否则需要自行管理引用计数
 2. Res.instantiate不要对动态生成的节点使用，尽量只instantiate prefab上预设好的节点，否则有可能会导致引用计数的管理出错
 3. 调用load接口时如需传入release参数，则同一资源在全局调用load时release参数尽量保持一致，否则可能不符合预期
 4. 请使用ResSpine、ResSprite组件去动态加载spine、图片资源，否则需要自行管理这些资源的引用计数
+```typescript
+// 请使用Res.instantiate代替cc.instantiate去获取节点实例
+let node: cc.Node = Res.instantiate(prefab);
+
+// ResSpine、ResSprite组件负责自动管理引用计数
+// 请使用ResSprite去动态加载或者动态设置spriteFrame
+resSpr.setSpriteFrame("xxx/a");
+resSpr.spriteFrame = sf;
+```
+
+资源释放：
+```typescript
+// 设置资源可被释放的间隔时间，资源超过此间隔未被再次load才可释放
+Res.releaseSec = 60;
+
+// 尝试进行缓存资源的释放
+// 只要遵守上述规则，此接口不会导致正在被使用的资源被引擎释放，可放心使用
+Res.releaseAll();
+```
 
 - **属性**
     - **`releaseSec: number`**  资源释放的间隔时间（秒），资源超过此间隔未被load才可释放
 
 - **方法**
     - **`get<T extends cc.Asset>(url: string, type: typeof cc.Asset): T`**  获取缓存资源。通常不应直接调用此接口，除非调用前能确保资源已加载并且能自行管理引用计数
-    - **`load<T extends cc.Asset>(url: string, type: typeof cc.Asset, release: boolean = true): Promise<T>`**  加载resources文件夹下单个资源
+    - **`loadBundle(nameOrUrl: string): Promise<cc.AssetManager.Bundle>`** 加载bundle
+    - **`load<T extends cc.Asset>(url: string, type: typeof cc.Asset, release: boolean = true): Promise<T | null>`**  加载resources文件夹下单个资源
     - **`loadDir<T extends cc.Asset>(url: string, type: typeof cc.Asset, release: boolean = true): Promise<T[]>`**  加载resources文件夹下某个文件夹内某类资源
     - **`instantiate(original: cc.Node | cc.Prefab, related?: cc.Node | cc.Prefab): cc.Node`**  获取节点实例，建立节点与缓存prefab的联系
     - **`releaseAll()`**  尝试释放所有缓存资源
@@ -297,7 +330,7 @@ I18n.getText("test", "somthing", 2); // => "test somthing 2 !!!"
     - **`getText(key: string, ...option: [{ [k: string]: string | number }] | Array<string | number>): string`**  通过key获取语言表中的字符串
 
 
-#### <a id="framework-ui"></a>一些ui组件
+#### <a id="framework-ui"></a>常用ui组件
 >文件路径(scripts/common/cmpt/)
 - **VirtualList** 虚拟列表，仅生成mask区域内所需的最少节点，且支持节点分层
 

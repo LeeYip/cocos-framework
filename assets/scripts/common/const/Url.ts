@@ -1,5 +1,5 @@
 /**
- * resources目录下单个资源路径
+ * 单个资源路径
  */
 export const ResUrl = {
     PREFAB: {
@@ -24,7 +24,7 @@ export const ResUrl = {
 }
 
 /**
- * resources目录下文件夹路径
+ * 文件夹路径
  */
 export const DirUrl = {
     PREFAB: "prefab/",

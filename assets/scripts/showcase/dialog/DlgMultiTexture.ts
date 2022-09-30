@@ -1,7 +1,7 @@
 import DialogBase from "../../common/cmpt/base/DialogBase";
 import MultiSprite from "../../common/cmpt/ui/multiTexture/MultiSprite";
 import { MultiTextureManager } from "../../common/cmpt/ui/multiTexture/MultiTextureManager";
-import { ResUrl } from "../../common/const/Url";
+import { DirUrl, ResUrl } from "../../common/const/Url";
 import Res from "../../common/util/Res";
 
 const { ccclass, property } = cc._decorator;
@@ -16,7 +16,7 @@ if (CC_NATIVERENDERER) {
 
 @ccclass
 export default class DlgMultiTexture extends DialogBase {
-    public static pUrl: string = "DlgMultiTexture";
+    public static pUrl: string = DirUrl.PREFAB_DIALOG + "DlgMultiTexture";
 
     @property(cc.Node)
     item1: cc.Node = null;

@@ -10,7 +10,7 @@ const { ccclass, property, disallowMultiple, menu } = cc._decorator;
 @disallowMultiple
 @menu("Framework/基础组件/DialogBase")
 export default class DialogBase extends cc.Component {
-    /** 弹窗prefab在resources/prefab/dialog/下的路径 */
+    /** 弹窗prefab路径，规则同Res加载路径 */
     public static pUrl: string = "";
 
     @property(cc.Animation)
@@ -34,7 +34,7 @@ export default class DialogBase extends cc.Component {
     private _resolveList: Array<(value?: any) => void> = [];
 
     private _prefabUrl: string = "";
-    /** 弹窗prefab在resources/prefab/dialog/下的路径 */
+    /** 弹窗prefab路径，规则同Res加载路径 */
     public get prefabUrl(): string { return this._prefabUrl; }
 
     protected onLoad(): void {

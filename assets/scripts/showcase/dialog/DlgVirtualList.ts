@@ -1,5 +1,6 @@
 import DialogBase from "../../common/cmpt/base/DialogBase";
 import VirtualList from "../../common/cmpt/ui/scrollList/VirtualList";
+import { DirUrl } from "../../common/const/Url";
 import Tool from "../../common/util/Tool";
 import { ItemArgs } from "./ListItem";
 
@@ -7,7 +8,7 @@ const { ccclass, property } = cc._decorator;
 
 @ccclass
 export default class DlgVirtualList extends DialogBase {
-    public static pUrl: string = "DlgVirtualList";
+    public static pUrl: string = DirUrl.PREFAB_DIALOG + "DlgVirtualList";
 
     @property(VirtualList) list: VirtualList<ItemArgs> = null;
     @property(cc.Label) rndLab: cc.Label = null;

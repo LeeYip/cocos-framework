@@ -1,6 +1,7 @@
 import DialogBase from "../../common/cmpt/base/DialogBase";
 import Timer from "../../common/cmpt/base/Timer";
 import { EventName } from "../../common/const/EventName";
+import { DirUrl } from "../../common/const/Url";
 import Events, { preloadEvent } from "../../common/util/Events";
 import { SCALE_TWEEN, Tween } from "../../common/util/Tween";
 
@@ -8,7 +9,7 @@ const { ccclass, property } = cc._decorator;
 
 @ccclass
 export default class DlgTimer extends DialogBase {
-    public static pUrl: string = "DlgTimer";
+    public static pUrl: string = DirUrl.PREFAB_DIALOG + "DlgTimer";
 
     @property(cc.Slider) public slider: cc.Slider = null;
     @property(cc.Node) move1: cc.Node = null;

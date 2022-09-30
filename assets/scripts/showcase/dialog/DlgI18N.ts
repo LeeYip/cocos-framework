@@ -1,4 +1,6 @@
 import DialogBase from "../../common/cmpt/base/DialogBase";
+import ResSprite from "../../common/cmpt/ui/res/ResSprite";
+import { DirUrl } from "../../common/const/Url";
 import I18n, { LangType } from "../../i18n/I18n";
 import LocalizedLabel from "../../i18n/LocalizedLabel";
 
@@ -6,7 +8,7 @@ const { ccclass, property } = cc._decorator;
 
 @ccclass
 export default class DlgI18N extends DialogBase {
-    public static pUrl: string = "DlgI18N";
+    public static pUrl: string = DirUrl.PREFAB_DIALOG + "DlgI18N";
 
     @property(LocalizedLabel) text1: LocalizedLabel = null;
     @property(LocalizedLabel) text2: LocalizedLabel = null;

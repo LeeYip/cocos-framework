@@ -2,12 +2,13 @@ import DialogBase from "../../common/cmpt/base/DialogBase";
 import AnimValueLabel from "../../common/cmpt/ui/animValue/AnimValueLabel";
 import AnimValueProgress from "../../common/cmpt/ui/animValue/AnimValueProgress";
 import AnimValueProgressHP from "../../common/cmpt/ui/animValue/AnimValueProgressHP";
+import { DirUrl } from "../../common/const/Url";
 
 const { ccclass, property } = cc._decorator;
 
 @ccclass
 export default class DlgAnimValue extends DialogBase {
-    public static pUrl: string = "DlgAnimValue";
+    public static pUrl: string = DirUrl.PREFAB_DIALOG + "DlgAnimValue";
 
     @property(AnimValueLabel) public animLab: AnimValueLabel = null;
     @property(AnimValueProgress) public animProgress: AnimValueProgress = null;

@@ -1,5 +1,6 @@
 import DialogBase from "../../common/cmpt/base/DialogBase";
 import { EventName } from "../../common/const/EventName";
+import { DirUrl } from "../../common/const/Url";
 import Events, { eventsOnEnable, preloadEvent } from "../../common/util/Events";
 import Tool from "../../common/util/Tool";
 
@@ -8,7 +9,7 @@ const { ccclass, property } = cc._decorator;
 @ccclass
 @eventsOnEnable()
 export default class DlgEvents extends DialogBase {
-    public static pUrl: string = "DlgEvents";
+    public static pUrl: string = DirUrl.PREFAB_DIALOG + "DlgEvents";
 
     @property(cc.Label) lab1: cc.Label = null;
 

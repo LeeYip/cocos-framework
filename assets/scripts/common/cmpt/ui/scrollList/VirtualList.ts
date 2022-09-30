@@ -1,3 +1,4 @@
+import EditorTool from "../../../util/EditorTool";
 import Tool from "../../../util/Tool";
 import VirtualLayout from "./VirtualLayout";
 
@@ -226,9 +227,9 @@ export default class VirtualList<T extends VirtualArgs> extends cc.Component {
                 }
             }
             if (hasChildType) {
-                cc.Class["Attr"].setClassAttr(OtherLayoutData, "templateChild", "enumList", cc.Enum["getList"](mainItemChild));
+                EditorTool.setClassAttrPropEnum(OtherLayoutData, "templateChild", cc.Enum["getList"](mainItemChild));
                 if (refresh) {
-                    Editor.Utils.refreshSelectedInspector("node", this.node.uuid);
+                    EditorTool.refreshSelectedInspector(this.node);
                 }
             }
         };

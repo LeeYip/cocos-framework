@@ -1,11 +1,12 @@
 import DialogBase from "../../common/cmpt/base/DialogBase";
 import Layer from "../../common/cmpt/base/Layer";
+import { DirUrl } from "../../common/const/Url";
 
 const { ccclass, property } = cc._decorator;
 
 @ccclass
 export default class DlgLayer extends DialogBase {
-    public static pUrl: string = "layer/DlgLayer";
+    public static pUrl: string = DirUrl.PREFAB_DIALOG + "layer/DlgLayer";
 
     /**
      * @override
@@ -15,9 +16,9 @@ export default class DlgLayer extends DialogBase {
     }
 
     private async onClockAwait() {
-        await Layer.inst.openUniDialogAsync("layer/DlgLayer2");
-        await Layer.inst.waitCloseDialog("layer/DlgLayer2");
-        await Layer.inst.openUniDialogAsync("layer/DlgLayer3");
+        await Layer.inst.openUniDialogAsync(DirUrl.PREFAB_DIALOG + "layer/DlgLayer2");
+        await Layer.inst.waitCloseDialog(DirUrl.PREFAB_DIALOG + "layer/DlgLayer2");
+        await Layer.inst.openUniDialogAsync(DirUrl.PREFAB_DIALOG + "layer/DlgLayer3");
     }
 
     private onClickTipUnique() {

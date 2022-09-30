@@ -27,7 +27,7 @@ export default class ResSpine extends cc.Component {
 
     /**
      * 设置skeletonData
-     * @param url 
+     * @param url 骨骼资源路径，规则同Res加载路径
      */
     public async setSkeletonData(url: string): Promise<void> {
         let result = Res.get(url, sp.SkeletonData) || await Res.load(url, sp.SkeletonData);

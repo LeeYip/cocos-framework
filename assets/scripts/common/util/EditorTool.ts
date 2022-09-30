@@ -30,4 +30,25 @@ export default class EditorTool {
             });
         });
     }
+
+    /**
+     * 编辑器模式下设置ccclass的属性装饰器中的枚举值
+     */
+    public static setClassAttrPropEnum(ctor: unknown, propName: string, value: unknown): void {
+        if (!CC_EDITOR) {
+            return;
+        }
+        cc.Class["Attr"].setClassAttr(ctor, propName, "enumList", value);
+    }
+
+    /**
+     * 编辑器模式下刷新选中节点的属性检查器窗口
+     * @param node 选中的节点
+     */
+    public static refreshSelectedInspector(node: cc.Node): void {
+        if (!CC_EDITOR) {
+            return;
+        }
+        Editor.Utils.refreshSelectedInspector("node", node.uuid);
+    }
 }

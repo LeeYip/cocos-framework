@@ -41,7 +41,7 @@ export default class Game extends cc.Component {
     }
 
     private onClickButton() {
-        Layer.inst.openUniDialogAsync("DlgButton");
+        Layer.inst.openUniDialogAsync(DirUrl.PREFAB_DIALOG + "DlgButton");
     }
 
     private onClickShake() {
