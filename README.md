@@ -181,8 +181,8 @@ export default class Test extends cc.Component {
 
 或者也可使用类装饰器覆盖onLoad中和onDestroy方法，并分别在其中调用targetOn与targetOff
 ```typescript
-// 参数为true则会注册父类用preloadEvent绑定的事件
 // 参数为false则只注册当前类用preloadEvent绑定的事件
+// 参数为true则会注册当前类以及父类用preloadEvent绑定的事件
 @eventsOnLoad(true) // 也可使用@eventsOnEnable，对应于onEnable和onDisable
 export default class Test extends cc.Component {
     // 使用装饰器绑定对应事件监听的函数
@@ -273,9 +273,9 @@ Res.releaseAll();
 - **方法**
     - **`get<T extends cc.Asset>(url: string, type: typeof cc.Asset): T`**  获取缓存资源。通常不应直接调用此接口，除非调用前能确保资源已加载并且能自行管理引用计数
     - **`loadBundle(nameOrUrl: string): Promise<cc.AssetManager.Bundle>`** 加载bundle
-    - **`load<T extends cc.Asset>(url: string, type: typeof cc.Asset, release: boolean = true): Promise<T | null>`**  加载resources文件夹下单个资源
-    - **`loadDir<T extends cc.Asset>(url: string, type: typeof cc.Asset, release: boolean = true): Promise<T[]>`**  加载resources文件夹下某个文件夹内某类资源
-    - **`instantiate(original: cc.Node | cc.Prefab, related?: cc.Node | cc.Prefab): cc.Node`**  获取节点实例，建立节点与缓存prefab的联系
+    - **`load<T extends cc.Asset>(url: string, type: typeof cc.Asset, release: boolean = true): Promise<T | null>`**  加载单个资源
+    - **`loadDir<T extends cc.Asset>(url: string, type: typeof cc.Asset, release: boolean = true): Promise<T[]>`**  加载某个文件夹内的某类资源
+    - **`instantiate(original: cc.Node | cc.Prefab, related?: cc.Node | cc.Prefab): cc.Node`**  获取节点实例，并建立新节点与prefab资源的联系
     - **`releaseAll()`**  尝试释放所有缓存资源
 
 #### <a id="framework-audio"></a>音频管理器
@@ -360,7 +360,7 @@ I18n.getText("test", "somthing", 2); // => "test somthing 2 !!!"
 
 #### <a id="framework-tool"></a>常用工具类
 >文件路径(scripts/common/util/)
-- **Tool** 常用工具接口
+- **Tool** 常用工具方法
 - **Decorator** 装饰器
 
 #### <a id="framework-hack"></a>引擎源码hack

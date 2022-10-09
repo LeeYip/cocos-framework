@@ -39,7 +39,7 @@ export default class ResSprite extends cc.Component {
     }
 
     /**
-     * 设置spriteFrame
+     * 加载并设置spriteFrame
      * @param url 图片或图集路径，规则同Res加载路径
      * @param key 如果需要加载的url为图集时，需传入图集的key
      */

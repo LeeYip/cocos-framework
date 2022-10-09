@@ -123,18 +123,19 @@ export default class AnimValue extends cc.Component {
     }
 
     /**
-     * 设置进度值。异步方法，进度动画结束后resolve
+     * 设置进度值。进度动画结束后resolve
      * @virtual
      * @param end 目标进度值
      * @param anim 是否执行动画，默认true
      */
-    public async setValue(end: number, anim: boolean = true): Promise<void> {
-        if (!anim) {
-            this.setValueImmediately(end);
-            return;
-        }
-
+    public setValue(end: number, anim: boolean = true): Promise<void> {
         return new Promise((resolve, reject) => {
+            if (!anim) {
+                this.setValueImmediately(end);
+                resolve();
+                return;
+            }
+
             this._animResolve = resolve;
             this._endValue = end;
             this._isAdd = this._endValue - this._curValue > 0;
