@@ -9,7 +9,7 @@ if (!CC_EDITOR) {
         if (Timer.timer) {
             return;
         }
-        
+
         cc.log("addPersistRootNode: TIMER");
         let node = new cc.Node("TIMER");
         cc.game.addPersistRootNode(node);
@@ -103,22 +103,6 @@ export default class Timer extends cc.Component {
             this._timeScale = this._lastTimeScale;
             Events.emit(EventName.GAME_RESUME);
         }
-    }
-
-    /**
-     * 对单位为秒的时间生成格式化时间字符串
-     * @param t 时间s
-     */
-    public static getFormatTime(t: number): string {
-        let seconds: number = Math.floor(t);
-        let minutes: number = Math.floor(seconds / 60);
-        let hours: number = Math.floor(seconds / 3600);
-
-        let h: string = hours < 10 ? `0${hours}` : `${hours}`;
-        let m: string = minutes % 60 < 10 ? `0${minutes % 60}` : `${minutes % 60}`;
-        let s: string = seconds % 60 < 10 ? `0${seconds % 60}` : `${seconds % 60}`;
-
-        return hours > 0 ? `${h}:${m}:${s}` : `${m}:${s}`;
     }
 
     //#endregion
