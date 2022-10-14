@@ -272,25 +272,25 @@ export default class Tool {
      * @param format 格式化字符串
      * @example
      * // 当format为string时，会以format中的最大时间单位进行格式化
-     * Tool.formatTimeString(3601, "m:s"); // 60:1
-     * Tool.formatTimeString(3601, "mm:ss"); // 60:01
-     * Tool.formatTimeString(3601, "hh:mm:ss"); // 01:00:01
+     * Tool.formatTimeString(3601, "%{m}:%{s}"); // 60:1
+     * Tool.formatTimeString(3601, "%{mm}:%{ss}"); // 60:01
+     * Tool.formatTimeString(3601, "%{hh}:%{mm}:%{ss}"); // 01:00:01
      * 
      * // 当format为object时，会以传入的sec计算最大的时间单位，并选择format对应的字符串进行格式化
      * Tool.formatTimeString(100, {
-     *     S: "s秒",
-     *     M: "m分s秒",
-     *     H: "h时m分s秒",
-     *     D: "d天h时m分s秒"
+     *     S: "%{s}秒",
+     *     M: "%{m}分%{s}秒",
+     *     H: "%{h}时%{m}分%{s}秒",
+     *     D: "%{d}天%{h}时%{m}分%{s}秒"
      * }); // 1分40秒
      * Tool.formatTimeString(100000, {
-     *     S: "s秒",
-     *     M: "m分s秒",
-     *     H: "h时m分s秒",
-     *     D: "d天h时m分s秒"
+     *     S: "%{s}秒",
+     *     M: "%{m}分%{s}秒",
+     *     H: "%{h}时%{m}分%{s}秒",
+     *     D: "%{d}天%{h}时%{m}分%{s}秒"
      * }); // 1天3时46分40秒
      */
-    public static formatTimeString(sec: number, format: string | { "S": string; "M": string; "H": string; "D": string } = "hh:mm:ss"): string {
+    public static formatTimeString(sec: number, format: string | { "S": string; "M": string; "H": string; "D": string } = "%{hh}:%{mm}:%{ss}"): string {
         let seconds: number = Math.floor(sec);
         let minutes: number = Math.floor(seconds / 60);
         let hours: number = Math.floor(seconds / 3600);
@@ -337,19 +337,18 @@ export default class Tool {
         }
 
         let data = {
-            d: days,
+            d: `${days}`,
             hh: hours < 10 ? `0${hours}` : `${hours}`,
-            h: hours,
+            h: `${hours}`,
             mm: minutes < 10 ? `0${minutes}` : `${minutes}`,
-            m: minutes,
+            m: `${minutes}`,
             ss: seconds < 10 ? `0${seconds}` : `${seconds}`,
-            s: seconds
+            s: `${seconds}`
         };
 
-        result = result.toLowerCase();
         for (const key in data) {
             const value = data[key];
-            result = result.replace(new RegExp(key, "g"), value);
+            result = result.replace(new RegExp(`%{${key}}`, "g"), value);
         }
 
         return result;

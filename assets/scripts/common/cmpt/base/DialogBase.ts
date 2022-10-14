@@ -14,21 +14,21 @@ export default class DialogBase extends cc.Component {
     public static pUrl: string = "";
 
     @property(cc.Animation)
-    private dlgAnim: cc.Animation = null;
+    protected dlgAnim: cc.Animation = null;
 
     @property({
         type: cc.AnimationClip,
         tooltip: CC_DEV && "打开弹窗的动画",
         visible() { return !!this.dlgAnim; }
     })
-    private openClip: cc.AnimationClip = null;
+    protected openClip: cc.AnimationClip = null;
 
     @property({
         type: cc.AnimationClip,
         tooltip: CC_DEV && "关闭弹窗的动画",
         visible() { return !!this.dlgAnim; }
     })
-    private closeClip: cc.AnimationClip = null;
+    protected closeClip: cc.AnimationClip = null;
 
     /** 外部的resolve函数，在弹窗close时调用 */
     private _resolveList: Array<(value?: any) => void> = [];
