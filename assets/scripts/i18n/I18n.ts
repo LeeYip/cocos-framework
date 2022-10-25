@@ -1,5 +1,6 @@
 import { EventName } from "../common/const/EventName";
 import Events from "../common/util/Events";
+import Tool from "../common/util/Tool";
 import En from "./config/En";
 import Zh from "./config/Zh";
 
@@ -94,8 +95,8 @@ export default class I18n {
      * @param option 用于替换的数据，可以传键值对，也可以按顺序传参
      * @example
      * // 语言表 {"test": "test %{arg1} %{arg2} !!!"}
-     * I18n.getText("test", {arg1: "somthing", arg2: 2}); => "test somthing 2 !!!"
-     * I18n.getText("test", "somthing", 2); => "test somthing 2 !!!"
+     * I18n.getText("test", {arg1: "somthing", arg2: 2}); // "test somthing 2 !!!"
+     * I18n.getText("test", "somthing", 2); // "test somthing 2 !!!"
      */
     public static getText(key: string, ...option: [{ [k: string]: string | number }] | Array<string | number>): string {
         if (!this._phrases) {
@@ -107,21 +108,7 @@ export default class I18n {
         }
 
         let text: string = this._phrases.hasOwnProperty(key) ? this._phrases[key] : key;
-        if (option.length === 1 && Object.prototype.toString.call(option[0]) === "[object Object]") {
-            // 参数为键值对
-            for (let arg in (option[0] as { [k: string]: string | number })) {
-                if (option[0].hasOwnProperty(arg)) {
-                    let reg = new RegExp(`%{${arg}}`, "g");
-                    text = text.replace(reg, `${option[0][arg]}`);
-                }
-            }
-        } else {
-            // 参数为数组
-            option.forEach((value: any) => {
-                text = text.replace(/%\{.*?\}/, `${value}`);
-            });
-        }
-
+        text = Tool.formatString(text, ...option);
         return text;
     }
 }

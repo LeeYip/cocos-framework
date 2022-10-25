@@ -267,7 +267,35 @@ export default class Tool {
     }
 
     /**
-     * 对单位为秒的时间生成格式化时间字符串
+     * 根据参数返回格式化字符串
+     * @param text 源字符串
+     * @param option 用于格式化源字符串的数据，可以是键值对，也可以按顺序传参
+     * @example
+     * // 可使用以下两种调用方式，返回结果都是"测试字符串111--abc..."
+     * Tool.formatString("测试字符串%{a1}--%{a2}...", {a1: 111, a2: "abc"});
+     * Tool.formatString("测试字符串%{a1}--%{a2}...", 111, "abc");
+     */
+    public static formatString(text: string, ...option: [{ [k: string]: string | number }] | Array<string | number>): string {
+        let result = text;
+        if (option.length === 1 && Object.prototype.toString.call(option[0]) === "[object Object]") {
+            // 参数为键值对
+            for (let arg in (option[0] as { [k: string]: string | number })) {
+                if (option[0].hasOwnProperty(arg)) {
+                    let reg = new RegExp(`%{${arg}}`, "g");
+                    result = result.replace(reg, `${option[0][arg]}`);
+                }
+            }
+        } else {
+            // 参数为数组
+            option.forEach((value: any) => {
+                result = result.replace(/%\{.*?\}/, `${value}`);
+            });
+        }
+        return result;
+    }
+
+    /**
+     * 对一段时间返回格式化时间字符串
      * @param sec 时间s
      * @param format 格式化字符串
      * @example
@@ -302,11 +330,11 @@ export default class Tool {
         if (typeof format === "string") {
             // 查询格式化字符串中最大的单位
             result = format;
-            if (/d/i.test(format)) {
+            if (/%\{d+\}/.test(format)) {
                 maxUnit = TimeUnit.D;
-            } else if (/h/i.test(format)) {
+            } else if (/%\{h+\}/.test(format)) {
                 maxUnit = TimeUnit.H;
-            } else if (/m/i.test(format)) {
+            } else if (/%\{m+\}/.test(format)) {
                 maxUnit = TimeUnit.M;
             }
         } else {
@@ -337,6 +365,7 @@ export default class Tool {
         }
 
         let data = {
+            dd: days < 10 ? `0${days}` : `${days}`,
             d: `${days}`,
             hh: hours < 10 ? `0${hours}` : `${hours}`,
             h: `${hours}`,
@@ -345,12 +374,43 @@ export default class Tool {
             ss: seconds < 10 ? `0${seconds}` : `${seconds}`,
             s: `${seconds}`
         };
+        result = this.formatString(result, data);
+        return result;
+    }
 
-        for (const key in data) {
-            const value = data[key];
-            result = result.replace(new RegExp(`%{${key}}`, "g"), value);
+    /**
+     * 将一个Date对象或Date毫秒数返回格式化日期字符串
+     * @param date Date对象或Date毫秒数
+     * @param format 格式化字符串
+     * @param isUTC true:UTC时间 false:本地时间
+     * @example
+     * Tool.formatDateString(0, "%{YYYY}-%{MM}-%{dd} %{hh}:%{mm}:%{ss}", true); // "1970-01-01 00:00:00"
+     * Tool.formatDateString(0, "%{dd}/%{MM}/%{YY}", true); // "01/01/70"
+     */
+    public static formatDateString(date: number | Date, format: string = "%{YYYY}-%{MM}-%{dd} %{hh}:%{mm}:%{ss}", isUTC: boolean = false): string {
+        let src = date instanceof Date ? date : new Date(date);
+        let year = isUTC ? src.getUTCFullYear() : src.getFullYear();
+        let month = isUTC ? src.getUTCMonth() + 1 : src.getMonth() + 1;
+        let days = isUTC ? src.getUTCDate() : src.getDate();
+        let hours = isUTC ? src.getUTCHours() : src.getHours();
+        let minutes = isUTC ? src.getUTCMinutes() : src.getMinutes();
+        let seconds = isUTC ? src.getUTCSeconds() : src.getSeconds();
+
+        let data = {
+            YYYY: `${year}`,
+            YY: year % 100 < 10 ? `0${year % 100}` : `${year % 100}`,
+            MM: month < 10 ? `0${month}` : `${month}`,
+            M: `${month}`,
+            dd: days < 10 ? `0${days}` : `${days}`,
+            d: `${days}`,
+            hh: hours < 10 ? `0${hours}` : `${hours}`,
+            h: `${hours}`,
+            mm: minutes < 10 ? `0${minutes}` : `${minutes}`,
+            m: `${minutes}`,
+            ss: seconds < 10 ? `0${seconds}` : `${seconds}`,
+            s: `${seconds}`
         }
-
+        let result = this.formatString(format, data);
         return result;
     }
 
