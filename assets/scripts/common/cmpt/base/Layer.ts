@@ -1,4 +1,4 @@
-import { DirUrl, ResUrl } from "../../const/Url";
+import { ResUrl } from "../../const/Url";
 import Res from "../../util/Res";
 import Tool from "../../util/Tool";
 import DialogBase from "./DialogBase";
@@ -62,36 +62,15 @@ export default class Layer extends cc.Component {
     }
 
     /**
-     * 进入主界面
+     * 进入常驻界面，并清空dialog与tip（不同于dialog，常驻界面始终显示在最底层，且同时只会存在一个）
      */
-    public async enterHome(): Promise<cc.Node> {
+    public async enterMain(url: string): Promise<cc.Node | null> {
         this.showLoading();
-        let prefab: cc.Prefab = await Res.load(ResUrl.PREFAB.HOME, cc.Prefab);
+        let prefab: cc.Prefab = await Res.load(url, cc.Prefab);
         this.hideLoading();
         if (!prefab) {
-            cc.error(`[Layer.enterHome] can not find home prefab: ${ResUrl.PREFAB.HOME}`);
-            return;
-        }
-
-        this.mainLayer.destroyAllChildren();
-        this.closeDialogs();
-        this.clearTips();
-        let node: cc.Node = Res.instantiate(prefab);
-        node.setPosition(0, 0);
-        this.mainLayer.addChild(node);
-        return node;
-    }
-
-    /**
-     * 进入游戏界面
-     */
-    public async enterGame(): Promise<cc.Node> {
-        this.showLoading();
-        let prefab: cc.Prefab = await Res.load(ResUrl.PREFAB.GAME, cc.Prefab);
-        this.hideLoading();
-        if (!prefab) {
-            cc.error(`[Layer.enterGame] can not find game prefab: ${ResUrl.PREFAB.GAME}`);
-            return;
+            cc.error(`[Layer.enterMain] can not find prefab: ${url}`);
+            return null;
         }
 
         this.mainLayer.destroyAllChildren();

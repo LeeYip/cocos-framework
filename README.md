@@ -127,8 +127,7 @@ await Layer.inst.waitCloseDialog(DlgExample.pUrl);
 ```
 
 - **方法**
-    - **`enterHome(): Promise<cc.Node>`**  进入主界面
-    - **`enterGame(): Promise<cc.Node>`**  进入游戏界面
+    - **`enterMain(): Promise<cc.Node | null>`**  进入常驻界面，并清空dialog与tip（不同于dialog，常驻界面始终显示在最底层，且同时只会存在一个）
     - **`getDialog(url: string): DialogBase`**  获取弹窗组件（返回遍历到的第一个）
     - **`openDialog(url: string, ...args: any[])`**  （同步方法，需确保事先已加载预制资源）打开弹窗
     - **`openUniDialog(url: string, ...args: any[])`**  （同步方法，需确保事先已加载预制资源）打开唯一弹窗，同一弹窗只能同时存在一个

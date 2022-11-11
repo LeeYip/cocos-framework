@@ -379,8 +379,8 @@ export default class Tool {
     }
 
     /**
-     * 将一个Date对象或Date毫秒数返回格式化日期字符串
-     * @param date Date对象或Date毫秒数
+     * 将一个Date对象或Date时间戳返回格式化日期字符串
+     * @param date Date对象或Date时间戳
      * @param format 格式化字符串
      * @param isUTC true:UTC时间 false:本地时间
      * @example

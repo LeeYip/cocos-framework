@@ -1,5 +1,5 @@
 import Layer from "../../common/cmpt/base/Layer";
-import { DirUrl } from "../../common/const/Url";
+import { DirUrl, ResUrl } from "../../common/const/Url";
 import { eventsOnLoad } from "../../common/util/Events";
 import Res from "../../common/util/Res";
 import DlgAnimValue from "../dialog/DlgAnimValue";
@@ -21,7 +21,7 @@ const { ccclass, property } = cc._decorator;
 export default class Game extends cc.Component {
 
     private onClickHome() {
-        Layer.inst.enterHome();
+        Layer.inst.enterMain(ResUrl.PREFAB.HOME);
     }
 
     private onClickTimer() {
