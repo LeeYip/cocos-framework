@@ -99,13 +99,15 @@ export default class VirtualLayout<T extends VirtualArgs> extends cc.Component {
     private _sizeDirty: boolean = false;
     /** 标记当前帧是否需要更新view区域数据显示 */
     private _viewDirty: boolean = false;
+    /** 标记当前帧是否需要同步others content的坐标 */
+    private _posDirty: boolean = false;
     /** main content激活状态的item */
     private _items: cc.Node[] = [];
     /** main content被回收的item池（不移出节点树，只设置opacity） */
     private _itemPool: cc.Node[] = [];
     /** others content激活状态的item，下标顺序与this.list.Others数组一致 */
     private _otherItemsArr: cc.Node[][] = [];
-    /** others content被回收的item池（不移出节点树，只设置opacity），下标顺序与this.list.Others数组一致 */
+    /** others content被回收的item池数组（不移出节点树，只设置opacity），下标顺序与this.list.Others数组一致 */
     private _otherItemPoolArr: cc.Node[][] = [];
 
     public onInit(list: VirtualList<T>): void {
@@ -122,7 +124,7 @@ export default class VirtualLayout<T extends VirtualArgs> extends cc.Component {
         });
 
         // 元素大小固定时初始化fixedSize
-        if (this._list.isFixedSize && this._fixedSize === null) {
+        if (this._fixedSize === null) {
             this.addItemNode(false);
             this._fixedSize = this._itemPool[0].getContentSize();
         }
@@ -137,8 +139,22 @@ export default class VirtualLayout<T extends VirtualArgs> extends cc.Component {
     }
 
     protected lateUpdate(): void {
+        this.updatePos();
         this.updateSize();
         this.updateView();
+    }
+
+    /**
+     * 同步others的坐标
+     */
+    private updatePos(): void {
+        if (!this._posDirty) {
+            return;
+        }
+        this._posDirty = false;
+        this._list.others.forEach((e) => {
+            e.content.position = this.node.position;
+        });
     }
 
     /**
@@ -204,7 +220,33 @@ export default class VirtualLayout<T extends VirtualArgs> extends cc.Component {
     }
 
     private updateSizeUnfixed(): void {
+        // 缓存宽高，最后赋值，是因为修改content size时会触发scrollview._calculateBoundary，改变content的坐标
+        let result = 0;
+        if (this.type === LayoutType.VERTICAL) {
+            if (this._list.argsArr.length <= 0) {
+                this.node.height = 0;
+                return;
+            }
 
+            result = this.top + this.bottom + (this._list.argsArr.length - 1) * this.spacingY;
+            for (let i = 0; i < this._list.argsArr.length; i++) {
+                let size = this.calcItemSizeUnfixed(i);
+                result += size.height;
+            }
+            this.node.height = result;
+        } else if (this.type === LayoutType.HORIZONTAL) {
+            if (this._list.argsArr.length <= 0) {
+                this.node.width = 0;
+                return;
+            }
+
+            result = this.left + this.right + (this._list.argsArr.length - 1) * this.spacingX;
+            for (let i = 0; i < this._list.argsArr.length; i++) {
+                let size = this.calcItemSizeUnfixed(i);
+                result += size.width;
+            }
+            this.node.width = result;
+        }
     }
 
     /**
@@ -391,17 +433,90 @@ export default class VirtualLayout<T extends VirtualArgs> extends cc.Component {
     }
 
     private updateViewUnfixed(): void {
+        let viewResult = this.checkViewItem();
+        let inView = viewResult.inView;
+        let outView = viewResult.outView;
+        let contentEdge = this.getNodeEdgeRect(this.node);
+        let xMax: number, xMin: number, yMax: number, yMin: number;
+        if (this.type === LayoutType.VERTICAL) {
+            let totalHeight: number = 0;
+            for (let i = 0; i < this._list.argsArr.length; i++) {
+                let size = this.calcItemSizeUnfixed(i);
+                totalHeight += size.height;
+                if (this.verticalDirection === VerticalDirection.TOP_TO_BOTTOM) {
+                    yMax = contentEdge.yMax - (this.top + i * this.spacingY + (totalHeight - size.height));
+                    yMin = yMax - size.height;
+                    if (yMax + this.node.y < this._viewEdge.yMin) {
+                        return;
+                    }
+                    if (yMin + this.node.y > this._viewEdge.yMax) {
+                        continue;
+                    }
+                } else {
+                    yMin = contentEdge.yMin + this.bottom + i * this.spacingY + (totalHeight - size.height);
+                    yMax = yMin + size.height;
+                    if (yMin + this.node.y > this._viewEdge.yMax) {
+                        return;
+                    }
+                    if (yMax + this.node.y < this._viewEdge.yMin) {
+                        continue;
+                    }
+                }
 
+                // 判断显示区域内部是否有节点显示此条数据
+                let found = inView.findIndex((e) => { return this._items[e].getComponent(VirtualItem).dataIdx === i; });
+                if (found !== -1) {
+                    continue;
+                }
+
+                // 没有节点显示此条数据，需使用显示区域外的节点显示此条数据
+                let itemIdx: number = outView.length === 0 ? this.addItemNode() : outView.shift();
+                let item: cc.Node = this._items[itemIdx];
+                this.setItem(cc.v3(0, yMin + item.anchorY * size.height), i, itemIdx);
+            }
+        } else if (this.type === LayoutType.HORIZONTAL) {
+            let totalWidth: number = 0;
+            for (let i = 0; i < this._list.argsArr.length; i++) {
+                let size = this.calcItemSizeUnfixed(i);
+                totalWidth += size.width;
+                if (this.horizontalDirection === HorizontalDirection.RIGHT_TO_LEFT) {
+                    xMax = contentEdge.xMax - (this.right + i * this.spacingX + (totalWidth - size.width));
+                    xMin = xMax - size.width;
+                    if (xMax + this.node.x < this._viewEdge.xMin) {
+                        return;
+                    }
+                    if (xMin + this.node.x > this._viewEdge.xMax) {
+                        continue;
+                    }
+                } else {
+                    xMin = contentEdge.xMin + this.left + i * this.spacingX + (totalWidth - size.width);
+                    xMax = xMin + size.width;
+                    if (xMin + this.node.x > this._viewEdge.xMax) {
+                        return;
+                    }
+                    if (xMax + this.node.x < this._viewEdge.xMin) {
+                        continue;
+                    }
+                }
+
+                // 判断显示区域内部是否有节点显示此条数据
+                let found = inView.findIndex((e) => { return this._items[e].getComponent(VirtualItem).dataIdx === i; });
+                if (found !== -1) {
+                    continue;
+                }
+
+                // 没有节点显示此条数据，需使用显示区域外的节点显示此条数据
+                let itemIdx: number = outView.length === 0 ? this.addItemNode() : outView.shift();
+                let item: cc.Node = this._items[itemIdx];
+                this.setItem(cc.v3(xMin + item.anchorX * size.width, 0), i, itemIdx);
+            }
+        }
     }
 
     /**
      * 区分在view内部与外部的items数组下标
      */
     private checkViewItem(): { inView: number[], outView: number[] } {
-        return this._list.isFixedSize ? this.checkViewItemFixed() : this.checkViewItemUnfixed();
-    }
-
-    private checkViewItemFixed(): { inView: number[], outView: number[] } {
         // 显示区域内部的下标
         let inView: number[] = [];
         // 显示区域外部的下标
@@ -439,15 +554,6 @@ export default class VirtualLayout<T extends VirtualArgs> extends cc.Component {
                 }
             }
         }
-
-        return { inView: inView, outView: outView };
-    }
-
-    private checkViewItemUnfixed(): { inView: number[], outView: number[] } {
-        // 显示区域内部的下标
-        let inView: number[] = [];
-        // 显示区域外部的下标
-        let outView: number[] = [];
 
         return { inView: inView, outView: outView };
     }
@@ -585,6 +691,18 @@ export default class VirtualLayout<T extends VirtualArgs> extends cc.Component {
     }
 
     /**
+     * 根据元素下标计算对应元素大小，isFixedSize为false时使用
+     * @param idx 
+     */
+    private calcItemSizeUnfixed(idx: number): cc.Size {
+        if (this._list.calcItemSize) {
+            return this._list.calcItemSize(this._list.argsArr[idx]);
+        } else {
+            return this._fixedSize;
+        }
+    }
+
+    /**
      * content位移监听回调
      */
     private onPositionChanged(): void {
@@ -593,12 +711,9 @@ export default class VirtualLayout<T extends VirtualArgs> extends cc.Component {
         // 2.在content size改变的时候，ScrollView会检测content有没有超出边界，此时会更新_outOfBoundaryAmount并直接修改content坐标。但是修改完content坐标之后_outOfBoundaryAmount记录的仍旧是旧值，此时_outOfBoundaryAmountDirty为false。
         // 3.ScrollView在touchend的时候会触发检测当前有没有超出边界，有的话自动回弹滚动。由于_outOfBoundaryAmountDirty为false，所以并未更新_outOfBoundaryAmount，而是直接取错误的_outOfBoundaryAmount作为超出边界的值，然后进行错误的自动回弹。
         this._list.scrollView["_outOfBoundaryAmountDirty"] = true;
-        // 更新view区域数据显示
+        // 更新标记
         this._viewDirty = true;
-        // 同步others
-        this._list.others.forEach((e) => {
-            e.content.position = this.node.position;
-        });
+        this._posDirty = true;
     }
 
     /**
@@ -675,6 +790,42 @@ export default class VirtualLayout<T extends VirtualArgs> extends cc.Component {
     }
 
     private getScrollOffsetUnfixed(idx: number, itemAnchor: cc.Vec2, viewAnchor: cc.Vec2): cc.Vec2 {
+        let contentEdge = this.getNodeEdgeRect(this.node);
+        let xMax: number, xMin: number, yMax: number, yMin: number;
+        let curSize: cc.Size = this.calcItemSizeUnfixed(idx);
+        if (this.type === LayoutType.VERTICAL) {
+            let totalHeight: number = 0;
+            for (let i = 0; i < idx; i++) {
+                let size = this.calcItemSizeUnfixed(i);
+                totalHeight += size.height;
+            }
+            if (this.verticalDirection === VerticalDirection.TOP_TO_BOTTOM) {
+                yMax = contentEdge.yMax - (this.top + idx * this.spacingY + totalHeight);
+                yMin = yMax - curSize.height;
+            } else {
+                yMin = contentEdge.yMin + this.bottom + idx * this.spacingY + totalHeight;
+                yMax = yMin + curSize.height;
+            }
+            let x = this._viewEdge.xMin - (contentEdge.xMin + this.node.x);
+            let y = contentEdge.yMax - (curSize.height * itemAnchor.y + yMin) - (1 - viewAnchor.y) * this._viewEdge.height;
+            return cc.v2(x, y);
+        } else if (this.type === LayoutType.HORIZONTAL) {
+            let totalWidth: number = 0;
+            for (let i = 0; i < idx; i++) {
+                let size = this.calcItemSizeUnfixed(i);
+                totalWidth += size.width;
+            }
+            if (this.horizontalDirection === HorizontalDirection.RIGHT_TO_LEFT) {
+                xMax = contentEdge.xMax - (this.right + idx * this.spacingX + totalWidth);
+                xMin = xMax - curSize.width;
+            } else {
+                xMin = contentEdge.xMin + this.left + idx * this.spacingX + totalWidth;
+                xMax = xMin + curSize.width;
+            }
+            let x = curSize.width * itemAnchor.x + xMin - contentEdge.xMin - viewAnchor.x * this._viewEdge.width;
+            let y = contentEdge.yMax - (this._viewEdge.yMax - this.node.y);
+            return cc.v2(x, y);
+        }
         return null;
     }
 

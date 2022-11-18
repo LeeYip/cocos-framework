@@ -154,10 +154,7 @@ export default class VirtualList<T extends VirtualArgs> extends cc.Component {
     @property({ type: OtherLayoutData, tooltip: CC_DEV && "列表副容器\n需要分层显示时使用，一般用于降低draw call" })
     public others: OtherLayoutData[] = [];
 
-    @property({
-        visible: false,
-        tooltip: CC_DEV && "元素节点大小是否一致且固定不变，大小不定时更耗性能（目前不支持此选项，必须为true）"
-    })
+    @property({ tooltip: CC_DEV && "元素节点大小是否一致\n大小不一致时必须提供calcItemSize接口，且暂不支持grid排版" })
     public isFixedSize: boolean = true;
 
     private _scrollView: cc.ScrollView = null;
@@ -183,6 +180,10 @@ export default class VirtualList<T extends VirtualArgs> extends cc.Component {
         this._argsArr = v;
         this.layout.rearrange();
     }
+
+    private _calcItemSize: (args: T) => cc.Size = null;
+    /** 根据参数计算元素大小的接口（isFixedSize为false时必须提供） */
+    public get calcItemSize(): (args: T) => cc.Size { return this._calcItemSize; };
 
     protected onLoad(): void {
         if (CC_EDITOR) {
@@ -246,6 +247,41 @@ export default class VirtualList<T extends VirtualArgs> extends cc.Component {
      */
     public scrollItemToView(idx: number, itemAnchor: cc.Vec2 = cc.v2(), viewAnchor: cc.Vec2 = cc.v2(), t: number = 0, a: boolean = true): void {
         this.scrollView.scrollToOffset(this.layout.getScrollOffset(idx, itemAnchor, viewAnchor), t, a);
+    }
+
+    /**
+     * 滚动到视图顶部
+     */
+    public scrollToTop(timeInSecond: number = 0, attenuated: boolean = true): void {
+        this.scrollView.scrollToTop(timeInSecond, attenuated);
+    }
+
+    /**
+     * 滚动到视图底部
+     */
+    public scrollToBottom(timeInSecond: number = 0, attenuated: boolean = true): void {
+        this.scrollView.scrollToBottom(timeInSecond, attenuated);
+    }
+
+    /**
+     * 滚动到视图左部
+     */
+    public scrollToLeft(timeInSecond: number = 0, attenuated: boolean = true): void {
+        this.scrollView.scrollToLeft(timeInSecond, attenuated);
+    }
+
+    /**
+     * 滚动到视图右部
+     */
+    public scrollToRight(timeInSecond: number = 0, attenuated: boolean = true): void {
+        this.scrollView.scrollToRight(timeInSecond, attenuated);
+    }
+
+    /**
+     * 根据参数计算元素大小的接口（isFixedSize为false时必须提供）
+     */
+    public setCalcItemSize(call: (args: T) => cc.Size): void {
+        this._calcItemSize = call;
     }
 
     /**

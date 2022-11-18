@@ -85,9 +85,9 @@ export default class CircleList extends cc.Component {
      * @param length 数据长度
      * @param curIdx 初始显示的数据
      * @param refreshCall 每个item刷新时的回调
-     * @param target
+     * @param target 调用refreshCall时的this
      */
-    public onInit(length: number, curIdx: number, refreshCall: (node: cc.Node, idx: number, isCur: boolean) => void, target: any): void {
+    public onInit(length: number, curIdx: number, refreshCall: (node: cc.Node, idx: number, isCur: boolean) => void, target: any = null): void {
         this._dataLen = length;
         this._curIdx = cc.misc.clampf(curIdx, 0, this._dataLen - 1);
         this._refreshCall = refreshCall;

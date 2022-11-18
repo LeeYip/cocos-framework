@@ -331,7 +331,7 @@ I18n.getText("test", "somthing", 2); // => "test somthing 2 !!!"
 
 #### <a id="framework-ui"></a>常用ui组件
 >文件路径(scripts/common/cmpt/)
-- **VirtualList** 虚拟列表，仅生成mask区域内所需的最少节点，且支持节点分层
+- **VirtualList** 虚拟列表，仅生成视图区域内所需的最少节点，且支持节点分层
 
 - **CircleList** 无限循环列表/轮播图
 

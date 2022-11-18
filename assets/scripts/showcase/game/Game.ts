@@ -13,6 +13,7 @@ import DlgShader from "../dialog/DlgShader";
 import DlgShake from "../dialog/DlgShake";
 import DlgTimer from "../dialog/DlgTimer";
 import DlgVirtualList from "../dialog/DlgVirtualList";
+import DlgVirtualList2 from "../dialog/DlgVirtualList2";
 
 const { ccclass, property } = cc._decorator;
 
@@ -50,6 +51,10 @@ export default class Game extends cc.Component {
 
     private onClickVirtualList() {
         Layer.inst.openUniDialogAsync(DlgVirtualList.pUrl);
+    }
+
+    private onClickVirtualList2() {
+        Layer.inst.openUniDialogAsync(DlgVirtualList2.pUrl);
     }
 
     private onClickCircleList() {
