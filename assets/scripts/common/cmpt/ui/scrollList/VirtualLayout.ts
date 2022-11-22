@@ -131,11 +131,13 @@ export default class VirtualLayout<T extends VirtualArgs> extends cc.Component {
 
         // 注册事件
         this.node.on(cc.Node.EventType.POSITION_CHANGED, this.onPositionChanged, this);
+        this._view.on(cc.Node.EventType.SIZE_CHANGED, this.onViewSizeChanged, this);
     }
 
     protected onDestroy(): void {
         // 注销事件
         this.node.off(cc.Node.EventType.POSITION_CHANGED, this.onPositionChanged, this);
+        this._view.off(cc.Node.EventType.SIZE_CHANGED, this.onViewSizeChanged, this);
     }
 
     protected lateUpdate(): void {
@@ -714,6 +716,13 @@ export default class VirtualLayout<T extends VirtualArgs> extends cc.Component {
         // 更新标记
         this._viewDirty = true;
         this._posDirty = true;
+    }
+
+    /**
+     * view size监听回调
+     */
+    private onViewSizeChanged(): void {
+        this._viewEdge = this.getNodeEdgeRect(this._view);
     }
 
     /**
