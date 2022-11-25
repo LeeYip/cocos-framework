@@ -45,6 +45,37 @@ export default class Layer extends cc.Component {
     /** 当前存在的tip文字数组 */
     private _tipTexts: string[] = [];
 
+    protected resetInEditor(): void {
+        if (!CC_EDITOR) {
+            return;
+        }
+        let checkNode = (...names: string[]) => {
+            names.forEach((name) => {
+                if (!this.node.getChildByName(name)) {
+                    let node = new cc.Node(name);
+                    this.node.addChild(node);
+                    let widget = node.addComponent(cc.Widget);
+                    widget.top = 0;
+                    widget.isAlignTop = true;
+                    widget.bottom = 0;
+                    widget.isAlignBottom = true;
+                    widget.left = 0;
+                    widget.isAlignLeft = true;
+                    widget.right = 0;
+                    widget.isAlignRight = true;
+                    if (name === "LoadingLayer") {
+                        node.addComponent(cc.BlockInputEvents);
+                    }
+                }
+            });
+        };
+        checkNode("MainLayer", "DialogLayer", "LoadingLayer", "TipLayer");
+        this.mainLayer = this.node.getChildByName("MainLayer");
+        this.dialogLayer = this.node.getChildByName("DialogLayer");
+        this.loadingLayer = this.node.getChildByName("LoadingLayer");
+        this.tipLayer = this.node.getChildByName("TipLayer");
+    }
+
     protected onLoad(): void {
         Layer.inst = this;
         this.hideLoading();
