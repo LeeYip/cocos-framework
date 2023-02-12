@@ -178,7 +178,7 @@ export default class Test extends cc.Component {
 }
 ```
 
-或者也可使用类装饰器覆盖onLoad中和onDestroy方法，并分别在其中调用targetOn与targetOff
+或者也可使用类装饰器覆盖onLoad和onDestroy方法，并分别在其中调用targetOn与targetOff
 ```typescript
 // 参数为false则只注册当前类用preloadEvent绑定的事件
 // 参数为true则会注册当前类以及父类用preloadEvent绑定的事件
