@@ -1,5 +1,5 @@
 # Cocos Framework
-一个基于Cocos Creator2.4.10的框架
+一个基于Cocos Creator2.4.11的框架
 
 ## 目录
 - [前言](#preface)
