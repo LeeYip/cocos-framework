@@ -1,15 +1,15 @@
-import ResSprite from "../common/cmpt/ui/res/ResSprite";
-import { EventName } from "../common/const/EventName";
-import { eventsOnLoad, preloadEvent } from "../common/util/Events";
-import I18n, { LangType } from "./I18n";
+import { EventName } from "../../../const/EventName";
+import { eventsOnLoad, preloadEvent } from "../../../util/Events";
+import I18n, { LangType } from "../../../util/I18n";
+import ResSprite from "../res/ResSprite";
 
 const { ccclass, menu, requireComponent } = cc._decorator;
 
 @ccclass
 @eventsOnLoad()
 @requireComponent(ResSprite)
-@menu("Framework/I18N/LocalizedSprite")
-export default class LocalizedSprite extends cc.Component {
+@menu("Framework/I18N/I18nSprite")
+export default class I18nSprite extends cc.Component {
     private _sprite: ResSprite = null;
     private _imageKey: string = "";
     /** 图片名 */

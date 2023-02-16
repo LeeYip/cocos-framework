@@ -302,11 +302,13 @@ Res.releaseAll();
     - **`uncacheAll()`**  停止所有音频，清除所有音频缓存
 
 #### <a id="framework-i18n"></a>多语言
->文件路径(scripts/i18n/)
+>文件路径(scripts/common/util/I18n.ts)
 
 支持文字以及图片的多语言切换，不同语言的同一图片需命名一致，配置路径如下，如需更改配置路径请自行更换。详见工程示例
 
->语言表路径：scripts/i18n/config/En.ts和scripts/i18n/config/Zh.ts
+>UI组件路径: scripts/common/cmpt/ui/i18n/
+
+>语言表路径：scripts/common/config/En.ts和scripts/common/config/Zh.ts
 
 >图片路径：resources/textures/localizedImage/en/和resources/textures/localizedImage/zh/
 
@@ -333,7 +335,9 @@ I18n.getText("test", "somthing", 2); // => "test somthing 2 !!!"
 >文件路径(scripts/common/cmpt/)
 - **VirtualList** 虚拟列表，仅生成视图区域内所需的最少节点，且支持节点分层
 
-- **CircleList** 无限循环列表/轮播图
+- **LoopList** 无限循环列表/轮播图
+
+- **CircleList** 环形列表，将节点以椭圆排列
 
 - **AnimValue** 渐变动画组件基类，可基于此组件实现各种数值渐变动画
     - **AnimValueLabel** 数字渐变动画组件

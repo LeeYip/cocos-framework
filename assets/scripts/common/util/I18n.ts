@@ -1,8 +1,8 @@
-import { EventName } from "../common/const/EventName";
-import Events from "../common/util/Events";
-import Tool from "../common/util/Tool";
-import En from "./config/En";
-import Zh from "./config/Zh";
+import En from "../config/En";
+import Zh from "../config/Zh";
+import { EventName } from "../const/EventName";
+import Events from "./Events";
+import Tool from "./Tool";
 
 /**
  * 语言类型

@@ -1,14 +1,14 @@
-import { EventName } from "../common/const/EventName";
-import { eventsOnLoad, preloadEvent } from "../common/util/Events";
-import I18n from "./I18n";
+import { EventName } from "../../../const/EventName";
+import { eventsOnLoad, preloadEvent } from "../../../util/Events";
+import I18n from "../../../util/I18n";
 
 const { ccclass, property, executeInEditMode, menu } = cc._decorator;
 
 @ccclass
 @eventsOnLoad()
 @executeInEditMode
-@menu("Framework/I18N/LocalizedLabel")
-export default class LocalizedLabel extends cc.Component {
+@menu("Framework/I18N/I18nLabel")
+export default class I18nLabel extends cc.Component {
     @property(cc.String) private _textKey: string = "";
 
     @property({ type: cc.String, tooltip: "i18n key" })

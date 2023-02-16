@@ -116,6 +116,35 @@ export default class Tool {
     }
 
     /**
+     * 将角度约束在 [0,360) 区间内
+     */
+    public static normalizeDegree(degree: number): number {
+        let result = degree % 360;
+        if (result < 0) {
+            result += 360;
+        }
+        return result;
+    }
+
+    /**
+     * 圆心在坐标原点的椭圆，以与x轴逆时针方向的角度计算对应椭圆边上的坐标
+     */
+    public static getEllipsePoint(a: number, b: number, degree: number) {
+        degree = this.normalizeDegree(degree);
+        let k = Math.tan(cc.misc.degreesToRadians(degree));
+        let x = Math.sqrt(b * b / (k * k + b * b / a / a));
+        if (degree > 90 && degree < 270) {
+            x = -x;
+        }
+        let y = Math.sqrt(b * b - b * b * x * x / a / a);
+        if (degree > 180) {
+            y = -y;
+        }
+
+        return cc.v2(x, y);
+    }
+
+    /**
      * 返回value是否在 [min, max] 区间内
      * @param min 
      * @param max 

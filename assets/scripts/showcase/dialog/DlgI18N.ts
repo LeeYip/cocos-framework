@@ -1,8 +1,7 @@
 import DialogBase from "../../common/cmpt/base/DialogBase";
-import ResSprite from "../../common/cmpt/ui/res/ResSprite";
+import I18nLabel from "../../common/cmpt/ui/i18n/I18nLabel";
 import { DirUrl } from "../../common/const/Url";
-import I18n, { LangType } from "../../i18n/I18n";
-import LocalizedLabel from "../../i18n/LocalizedLabel";
+import I18n, { LangType } from "../../common/util/I18n";
 
 const { ccclass, property } = cc._decorator;
 
@@ -10,8 +9,8 @@ const { ccclass, property } = cc._decorator;
 export default class DlgI18N extends DialogBase {
     public static pUrl: string = DirUrl.PREFAB_DIALOG + "DlgI18N";
 
-    @property(LocalizedLabel) text1: LocalizedLabel = null;
-    @property(LocalizedLabel) text2: LocalizedLabel = null;
+    @property(I18nLabel) text1: I18nLabel = null;
+    @property(I18nLabel) text2: I18nLabel = null;
 
     /**
      * @override

@@ -1,160 +1,141 @@
-import Res from "../../../util/Res";
+import Tool from "../../../util/Tool";
 
-const { ccclass, property, requireComponent, disallowMultiple, menu } = cc._decorator;
+const { ccclass, property, executeInEditMode, menu } = cc._decorator;
 
-/** 列表元素模板类型 */
-enum TemplateType {
-    NODE,
-    PREFAB
-}
+/** 初始角度 */
+const INIT_DEGREE: number = 270;
 
 /**
- * 无限循环列表(轮播图)
+ * 环形列表，将节点以椭圆排列
  */
 @ccclass
-@disallowMultiple
-@requireComponent(cc.PageView)
+@executeInEditMode
 @menu("Framework/UI组件/CircleList")
 export default class CircleList extends cc.Component {
-    /** item刷新事件 */
-    public static ITEM_REFRESH: string = "circleList-itemRefresh";
+    @property(cc.Node)
+    private content: cc.Node = null;
+    @property({ tooltip: CC_DEV && "椭圆长短轴" })
+    private ellipseAxes: cc.Vec2 = cc.v2(0, 0);
+    @property({ tooltip: CC_DEV && "列表自动滚动的速度" })
+    private scrollSpeed: number = 200;
 
-    @property({
-        type: cc.Enum(TemplateType),
-        tooltip: CC_DEV && "列表元素模板类型"
-    })
-    public templateType: TemplateType = TemplateType.PREFAB;
+    private _init: boolean = false;
+    private _curDegree: number = INIT_DEGREE;
+    private _targetDegree: number = INIT_DEGREE;
+    private _scrolling: boolean = false;
+    private _itemDegreeMap: Map<cc.Node, number> = new Map();
+    private _maxDelta: number = 0;
+    /** 子节点被选中时的回调 */
+    private _selectCall: (item: cc.Node) => void = null;
 
-    @property({
-        type: cc.Prefab,
-        tooltip: CC_DEV && "列表元素模板预制体",
-        visible() { return this.templateType === TemplateType.PREFAB; }
-    })
-    public templatePrefab: cc.Prefab = null;
-
-    @property({
-        type: cc.Node,
-        tooltip: CC_DEV && "列表元素模板节点",
-        visible() { return this.templateType === TemplateType.NODE; }
-    })
-    public templateNode: cc.Node = null;
-
-    private _firstDirty: boolean = false;
-    private _refreshDirty: boolean = false;
-    /** 当前显示的数据下标 */
-    private _curIdx = 0;
-    /** 所有item的中间节点下标 */
-    private _midIdx = 2;
-    /** 实际需显示的数据长度 */
-    private _dataLen = 0;
-    private _refreshCall: (node: cc.Node, idx: number, isCur: boolean) => void = null;
-    private _target: any = null;
-
-    private _pageView: cc.PageView = null;
-    public get pageView(): cc.PageView {
-        if (!this._pageView) {
-            this._pageView = this.getComponent(cc.PageView);
-        }
-        return this._pageView;
+    /** 虚拟角度，子节点会根据角度计算坐标 */
+    public get curDegree(): number { return this._curDegree; }
+    public set curDegree(v: number) {
+        this._curDegree = Tool.normalizeDegree(v);
+        this.refreshItems();
     }
 
-    public get view(): cc.Node { return this.pageView.content.parent; }
-
-    protected start(): void {
-        // 注册事件
-        this.node.on("scroll-ended", this.onScrollEnd, this);
-    }
-
-    protected lateUpdate(): void {
-        if (this.pageView.getPages().length === 0) {
+    /**
+     * 初始化列表，按角度均匀排列content所有子节点
+     * @param selectCall 
+     */
+    public init(selectCall: (item: cc.Node) => void = null): void {
+        this._init = true;
+        this._scrolling = false;
+        this._maxDelta = 0;
+        this._itemDegreeMap.clear();
+        this._selectCall = selectCall;
+        if (this.content.childrenCount <= 0) {
             return;
         }
-        if (this._firstDirty) {
-            this._firstDirty = false;
-            this.pageView.setContentPosition(cc.v2(-this.view.width / 2 - this._midIdx * this.view.width, 0));
-            this.pageView.setCurrentPageIndex(this._midIdx);
-        }
-        if (this._refreshDirty) {
-            this._refreshDirty = false;
-            this.refresh();
-        }
-    }
+        let average: number = 360 / this.content.childrenCount;
+        this.content.children.forEach((v, i) => {
+            this._itemDegreeMap.set(v, i * average);
 
-    /**
-     * 初始化循环列表
-     * @param length 数据长度
-     * @param curIdx 初始显示的数据
-     * @param refreshCall 每个item刷新时的回调
-     * @param target 调用refreshCall时的this
-     */
-    public onInit(length: number, curIdx: number, refreshCall: (node: cc.Node, idx: number, isCur: boolean) => void, target: any = null): void {
-        this._dataLen = length;
-        this._curIdx = cc.misc.clampf(curIdx, 0, this._dataLen - 1);
-        this._refreshCall = refreshCall;
-        this._target = target;
-        this._firstDirty = true;
-        this._refreshDirty = true;
-
-        // 生成节点
-        if (this.pageView.getPages().length === 0) {
-            let tmp: any = this.templateType === TemplateType.PREFAB ? this.templatePrefab : this.templateNode;
-            for (let i = 0; i < 5; i++) {
-                let node = Res.instantiate(tmp, this.node);
-                node.active = true;
-                node.setPosition(0, 0);
-                this.pageView.addPage(node);
-            }
-            this.pageView.content.getComponent(cc.Layout).updateLayout();
-        }
-    }
-
-    /**
-     * 重置数据长度与当前显示的数据下标
-     */
-    public resetData(length: number, curIdx: number = null): void {
-        this._dataLen = length;
-        this._curIdx = cc.misc.clampf(curIdx === null ? this._curIdx : curIdx, 0, this._dataLen - 1);
-        this._refreshDirty = true;
-    }
-
-    /**
-     * 根据下标设置当前显示的数据
-     */
-    public setCurIdx(curIdx: number): void {
-        this._curIdx = curIdx;
-        this._refreshDirty = true;
-    }
-
-    private onScrollEnd(): void {
-        let cur = this.pageView.getCurrentPageIndex();
-        if (cur === this._midIdx) {
-            return;
-        }
-        this.pageView.setContentPosition(cc.v2(-this.view.width / 2 - this._midIdx * this.view.width, 0));
-        this.pageView.setCurrentPageIndex(this._midIdx);
-        this._curIdx += cur - this._midIdx;
-        while (this._curIdx < 0) {
-            this._curIdx += this._dataLen;
-        }
-        while (this._curIdx > this._dataLen - 1) {
-            this._curIdx -= this._dataLen;
-        }
-        this._refreshDirty = true;
-    }
-
-    private refresh(): void {
-        this.pageView.content.children.forEach((item, index) => {
-            let i = this._curIdx - (this._midIdx - index);
-            while (i < 0) {
-                i += this._dataLen;
-            }
-            while (i > this._dataLen - 1) {
-                i -= this._dataLen;
-            }
-
-            if (this._refreshCall) {
-                this._refreshCall.call(this._target, item, i, i === this._curIdx);
-            }
+            v.on(cc.Node.EventType.TOUCH_MOVE, this.itemTouchMove, this);
+            v.on(cc.Node.EventType.TOUCH_END, this.itemTouchEnd, this);
+            v.on(cc.Node.EventType.TOUCH_CANCEL, this.itemTouchEnd, this);
         });
+        this.refreshItems();
+    }
+
+    /**
+     * 滚动到指定子节点处
+     * @param item 子节点
+     */
+    public scrollToItem(item: cc.Node): void {
+        if (!this._itemDegreeMap.has(item)) {
+            return;
+        }
+
+        let itemDegree = this._itemDegreeMap.get(item);
+        let delta = INIT_DEGREE - itemDegree;
+        this._targetDegree = Tool.normalizeDegree(delta);
+        this._scrolling = true;
+        this._selectCall?.(item);
+    }
+
+    private refreshItems(): void {
+        this.content.children.forEach((v, i) => {
+            let degree = Tool.normalizeDegree(this._itemDegreeMap.get(v) + this.curDegree);
+            let pos = Tool.getEllipsePoint(this.ellipseAxes.x, this.ellipseAxes.y, degree);
+            v.setPosition(pos);
+            v.zIndex = -v.y;
+        });
+    }
+
+    protected update(dt: number): void {
+        if (!this._init || !this._scrolling || this.curDegree === this._targetDegree) {
+            return;
+        }
+
+        let delta = Math.abs(this._targetDegree - this.curDegree);
+        let degree = this.curDegree;
+        let sign = (delta < 180 ? 1 : -1) * Math.sign(this._targetDegree - this.curDegree);
+        degree += dt * this.scrollSpeed * sign;
+
+        if ((this.curDegree > this._targetDegree && degree < this._targetDegree) || (this.curDegree < this._targetDegree && degree > this._targetDegree)) {
+            degree = this._targetDegree;
+            this._scrolling = false;
+        }
+        this.curDegree = degree;
+    }
+
+    private itemTouchMove(event: cc.Event.EventTouch): void {
+        let delta = event.getDeltaX();
+        if (Math.abs(delta) < 1) {
+            return;
+        }
+
+        if (this._maxDelta < Math.abs(delta)) {
+            this._maxDelta = Math.abs(delta);
+        }
+        this.curDegree = this.curDegree + delta / 5;
+    }
+
+    private itemTouchEnd(event: cc.Event.EventTouch): void {
+        let node = event.target;
+        if (this._maxDelta < 5) {
+            this._maxDelta = 0;
+            this.scrollToItem(node);
+            return;
+        }
+
+        let minDelta = 360;
+        let minNode = this.content.children[0];
+        for (let i = 0; i < this.content.children.length; i++) {
+            const item = this.content.children[i];
+            let itemDegree = Tool.normalizeDegree(this._itemDegreeMap.get(item) + this.curDegree);
+            let delta = Math.abs(INIT_DEGREE - itemDegree);
+            if (delta > 180) {
+                delta = itemDegree + 360 - INIT_DEGREE;
+            }
+            if (delta < minDelta) {
+                minDelta = delta;
+                minNode = item;
+            }
+        }
+        this._maxDelta = 0;
+        this.scrollToItem(minNode);
     }
 }

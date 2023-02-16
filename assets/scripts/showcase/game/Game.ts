@@ -8,6 +8,7 @@ import DlgCircleList from "../dialog/DlgCircleList";
 import DlgEvents from "../dialog/DlgEvents";
 import DlgI18N from "../dialog/DlgI18N";
 import DlgLayer from "../dialog/DlgLayer";
+import DlgLoopList from "../dialog/DlgLoopList";
 import DlgMultiTexture from "../dialog/DlgMultiTexture";
 import DlgShader from "../dialog/DlgShader";
 import DlgShake from "../dialog/DlgShake";
@@ -55,6 +56,10 @@ export default class Game extends cc.Component {
 
     private onClickVirtualList2() {
         Layer.inst.openUniDialogAsync(DlgVirtualList2.pUrl);
+    }
+
+    private onClickLoopList() {
+        Layer.inst.openUniDialogAsync(DlgLoopList.pUrl);
     }
 
     private onClickCircleList() {
