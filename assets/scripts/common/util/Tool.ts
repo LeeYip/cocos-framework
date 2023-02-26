@@ -1,4 +1,4 @@
-import { Group, Tween, TWEEN } from "./Tween";
+import { Group, SCALE_TWEEN, Tween, TWEEN } from "./Tween";
 
 enum TimeUnit {
     S,
@@ -72,6 +72,32 @@ export default class Tool {
                 .start()
                 .bindCCObject(cmpt);
         });
+    }
+
+    /**
+     * 以SCALE_TWEEN周期性执行回调，会随绑定的target销毁而销毁
+     * @param callback 
+     * @param target 
+     * @param interval 回调间隔时间 秒
+     * @param repeat 回调共会执行repeat+1次
+     */
+    public static scheduleByScaleTween(callback: () => void, target: cc.Object, interval: number, repeat: number = 0) {
+        let count = 0;
+        let once = () => {
+            let data = { arg: 0 };
+            new Tween(data, SCALE_TWEEN)
+                .bindCCObject(target)
+                .to({ arg: 1 }, interval * 1000)
+                .onComplete(() => {
+                    callback();
+                    count++;
+                    if (count < repeat + 1) {
+                        once();
+                    }
+                })
+                .start();
+        };
+        once();
     }
 
     /**

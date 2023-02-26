@@ -251,6 +251,19 @@ export class Group {
         delete this._tweens[tween.getId()];
         delete this._tweensAddedDuringUpdate[tween.getId()];
     }
+    removeByCCObject(target: cc.Object) {
+        let tweenIds = Object.keys(this._tweens);
+        if (tweenIds.length === 0) {
+            return;
+        }
+
+        for (let i = 0; i < tweenIds.length; i++) {
+            let tween: Tween<any> = this._tweens[tweenIds[i]];
+            if (tween && tween.ccObject === target) {
+                tween.stop();
+            }
+        }
+    }
     update(time?: number, preserve?: boolean): boolean {
         if (time === void 0) { time = now$1(); }
         if (preserve === void 0) { preserve = false; }
@@ -397,6 +410,7 @@ var scaleGroup = new Group();
 export class Tween<T extends UnknownProps> {
     /** 绑定的cc.Object */
     private _ccObject;
+    public get ccObject() { return this._ccObject; }
 
     private _object;
     private _group;
@@ -456,8 +470,9 @@ export class Tween<T extends UnknownProps> {
     /**
      * 绑定cc.Object，则cc.Object销毁时，tween也会销毁
      */
-    bindCCObject(obj: cc.Object) {
+    bindCCObject(obj: cc.Object): this {
         this._ccObject = obj;
+        return this;
     }
 
     /**
