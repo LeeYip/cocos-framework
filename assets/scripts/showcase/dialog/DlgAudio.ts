@@ -18,7 +18,7 @@ export default class DlgAudio extends DialogBase {
     /**
      * @override
      */
-    public open() {
+    public onOpen() {
         this.onSlide();
     }
 

@@ -151,7 +151,7 @@ export default class Layer extends cc.Component {
             //@ts-ignore
             cmpt._prefabUrl = url;
             cmpt.playOpen();
-            cmpt.open(...args);
+            cmpt.onOpen(...args);
         }
     }
 
@@ -191,7 +191,7 @@ export default class Layer extends cc.Component {
             //@ts-ignore
             cmpt._prefabUrl = url;
             cmpt.playOpen();
-            cmpt.open(...args);
+            cmpt.onOpen(...args);
         }
     }
 

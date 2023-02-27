@@ -41,7 +41,7 @@ export default class DlgTimer extends DialogBase {
     /**
      * @override
      */
-    public open() {
+    public onOpen() {
         this.slider.progress = Timer.timeScale;
         this.slider.node.getChildByName("lab").getComponent(cc.Label).string = `timescale: ${Math.floor(this.slider.progress * 100) / 100}`;
         this.eventTimeScale();

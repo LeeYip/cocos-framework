@@ -11,7 +11,7 @@ export default class DlgLayer extends DialogBase {
     /**
      * @override
      */
-    public open() {
+    public onOpen() {
 
     }
 

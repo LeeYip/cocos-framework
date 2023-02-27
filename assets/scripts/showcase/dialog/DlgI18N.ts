@@ -15,7 +15,7 @@ export default class DlgI18N extends DialogBase {
     /**
      * @override
      */
-    public open() {
+    public onOpen() {
         this.text1.setOption({ num: 10 });
         this.text2.setOption(10, "---");
     }

@@ -13,7 +13,7 @@ export default class DlgLoopList extends DialogBase {
     /**
      * @override
      */
-    public open() {
+    public onOpen() {
         this.list.onInit(10, 5, this.refreshItem, this);
     }
 

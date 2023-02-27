@@ -20,7 +20,7 @@ export default class DlgShader extends DialogBase {
     /**
      * @override
      */
-    public open() {
+    public onOpen() {
         this._tween = new Tween(this.fill, SCALE_TWEEN)
             .to({ fillPhase: [1, 0] }, 1000)
             .repeat(1000)

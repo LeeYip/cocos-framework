@@ -13,7 +13,7 @@ export default class DlgCircleList extends DialogBase {
     /**
      * @override
      */
-    public open() {
+    public onOpen() {
         this.list.init();
     }
 }

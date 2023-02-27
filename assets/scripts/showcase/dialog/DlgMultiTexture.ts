@@ -28,7 +28,7 @@ export default class DlgMultiTexture extends DialogBase {
     /**
      * @override
      */
-    public async open() {
+    public async onOpen() {
         let arr = [ResUrl.ATLAS.EN, ResUrl.ATLAS.ZH];
 
         // idx为0的纹理：Cocos自动图集纹理

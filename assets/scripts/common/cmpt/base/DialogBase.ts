@@ -92,15 +92,23 @@ export default class DialogBase extends cc.Component {
      * 打开弹窗时的处理
      * @virtual
      */
-    public open(...args: any[]): any {
+    public onOpen(...args: any[]): void {
     }
 
     /**
-     * 关闭弹窗，销毁节点时的处理。
+     * 关闭弹窗时的处理
+     * @virtual
+     */
+    public onClose(): void {
+    }
+
+    /**
+     * 销毁弹窗节点时的处理。
      * - 必须使用此接口销毁，子类重写时请调用super.close()
      * @virtual
      */
-    public close(): any {
+    public close(): void {
+        this.onClose();
         this._resolveList.forEach((resolve) => { resolve(); });
         this.node.removeFromParent();
         this.node.destroy();

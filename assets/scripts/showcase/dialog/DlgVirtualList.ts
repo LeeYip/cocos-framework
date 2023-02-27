@@ -18,7 +18,7 @@ export default class DlgVirtualList extends DialogBase {
     /**
      * @override
      */
-    public open() {
+    public onOpen() {
         for (let i = 0; i < 50; i++) {
             this.list.push({ num: Tool.randInt(0, 1000) });
         }

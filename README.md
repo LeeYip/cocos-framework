@@ -90,28 +90,27 @@ comp.destory();
 组件需要绑在场景的根节点或者常驻节点上，所需的节点层级结构参照项目工程内的Main场景
 
 ```typescript
-// 弹窗组件需要继承DialogBase，并重写open方法和close方法，用来处理弹窗打开和关闭时的逻辑
+// 弹窗组件需要继承DialogBase，并重写onOpen方法和onClose方法，用来处理弹窗打开和关闭时的逻辑
 export default class DlgExample extends DialogBase {
     public static pUrl: string = "example/DlgExample";
 
     /**
      * @override
      */
-    public open(num1: number, num2: number) {
+    public onOpen(num1: number, num2: number) {
         // do something...
     }
 
     /**
      * @override
      */
-    public close() {
-        super.close();
+    public onClose() {
         // do something...
     }
 }
 ```
 
-打开一个弹窗，并传递open方法的参数，弹窗prefab路径规则与[资源管理器](#framework-res)加载路径规则相同
+打开一个弹窗，并传递onOpen方法的参数，弹窗prefab路径规则与[资源管理器](#framework-res)加载路径规则相同
 ```typescript
 // 建议在弹窗组件类上加一个静态属性pUrl用以标明路径，这样在代码里便于查找和跳转引用
 Layer.inst.openUniDialog(DlgExample.pUrl, 1, 2);

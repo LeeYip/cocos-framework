@@ -23,7 +23,7 @@ export default class DlgVirtualList2 extends DialogBase {
     /**
      * @override
      */
-    public open() {
+    public onOpen() {
         // 元素大小不一致时提供计算元素大小的接口
         this.list.setCalcItemSize(calcItemSize);
 
