@@ -481,10 +481,10 @@ export class Tween<T extends UnknownProps> {
      * - 如果没绑定则返回true
      */
     isCCObjectValid() {
-        if (this._object instanceof cc.Object && !this._object.isValid) {
+        if (this._object instanceof cc.Object && !cc.isValid(this._object, true)) {
             return false;
         }
-        if (this._ccObject instanceof cc.Object && !this._ccObject.isValid) {
+        if (this._ccObject instanceof cc.Object && !cc.isValid(this._ccObject, true)) {
             return false;
         }
         return true;

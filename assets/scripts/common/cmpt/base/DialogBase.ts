@@ -46,16 +46,31 @@ export default class DialogBase extends cc.Component {
     }
 
     protected resetInEditor(): void {
-        if (CC_EDITOR) {
-            for (let i = 0; i < this.node.childrenCount; i++) {
-                let anim: cc.Animation = this.node.children[i].getComponent(cc.Animation);
-                if (anim) {
-                    this.dlgAnim = anim;
-                    EditorTool.load<cc.AnimationClip>("res/animation/dialog/open.anim").then((v) => { this.openClip = v; });
-                    EditorTool.load<cc.AnimationClip>("res/animation/dialog/close.anim").then((v) => { this.closeClip = v; });
-                    break;
-                }
+        if (!CC_EDITOR) {
+            return;
+        }
+        // 动画
+        for (let i = 0; i < this.node.childrenCount; i++) {
+            let anim: cc.Animation = this.node.children[i].getComponent(cc.Animation);
+            if (anim) {
+                this.dlgAnim = anim;
+                EditorTool.load<cc.AnimationClip>("res/animation/dialog/open.anim").then((v) => { this.openClip = v; });
+                EditorTool.load<cc.AnimationClip>("res/animation/dialog/close.anim").then((v) => { this.closeClip = v; });
+                break;
             }
+        }
+        // 触摸拦截
+        if (this.node.childrenCount <= 0 || !this.node.children[0].getComponent(cc.BlockInputEvents)) {
+            let block = new cc.Node("Block");
+            this.node.addChild(block);
+            block.setSiblingIndex(0);
+            block.setContentSize(this.node.getContentSize());
+            block.addComponent(cc.BlockInputEvents);
+            let widget = block.addComponent(cc.Widget);
+            widget.isAlignTop = true;
+            widget.isAlignBottom = true;
+            widget.isAlignLeft = true;
+            widget.isAlignRight = true;
         }
     }
 
