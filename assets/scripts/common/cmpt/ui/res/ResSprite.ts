@@ -28,7 +28,7 @@ export default class ResSprite extends cc.Component {
         if (this.sprite.spriteFrame === v) {
             return;
         }
-        v.addRef();
+        v?.addRef();
         this._asset?.decRef();
         this._asset = v;
         this.sprite.spriteFrame = v;

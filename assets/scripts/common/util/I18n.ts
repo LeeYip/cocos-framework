@@ -98,7 +98,7 @@ export default class I18n {
      * I18n.getText("test", {arg1: "somthing", arg2: 2}); // "test somthing 2 !!!"
      * I18n.getText("test", "somthing", 2); // "test somthing 2 !!!"
      */
-    public static getText(key: string, ...option: [{ [k: string]: string | number }] | Array<string | number>): string {
+    public static getText(key: string, ...option: [Record<string, string | number>] | Array<string | number>): string {
         if (!this._phrases) {
             cc.error(`[I18n.getText] 未正确初始化`);
             return "";

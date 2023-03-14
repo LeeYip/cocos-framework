@@ -181,6 +181,11 @@ export default class Res {
      * @param release 资源是否需要释放
      */
     public static async load<T extends cc.Asset>(url: string, type: typeof cc.Asset, release: boolean = true): Promise<T | null> {
+        if (!url) {
+            cc.error(`[Res.load] url is empty`);
+            return null;
+        }
+
         let asset: T = this.get(url, type);
         if (asset) {
             return asset;
@@ -219,6 +224,11 @@ export default class Res {
      * @param release 资源是否需要释放
      */
     public static async loadDir<T extends cc.Asset>(url: string, type: typeof cc.Asset, release: boolean = true): Promise<T[]> {
+        if (!url) {
+            cc.error(`[Res.load] url is empty`);
+            return [];
+        }
+
         let parseData = this.parseUrl(url);
         if (parseData.bundle && !cc.assetManager.getBundle(parseData.bundle)) {
             await this.loadBundle(parseData.bundle);
@@ -228,7 +238,7 @@ export default class Res {
             let bundle: cc.AssetManager.Bundle = parseData.bundle ? cc.assetManager.getBundle(parseData.bundle) : cc.resources;
             if (!bundle) {
                 cc.error(`[Res.loadDir] cant find bundle: ${url}`);
-                resolve(null);
+                resolve([]);
                 return;
             }
 

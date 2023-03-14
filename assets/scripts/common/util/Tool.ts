@@ -330,11 +330,11 @@ export default class Tool {
      * Tool.formatString("测试字符串%{a1}--%{a2}...", {a1: 111, a2: "abc"});
      * Tool.formatString("测试字符串%{a1}--%{a2}...", 111, "abc");
      */
-    public static formatString(text: string, ...option: [{ [k: string]: string | number }] | Array<string | number>): string {
+    public static formatString(text: string, ...option: [Record<string, string | number>] | Array<string | number>): string {
         let result = text;
         if (option.length === 1 && Object.prototype.toString.call(option[0]) === "[object Object]") {
             // 参数为键值对
-            for (let arg in (option[0] as { [k: string]: string | number })) {
+            for (let arg in (option[0] as Record<string, string | number>)) {
                 if (option[0].hasOwnProperty(arg)) {
                     let reg = new RegExp(`%{${arg}}`, "g");
                     result = result.replace(reg, `${option[0][arg]}`);
