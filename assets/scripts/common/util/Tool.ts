@@ -1,4 +1,4 @@
-import { Group, SCALE_TWEEN, Tween, TWEEN } from "./Tween";
+import { Group, Tween, TWEEN } from "./Tween";
 
 enum TimeUnit {
     S,
@@ -75,17 +75,18 @@ export default class Tool {
     }
 
     /**
-     * 以SCALE_TWEEN周期性执行回调，会随绑定的target销毁而销毁
+     * 以tween周期性执行回调，会随绑定的target销毁而销毁
      * @param callback 
      * @param target 
      * @param interval 回调间隔时间 秒
      * @param repeat 回调共会执行repeat+1次
+     * @param group tween分组
      */
-    public static scheduleByScaleTween(callback: () => void, target: cc.Object, interval: number, repeat: number = 0) {
+    public static scheduleByTween(callback: () => void, target: cc.Object, interval: number, repeat: number = 0, group: Group = TWEEN) {
         let count = 0;
         let once = () => {
             let data = { arg: 0 };
-            new Tween(data, SCALE_TWEEN)
+            new Tween(data, group)
                 .bindCCObject(target)
                 .to({ arg: 1 }, interval * 1000)
                 .onComplete(() => {
@@ -155,7 +156,7 @@ export default class Tool {
     /**
      * 圆心在坐标原点的椭圆，以与x轴逆时针方向的角度计算对应椭圆边上的坐标
      */
-    public static getEllipsePoint(a: number, b: number, degree: number) {
+    public static getEllipsePoint(a: number, b: number, degree: number): cc.Vec2 {
         degree = this.normalizeDegree(degree);
         let k = Math.tan(cc.misc.degreesToRadians(degree));
         let x = Math.sqrt(b * b / (k * k + b * b / a / a));
@@ -168,6 +169,31 @@ export default class Tool {
         }
 
         return cc.v2(x, y);
+    }
+
+    /**
+     * 判断射线与圆是否相交
+     * @param rayPoint 射线起点
+     * @param rayDir 射线方向
+     * @param circlrCenter 圆心
+     * @param circleRadius 圆半径
+     */
+    public static isRayCircleIntersection(rayPoint: cc.Vec2 | cc.Vec3, rayDir: cc.Vec2, circlrCenter: cc.Vec2 | cc.Vec3, circleRadius: number): boolean {
+        let d = rayDir.magSqr();
+        let t = ((circlrCenter.x - rayPoint.x) * rayDir.x + (circlrCenter.y - rayPoint.y) * rayDir.y) / d;
+        let p;
+        if (d <= 0) {
+            p = rayPoint;
+        } else {
+            if (t < 0) {
+                p = rayPoint;
+            } else {
+                p = cc.v2(rayPoint.x + t * rayDir.x, rayPoint.y + t * rayDir.y);
+            }
+        }
+        let dx = circlrCenter.x - p.x;
+        let dy = circlrCenter.y - p.y;
+        return (dx * dx + dy * dy) <= circleRadius * circleRadius;
     }
 
     /**
@@ -203,6 +229,14 @@ export default class Tool {
             min = 0;
         }
         return Math.random() * (max - min) + min;
+    }
+
+    /**
+     * 返回一个概率值(%)的随机结果是否在概率范围内
+     * @param rate 概率值(%) [0,100]
+     */
+    public static randRateResult(rate: number): boolean {
+        return this.randFloat(100) < rate;
     }
 
     /**
