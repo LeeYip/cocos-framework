@@ -285,6 +285,13 @@ export default class VirtualList<T extends VirtualArgs> extends cc.Component {
     }
 
     /**
+     * 立即更新布局
+     */
+    public forceUpdate(): void {
+        this.layout.forceUpdate();
+    }
+
+    /**
      * 刷新所有激活的item
      */
     public refreshAllItems(): void {

@@ -140,10 +140,17 @@ export default class VirtualLayout<T extends VirtualArgs> extends cc.Component {
         this._view.off(cc.Node.EventType.SIZE_CHANGED, this.onViewSizeChanged, this);
     }
 
-    protected lateUpdate(): void {
+    /**
+     * 立即更新布局
+     */
+    public forceUpdate(): void {
         this.updatePos();
         this.updateSize();
         this.updateView();
+    }
+
+    protected lateUpdate(): void {
+        this.forceUpdate();
     }
 
     /**
