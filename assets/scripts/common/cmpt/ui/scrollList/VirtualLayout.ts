@@ -286,7 +286,7 @@ export default class VirtualLayout<T extends VirtualArgs> extends cc.Component {
                     yMax = contentEdge.yMax - (this.top + i * this.spacingY + this._fixedSize.height * i);
                     yMin = yMax - this._fixedSize.height;
                     if (yMax + this.node.y < this._viewEdge.yMin) {
-                        return;
+                        break;
                     }
                     if (yMin + this.node.y > this._viewEdge.yMax) {
                         continue;
@@ -295,7 +295,7 @@ export default class VirtualLayout<T extends VirtualArgs> extends cc.Component {
                     yMin = contentEdge.yMin + this.bottom + i * this.spacingY + this._fixedSize.height * i;
                     yMax = yMin + this._fixedSize.height;
                     if (yMin + this.node.y > this._viewEdge.yMax) {
-                        return;
+                        break;
                     }
                     if (yMax + this.node.y < this._viewEdge.yMin) {
                         continue;
@@ -319,7 +319,7 @@ export default class VirtualLayout<T extends VirtualArgs> extends cc.Component {
                     xMax = contentEdge.xMax - (this.right + i * this.spacingX + this._fixedSize.width * i);
                     xMin = xMax - this._fixedSize.width;
                     if (xMax + this.node.x < this._viewEdge.xMin) {
-                        return;
+                        break;
                     }
                     if (xMin + this.node.x > this._viewEdge.xMax) {
                         continue;
@@ -328,7 +328,7 @@ export default class VirtualLayout<T extends VirtualArgs> extends cc.Component {
                     xMin = contentEdge.xMin + this.left + i * this.spacingX + this._fixedSize.width * i;
                     xMax = xMin + this._fixedSize.width;
                     if (xMin + this.node.x > this._viewEdge.xMax) {
-                        return;
+                        break;
                     }
                     if (xMax + this.node.x < this._viewEdge.xMin) {
                         continue;
@@ -362,7 +362,7 @@ export default class VirtualLayout<T extends VirtualArgs> extends cc.Component {
                         yMax = contentEdge.yMax - (this.top + rowIndex * this.spacingY + this._fixedSize.height * rowIndex);
                         yMin = yMax - this._fixedSize.height;
                         if (yMax + this.node.y < this._viewEdge.yMin) {
-                            return;
+                            break;
                         }
                         if (yMin + this.node.y > this._viewEdge.yMax) {
                             continue;
@@ -371,7 +371,7 @@ export default class VirtualLayout<T extends VirtualArgs> extends cc.Component {
                         yMin = contentEdge.yMin + this.bottom + rowIndex * this.spacingY + this._fixedSize.height * rowIndex;
                         yMax = yMin + this._fixedSize.height;
                         if (yMin + this.node.y > this._viewEdge.yMax) {
-                            return;
+                            break;
                         }
                         if (yMax + this.node.y < this._viewEdge.yMin) {
                             continue;
@@ -399,7 +399,7 @@ export default class VirtualLayout<T extends VirtualArgs> extends cc.Component {
                         xMax = contentEdge.xMax - (this.right + columnIndex * this.spacingX + this._fixedSize.width * columnIndex);
                         xMin = xMax - this._fixedSize.width;
                         if (xMax + this.node.x < this._viewEdge.xMin) {
-                            return;
+                            break;
                         }
                         if (xMin + this.node.x > this._viewEdge.xMax) {
                             continue;
@@ -408,7 +408,7 @@ export default class VirtualLayout<T extends VirtualArgs> extends cc.Component {
                         xMin = contentEdge.xMin + this.left + columnIndex * this.spacingX + this._fixedSize.width * columnIndex;
                         xMax = xMin + this._fixedSize.width;
                         if (xMin + this.node.x > this._viewEdge.xMax) {
-                            return;
+                            break;
                         }
                         if (xMax + this.node.x < this._viewEdge.xMin) {
                             continue;
@@ -439,6 +439,11 @@ export default class VirtualLayout<T extends VirtualArgs> extends cc.Component {
                 this.setItem(cc.v3(xMin + item.anchorX * item.width, yMin + item.anchorY * item.height), i, itemIdx);
             }
         }
+
+        // 回收区域外的节点
+        for (let i = outView.length - 1; i >= 0; i--) {
+            this.putActivatedItemByIndex(outView[i]);
+        }
     }
 
     private updateViewUnfixed(): void {
@@ -456,7 +461,7 @@ export default class VirtualLayout<T extends VirtualArgs> extends cc.Component {
                     yMax = contentEdge.yMax - (this.top + i * this.spacingY + (totalHeight - size.height));
                     yMin = yMax - size.height;
                     if (yMax + this.node.y < this._viewEdge.yMin) {
-                        return;
+                        break;
                     }
                     if (yMin + this.node.y > this._viewEdge.yMax) {
                         continue;
@@ -465,7 +470,7 @@ export default class VirtualLayout<T extends VirtualArgs> extends cc.Component {
                     yMin = contentEdge.yMin + this.bottom + i * this.spacingY + (totalHeight - size.height);
                     yMax = yMin + size.height;
                     if (yMin + this.node.y > this._viewEdge.yMax) {
-                        return;
+                        break;
                     }
                     if (yMax + this.node.y < this._viewEdge.yMin) {
                         continue;
@@ -481,6 +486,7 @@ export default class VirtualLayout<T extends VirtualArgs> extends cc.Component {
                 // 没有节点显示此条数据，需使用显示区域外的节点显示此条数据
                 let itemIdx: number = outView.length === 0 ? this.addItemNode() : outView.shift();
                 let item: cc.Node = this._items[itemIdx];
+                item.setContentSize(size);
                 this.setItem(cc.v3(0, yMin + item.anchorY * size.height), i, itemIdx);
             }
         } else if (this.type === LayoutType.HORIZONTAL) {
@@ -492,7 +498,7 @@ export default class VirtualLayout<T extends VirtualArgs> extends cc.Component {
                     xMax = contentEdge.xMax - (this.right + i * this.spacingX + (totalWidth - size.width));
                     xMin = xMax - size.width;
                     if (xMax + this.node.x < this._viewEdge.xMin) {
-                        return;
+                        break;
                     }
                     if (xMin + this.node.x > this._viewEdge.xMax) {
                         continue;
@@ -501,7 +507,7 @@ export default class VirtualLayout<T extends VirtualArgs> extends cc.Component {
                     xMin = contentEdge.xMin + this.left + i * this.spacingX + (totalWidth - size.width);
                     xMax = xMin + size.width;
                     if (xMin + this.node.x > this._viewEdge.xMax) {
-                        return;
+                        break;
                     }
                     if (xMax + this.node.x < this._viewEdge.xMin) {
                         continue;
@@ -517,13 +523,19 @@ export default class VirtualLayout<T extends VirtualArgs> extends cc.Component {
                 // 没有节点显示此条数据，需使用显示区域外的节点显示此条数据
                 let itemIdx: number = outView.length === 0 ? this.addItemNode() : outView.shift();
                 let item: cc.Node = this._items[itemIdx];
+                item.setContentSize(size);
                 this.setItem(cc.v3(xMin + item.anchorX * size.width, 0), i, itemIdx);
             }
+        }
+
+        // 回收区域外的节点
+        for (let i = outView.length - 1; i >= 0; i--) {
+            this.putActivatedItemByIndex(outView[i]);
         }
     }
 
     /**
-     * 区分在view内部与外部的items数组下标
+     * 区分在view内部与外部的items数组下标（返回的下标数组会从小到大排序）
      */
     private checkViewItem(): { inView: number[], outView: number[] } {
         // 显示区域内部的下标
@@ -660,7 +672,7 @@ export default class VirtualLayout<T extends VirtualArgs> extends cc.Component {
     }
 
     /**
-     * 回收item节点
+     * 将节点放入节点池
      * @param node 
      * @param isOther 是否为Others下的节点
      * @param otherIdx Others的下标
@@ -676,6 +688,20 @@ export default class VirtualLayout<T extends VirtualArgs> extends cc.Component {
             vi.onReset();
             this._itemPool.push(node);
         }
+    }
+
+    /**
+     * 回收已激活的节点
+     * @param index 节点在this._items中的下标
+     */
+    private putActivatedItemByIndex(index: number): void {
+        this.putItemNode(this._items[index]);
+        this._otherItemsArr.forEach((arr, otherIdx) => { this.putItemNode(arr[index], true, otherIdx); });
+
+        this._items.splice(index, 1);
+        this._otherItemsArr.forEach((arr) => {
+            arr.splice(index, 1);
+        });
     }
 
     /**
