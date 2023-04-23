@@ -97,7 +97,7 @@ export default class Layer extends cc.Component {
      */
     public async enterMain(url: string): Promise<cc.Node | null> {
         this.showLoading();
-        let prefab: cc.Prefab = await Res.load(url, cc.Prefab);
+        let prefab: cc.Prefab = Res.get(url, cc.Prefab) || await Res.load(url, cc.Prefab);
         this.hideLoading();
         if (!prefab) {
             cc.error(`[Layer.enterMain] can not find prefab: ${url}`);
