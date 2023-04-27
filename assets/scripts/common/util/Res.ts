@@ -339,4 +339,20 @@ export default class Res {
         });
         // other
     }
+
+    /**
+     * 获取resources包内资源打包后的真实路径
+     * @param url resources下的资源路径
+     * @param ext 资源的后缀名
+     * @param isNative true:返回打包后native目录下的路径，false:返回打包后import目录下的路径
+     */
+    public static getNativeUrlByResources(url: string, ext: string, isNative: boolean = true): string {
+        try {
+            let nativeUrl = cc.assetManager["_transform"]({ path: url, bundle: cc.AssetManager.BuiltinBundleName.RESOURCES, __isNative__: isNative, ext: ext });
+            return nativeUrl;
+        } catch (error) {
+            cc.error(`[Res.getNativeUrlByResources] error url: ${url}`);
+            return "";
+        }
+    }
 }
