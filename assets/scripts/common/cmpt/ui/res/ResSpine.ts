@@ -13,12 +13,27 @@ export default class ResSpine extends cc.Component {
     // 动态加载的资源
     private _asset: sp.SkeletonData = null;
 
+    private _url: string = "";
+
     private _spine: sp.Skeleton = null;
     private get spine(): sp.Skeleton {
         if (!this._spine) {
             this._spine = this.getComponent(sp.Skeleton);
         }
         return this._spine;
+    }
+
+    public get skeletonData(): sp.SkeletonData {
+        return this.spine.skeletonData;
+    }
+    public set skeletonData(v: sp.SkeletonData) {
+        if (!this.isValid || this.spine.skeletonData === v) {
+            return;
+        }
+        v?.addRef();
+        this._asset?.decRef();
+        this._asset = v;
+        this.spine.skeletonData = v;
     }
 
     protected onDestroy(): void {
@@ -30,12 +45,11 @@ export default class ResSpine extends cc.Component {
      * @param url 骨骼资源路径，规则同Res加载路径
      */
     public async setSkeletonData(url: string): Promise<void> {
+        this._url = url;
         let result = Res.get(url, sp.SkeletonData) || await Res.load(url, sp.SkeletonData);
-        if (result instanceof sp.SkeletonData) {
-            result.addRef();
-            this._asset?.decRef();
-            this._asset = result;
-            this.spine.skeletonData = result;
+        // 如短时间内多次调用，需保证显示最新一次加载的资源
+        if (result instanceof sp.SkeletonData && this._url === url) {
+            this.skeletonData = result;
         }
     }
 }

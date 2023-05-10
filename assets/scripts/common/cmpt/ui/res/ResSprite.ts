@@ -13,6 +13,9 @@ export default class ResSprite extends cc.Component {
     // 动态加载的资源
     private _asset: cc.SpriteFrame | cc.SpriteAtlas = null;
 
+    private _url: string = "";
+    private _atlasKey: string = "";
+
     private _sprite: cc.Sprite = null;
     private get sprite(): cc.Sprite {
         if (!this._sprite) {
@@ -25,7 +28,7 @@ export default class ResSprite extends cc.Component {
         return this.sprite.spriteFrame;
     }
     public set spriteFrame(v: cc.SpriteFrame) {
-        if (this.sprite.spriteFrame === v) {
+        if (!this.isValid || this.sprite.spriteFrame === v) {
             return;
         }
         v?.addRef();
@@ -44,9 +47,12 @@ export default class ResSprite extends cc.Component {
      * @param key 如果需要加载的url为图集时，需传入图集的key
      */
     public async setSpriteFrame(url: string, key: string = ""): Promise<void> {
+        this._url = url;
+        this._atlasKey = key;
         let type = key ? cc.SpriteAtlas : cc.SpriteFrame;
         let result = Res.get(url, type) || await Res.load(url, type);
-        if (result instanceof type) {
+        // 如短时间内多次调用，需保证显示最新一次加载的资源
+        if (result instanceof type && this._url === url && this._atlasKey === key) {
             this.spriteFrame = result instanceof cc.SpriteAtlas ? result.getSpriteFrame(key) : result;
         }
     }
