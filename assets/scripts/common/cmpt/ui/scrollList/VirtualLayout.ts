@@ -137,7 +137,7 @@ export default class VirtualLayout<T extends VirtualArgs> extends cc.Component {
     protected onDestroy(): void {
         // 注销事件
         this.node.off(cc.Node.EventType.POSITION_CHANGED, this.onPositionChanged, this);
-        this._view.off(cc.Node.EventType.SIZE_CHANGED, this.onViewSizeChanged, this);
+        this._view?.off(cc.Node.EventType.SIZE_CHANGED, this.onViewSizeChanged, this);
     }
 
     /**
