@@ -1,4 +1,5 @@
 import EditorTool from "../../util/EditorTool";
+import RecyclePool from "../../util/RecyclePool";
 import Tool from "../../util/Tool";
 
 const { ccclass, property, disallowMultiple, menu } = cc._decorator;
@@ -12,6 +13,9 @@ const { ccclass, property, disallowMultiple, menu } = cc._decorator;
 export default class DialogBase extends cc.Component {
     /** 弹窗prefab路径，规则同Res加载路径 */
     public static pUrl: string = "";
+
+    @property({ tooltip: CC_DEV && "关闭弹窗时是否缓存弹窗节点", })
+    protected cache: boolean = false;
 
     @property(cc.Animation)
     protected dlgAnim: cc.Animation = null;
@@ -118,15 +122,19 @@ export default class DialogBase extends cc.Component {
     }
 
     /**
-     * 销毁弹窗节点时的处理。
-     * - 必须使用此接口销毁，子类重写时请调用super.close()
+     * 关闭弹窗
+     * - 必须使用此接口关闭，子类重写时请调用super.close()
      * @virtual
      */
     public close(): void {
         this.onClose();
         this._resolveList.forEach((resolve) => { resolve(); });
-        this.node.removeFromParent();
-        this.node.destroy();
+        if (this.cache) {
+            RecyclePool.put(this.prefabUrl, this.node);
+        } else {
+            this.node.removeFromParent();
+            this.node.destroy();
+        }
     }
 
     /**

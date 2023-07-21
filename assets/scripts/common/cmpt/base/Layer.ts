@@ -1,4 +1,5 @@
 import { ResUrl } from "../../const/Url";
+import RecyclePool from "../../util/RecyclePool";
 import Res from "../../util/Res";
 import Tool from "../../util/Tool";
 import DialogBase from "./DialogBase";
@@ -40,7 +41,7 @@ export default class Layer extends cc.Component {
 
     /** 打开Loading层计数，为0时关闭，防止某些情况同时触发打开关闭Loading */
     private _loadingCount: number = 0;
-    /** tip节点池 */
+    /** tip节点池，缓存的tip节点留在tipLayer中不移除，只改变active隐藏 */
     private _tipPool: cc.Node[] = [];
     /** 当前存在的tip文字数组 */
     private _tipTexts: string[] = [];
@@ -137,13 +138,17 @@ export default class Layer extends cc.Component {
      * @param args DialogBase.open调用参数
      */
     public openDialog(url: string, ...args: any[]): void {
-        let prefab: cc.Prefab = Res.get(url, cc.Prefab);
-        if (!prefab) {
-            cc.error(`[Layer.openDialog] can not find dialog prefab: ${url}`);
-            return;
+        let node: cc.Node = RecyclePool.get(url);
+        if (!node) {
+            let prefab: cc.Prefab = Res.get(url, cc.Prefab);
+            if (!prefab) {
+                cc.error(`[Layer.openDialog] can not find dialog prefab: ${url}`);
+                return;
+            }
+    
+            node = Res.instantiate(prefab);
         }
 
-        let node = Res.instantiate(prefab);
         this.dialogLayer.addChild(node);
         node.setPosition(0, 0);
         let cmpt = node.getComponent(DialogBase);
@@ -175,15 +180,18 @@ export default class Layer extends cc.Component {
      * @param args DialogBase.open调用参数
      */
     public async openDialogAsync(url: string, ...args: any[]): Promise<void> {
-        this.showLoading();
-        let prefab: cc.Prefab = await Res.load(url, cc.Prefab);
-        this.hideLoading();
-        if (!prefab) {
-            cc.error(`[Layer.openDialogAsync] can not find dialog prefab: ${url}`);
-            return;
+        let node: cc.Node = RecyclePool.get(url);
+        if (!node) {
+            this.showLoading();
+            let prefab: cc.Prefab = await Res.load(url, cc.Prefab);
+            this.hideLoading();
+            if (!prefab) {
+                cc.error(`[Layer.openDialogAsync] can not find dialog prefab: ${url}`);
+                return;
+            }
+            node = Res.instantiate(prefab);
         }
 
-        let node = Res.instantiate(prefab);
         this.dialogLayer.addChild(node);
         node.setPosition(0, 0);
         let cmpt = node.getComponent(DialogBase);

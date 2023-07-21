@@ -87,7 +87,7 @@ export default class RecyclePool {
     /**
      * 根据类型从节点池取出节点
      */
-    public static get(key: string | { prototype: cc.Component }): cc.Node {
+    public static get(key: string | { prototype: cc.Component }): cc.Node | null {
         if (typeof key === "string") {
             let list = this._urlMap.get(key);
             if (list === undefined || list.length <= 0) {
