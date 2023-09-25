@@ -51,7 +51,7 @@ export default class ResSprite extends cc.Component {
         this._atlasKey = key;
         let type = key ? cc.SpriteAtlas : cc.SpriteFrame;
         let result = Res.get(url, type) || await Res.load(url, type);
-        // 如短时间内多次调用，需保证显示最新一次加载的资源
+        // 如短时间内多次调用，需保证使用最后一次加载的资源
         if (result instanceof type && this._url === url && this._atlasKey === key) {
             this.spriteFrame = result instanceof cc.SpriteAtlas ? result.getSpriteFrame(key) : result;
         }

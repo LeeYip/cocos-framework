@@ -47,7 +47,7 @@ export default class ResSpine extends cc.Component {
     public async setSkeletonData(url: string): Promise<void> {
         this._url = url;
         let result = Res.get(url, sp.SkeletonData) || await Res.load(url, sp.SkeletonData);
-        // 如短时间内多次调用，需保证显示最新一次加载的资源
+        // 如短时间内多次调用，需保证使用最后一次加载的资源
         if (result instanceof sp.SkeletonData && this._url === url) {
             this.skeletonData = result;
         }

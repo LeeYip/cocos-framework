@@ -69,7 +69,7 @@ export default class Game extends cc.Component {
     private async onClickAudio() {
         Layer.inst.openUniDialogAsync(DlgAudio.pUrl);
         Layer.inst.showLoading();
-        await Res.loadDir(DirUrl.AUDIO, cc.AudioClip);
+        await Res.loadDir(DirUrl.AUDIO, cc.AudioClip, false);
         Layer.inst.hideLoading();
     }
 
