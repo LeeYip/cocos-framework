@@ -61,6 +61,33 @@ export default class Decorator {
     }
 
     /**
+     * 异步方法装饰器，在异步方法未返回结果时，若同时多次调用仅会执行一次（返回首次调用的Promise）
+     * - 对于非静态成员，每一个对象实例都存在一个独立的调用队列
+     * - 对于静态成员，仅存在一个调用队列
+     */
+    public static onceWhileExecuting(target: unknown, funcName: string, desc: AsyncProperty): void {
+        let old = desc.value;
+        let promiseMap: Map<unknown, Promise<unknown>> = new Map();
+        desc.value = function (...args: unknown[]): Promise<unknown> {
+            let promise = promiseMap.get(this);
+            if (promise !== undefined) {
+                return promise;
+            }
+            promise = new Promise((resolve, reject) => {
+                old.apply(this, args).then((result: unknown) => {
+                    promiseMap.delete(this);
+                    resolve(result);
+                }).catch((error: unknown) => {
+                    promiseMap.delete(this);
+                    reject(error);
+                })
+            });
+            promiseMap.set(this, promise);
+            return promise;
+        };
+    }
+
+    /**
      * 方法装饰器，方法开始执行至执行完毕后锁定一段时间，期间忽略所有对该方法的调用
      * - 忽略调用时不会有返回值
      * @param seconds 锁定的秒数
